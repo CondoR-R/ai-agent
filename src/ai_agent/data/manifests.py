@@ -2,7 +2,9 @@
 from pathlib import Path
 import hashlib
 
+
 BLOCK_SIZE = 8192 # размер блока файла
+
 
 def file_sha256(path: str | Path) -> str:
     """Вычисляет SHA-256 файла
