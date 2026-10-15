@@ -4,7 +4,9 @@ from pathlib import Path
 from typing import Any
 import copy
 
+
 ConfigDict = dict[str, Any]
+
 
 def load_config(path: str | Path) -> ConfigDict:
     """Получение словаря конфигурации из yaml файла

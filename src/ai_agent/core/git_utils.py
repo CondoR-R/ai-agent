@@ -1,6 +1,7 @@
 """Утилиты для работы с git"""
 import subprocess
 
+
 def check_clean_status() -> None:
     """Проверка на отсутвие незакоммиченных изменений
     При отсутвии незакомиченных изменений ничего не происходит, 
@@ -12,6 +13,7 @@ def check_clean_status() -> None:
     text=True).stdout.strip()
     if dirty:
         raise SystemExit("Есть незакоммиченные изменения — итоговый запуск невозможен:\n" + dirty)
+
 
 def get_commit_hash() -> str:
     """Получение хэша коммита
