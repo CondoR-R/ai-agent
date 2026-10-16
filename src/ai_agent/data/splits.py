@@ -43,6 +43,9 @@ def validate_split(split: dict[str, list[int]], y: np.ndarray) -> None:
     params:
         split - словарь с train, val и test разбиениями,
         y - массив меток
+
+    raise:
+        ValueError, при отсутсвии обязательных полей или пустые, некорректные значения
     """
     parts = ("train", "val", "test")
     for p in parts:

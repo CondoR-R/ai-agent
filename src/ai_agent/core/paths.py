@@ -9,6 +9,7 @@ METADATA_FILENAME = "metadata.json"
 RESULTS_FILENAME = "results.jsonl"
 ERROR_FILENAME = "error.txt"
 CONFIG_FILENAME = "config.yaml"
+METRICS_FILENAME = "metrics.json"
 
 
 def _find_project_root(marker: str = MARKER_FILENAME) -> Path:

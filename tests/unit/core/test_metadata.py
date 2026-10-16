@@ -13,7 +13,7 @@ from ai_agent.core.metadata import (
     write_error,
     write_metadata,
 )
-from ai_agent.core.paths import ERROR_FILENAME, METADATA_FILENAME
+from ai_agent.core.paths import METADATA_FILENAME
 
 
 def _metadata_path(run_dir: Path) -> Path:

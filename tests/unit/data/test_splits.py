@@ -1,8 +1,5 @@
 """Тесты для src/ai_agent/data/splits.py."""
 
-from copy import deepcopy
-
-import numpy as np
 import pytest
 
 from ai_agent.data.loaders import load_digits_dataset

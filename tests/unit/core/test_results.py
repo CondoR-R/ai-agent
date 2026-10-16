@@ -1,4 +1,5 @@
 """Тесты для src/ai_agent/core/results.py."""
+
 import json
 from pathlib import Path
 
@@ -38,6 +39,7 @@ def _make_record(index: int, y_true: int = 0, y_pred: int = 0) -> dict:
 
 # --- validate_result ---
 
+
 def test_validate_result_ok():
     """Корректная запись проходит без исключения."""
     validate_result(_make_record(0), REQUIRED)
@@ -59,6 +61,7 @@ def test_validate_result_missing_field(field):
 
 
 # --- append_result ---
+
 
 def test_append_result_creates_file(run_dir):
     """Первый вызов создаёт results.jsonl."""
@@ -107,6 +110,7 @@ def test_append_result_rejects_invalid_record(run_dir):
 
 # --- load_results ---
 
+
 def test_load_results_empty_file(run_dir):
     """Пустой файл → пустой список."""
     _results_path(run_dir).write_text("", encoding="utf-8")
@@ -154,6 +158,7 @@ def test_load_results_error_message_contains_snippet(run_dir):
 
 
 # --- compute_metrics ---
+
 
 def _accuracy(records: list[dict]) -> dict:
     """Простейшая metric_fn для тестов: accuracy по полям y_true/y_pred."""

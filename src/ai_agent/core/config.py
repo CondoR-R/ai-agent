@@ -62,6 +62,9 @@ def validate_config(
             "train",
             "runtime"
         )
+
+    raise:
+        ValueError, при отсутствии обязательных полей и неправильных значениях
     """
     # проверка на присутствие обязательных полей
     for f in fields:
@@ -81,4 +84,10 @@ def save_config(path: str | Path, config: ConfigDict) -> None:
         config - словарь конфигурации
     """
     with open(path, "w", encoding="utf-8") as f:
-        yaml.safe_dump(config, f, sort_keys=False, allow_unicode=True, default_flow_style=False)
+        yaml.safe_dump(
+            config,
+            f,
+            sort_keys=False,
+            allow_unicode=True,
+            default_flow_style=False,
+        )

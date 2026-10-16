@@ -69,6 +69,10 @@ def validate_metadata(data: dict, expected_status: str | None = None) -> None:
     params:
         data - валидируемый словарь
         expected_status - статус, который будет присвоен после валидации
+
+    raise:
+        TypeError, при неправильном типе данных
+        ValueError, при отсутствии обязательных полей, некорректных значениях
     """
     # data - словарь
     if not isinstance(data, dict):
