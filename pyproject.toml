@@ -63,3 +63,8 @@ known-first-party = ["ai_agent"]
 quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
