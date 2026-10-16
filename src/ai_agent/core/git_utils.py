@@ -4,9 +4,9 @@ import subprocess
 
 def check_clean_status() -> None:
     """Проверка на отсутвие незакоммиченных изменений
-    При отсутвии незакомиченных изменений ничего не происходит, 
+    При отсутвии незакомиченных изменений ничего не происходит,
     если есть изменения - вызывается исключение
-    
+
     raise: SystemExit с сообщением о незакоммиченных файлах
     """
     dirty = subprocess.run(["git", "status", "--porcelain"], capture_output=True,
@@ -21,7 +21,7 @@ def get_commit_hash() -> str:
     return: хэш коммита
     """
     commit = subprocess.run(
-        ["git", "rev-parse", "HEAD"], 
+        ["git", "rev-parse", "HEAD"],
         capture_output=True,
         text=True
     ).stdout.strip()

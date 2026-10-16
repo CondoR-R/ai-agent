@@ -39,7 +39,7 @@ RUNS_DIR = PROJECT_ROOT / "runs"
 
 def get_run_id(work: str, series: str, seed: int) -> str:
     """Генерация названия run_id
-    
+
     params:
         work - номер работы
         series - имя серии (base/final/search)
@@ -53,12 +53,12 @@ def get_run_id(work: str, series: str, seed: int) -> str:
 
 def create_run_id_dir(run_id: str, runs_dir: Path = RUNS_DIR) -> Path:
     """Создает директорию с названием run_id в директории
-    runs_dir, если ее нет. Если нет директории runs_dir, создает ее.cj
-    
+    runs_dir, если ее нет. Если нет директории runs_dir, создает ее.
+
     params:
         run_id - название директории
         runs_dir — базовый каталог запусков, по умолчанию RUNS_DIR
-        
+
     return: путь к созданной директории.
     """
     runs_dir.mkdir(parents=True, exist_ok=True)

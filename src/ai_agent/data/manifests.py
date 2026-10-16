@@ -1,7 +1,6 @@
 """Чтение и обновление data/manifest.json."""
-from pathlib import Path
 import hashlib
-
+from pathlib import Path
 
 BLOCK_SIZE = 8192 # размер блока файла
 

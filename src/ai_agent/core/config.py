@@ -1,22 +1,22 @@
 """Обработка конфигурации"""
-import yaml
+import copy
 from pathlib import Path
 from typing import Any
-import copy
 
+import yaml
 
 ConfigDict = dict[str, Any]
 
 
 def load_config(path: str | Path) -> ConfigDict:
     """Получение словаря конфигурации из yaml файла
-    
+
     params:
         path - путь к файлу
 
     return: словарь из yaml файла
     """
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, encoding='utf-8') as f:
         y = yaml.safe_load(f)
     if y is None:
         y = {}
@@ -25,7 +25,7 @@ def load_config(path: str | Path) -> ConfigDict:
 
 def merge_configs(f_dict: ConfigDict, cli_dict: ConfigDict) -> ConfigDict:
     """Объединение словарей конфигурации из файла и CLI
-    
+
     params:
         f_dict - словарь из YAML файла
         cli_dict - словарь из коммандной строки
@@ -50,7 +50,7 @@ def validate_config(
         ),
     ) -> None:
     """Проверка присутвия обязательных полей и корректность значений
-    
+
     params:
         config - словарь конфигурации
         fields - кортеж обязательных полей, default = (
@@ -74,7 +74,7 @@ def validate_config(
 
 def save_config(path: str | Path, config: ConfigDict) -> None:
     """Сохранение YAML файла по указанному пути
-    
+
     params:
         path - путь сохранения
         config - словарь конфигурации

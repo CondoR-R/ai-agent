@@ -37,10 +37,10 @@ def make_stratified_split(
 
 
 def validate_split(split: dict[str, list[int]], y: np.ndarray) -> None:
-    """Проверка сплита: 
+    """Проверка сплита:
     есть все части (train, val, test),
     части не пересекаются, в сумме N элементов, в каждой есть все классы
-    
+
     params:
         split - словарь с train, val и test разбиениями,
         y - массив меток

@@ -8,7 +8,7 @@ import torch
 def set_seed(seed: int = 0) -> None:
     """Фиксирует seed для встроенного модуля random, библиотек
     numpy и pytorch
-    
+
     params:
         seed - сид генерации
     """
@@ -19,7 +19,7 @@ def set_seed(seed: int = 0) -> None:
 
 def set_num_threads(num_threads: int = 1) -> None:
     """Устанавливает число потоков в pytorch
-    
+
     params:
         num_threads - число потоков
     """
