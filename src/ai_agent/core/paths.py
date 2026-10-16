@@ -1,13 +1,14 @@
 """Пути, имена файлов и создание каталога runs/<run_id>/"""
+
 from datetime import datetime
 from pathlib import Path
 
-MARKER_FILENAME = 'pyproject.toml'
+MARKER_FILENAME = "pyproject.toml"
 
-METADATA_FILENAME = 'metadata.json'
-RESULTS_FILENAME = 'results.jsonl'
-ERROR_FILENAME = 'error.txt'
-CONFIG_FILENAME = 'config.yaml'
+METADATA_FILENAME = "metadata.json"
+RESULTS_FILENAME = "results.jsonl"
+ERROR_FILENAME = "error.txt"
+CONFIG_FILENAME = "config.yaml"
 
 
 def _find_project_root(marker: str = MARKER_FILENAME) -> Path:
@@ -27,9 +28,7 @@ def _find_project_root(marker: str = MARKER_FILENAME) -> Path:
         if (current / marker).exists():
             return current
         if current.parent == current:
-            raise RuntimeError(
-                f"Не удалось найти {marker}: корень проекта не определён"
-            )
+            raise RuntimeError(f"Не удалось найти {marker}: корень проекта не определён")
         current = current.parent
 
 
@@ -48,7 +47,7 @@ def get_run_id(work: str, series: str, seed: int) -> str:
     return: уникальное название для run_id
     """
     date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    return f'{work}_{series}_seed{seed}_{date}'
+    return f"{work}_{series}_seed{seed}_{date}"
 
 
 def create_run_id_dir(run_id: str, runs_dir: Path = RUNS_DIR) -> Path:

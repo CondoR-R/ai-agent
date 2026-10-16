@@ -1,8 +1,9 @@
 """Чтение и обновление data/manifest.json."""
+
 import hashlib
 from pathlib import Path
 
-BLOCK_SIZE = 8192 # размер блока файла
+BLOCK_SIZE = 8192  # размер блока файла
 
 
 def file_sha256(path: str | Path) -> str:
@@ -14,7 +15,7 @@ def file_sha256(path: str | Path) -> str:
     return: hash-строку для файла
     """
     h = hashlib.sha256()
-    with open(path, 'rb') as f:
+    with open(path, "rb") as f:
         while True:
             block = f.read(BLOCK_SIZE)
             if not block:

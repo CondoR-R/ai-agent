@@ -1,4 +1,5 @@
 """Утилиты для работы с git"""
+
 import subprocess
 
 
@@ -9,8 +10,9 @@ def check_clean_status() -> None:
 
     raise: SystemExit с сообщением о незакоммиченных файлах
     """
-    dirty = subprocess.run(["git", "status", "--porcelain"], capture_output=True,
-    text=True).stdout.strip()
+    dirty = subprocess.run(
+        ["git", "status", "--porcelain"], capture_output=True, text=True
+    ).stdout.strip()
     if dirty:
         raise SystemExit("Есть незакоммиченные изменения — итоговый запуск невозможен:\n" + dirty)
 
@@ -21,8 +23,6 @@ def get_commit_hash() -> str:
     return: хэш коммита
     """
     commit = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        capture_output=True,
-        text=True
+        ["git", "rev-parse", "HEAD"], capture_output=True, text=True
     ).stdout.strip()
     return commit

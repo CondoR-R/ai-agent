@@ -1,4 +1,5 @@
 """Фиксация параметров для воспроизводимости"""
+
 import random
 
 import numpy as np
