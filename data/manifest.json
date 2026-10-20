@@ -1,3 +1,21 @@
 {
-  "datasets": []
+  "datasets": [
+    {
+      "name": "lr0_load_digits",
+      "source": "scikit-learn",
+      "version": "1.9.1",
+      "rule": "test=20.0% (stratify, split_seed=0); val=25.0% of the rest (stratify, split_seed=0)",
+      "n_total": 1797,
+      "n_taken": 1797,
+      "n_excluded": 0,
+      "sizes": {
+        "train": 1077,
+        "val": 360,
+        "test": 360
+      },
+      "files": {
+        "data/split.json": "15784ba5a76de42db28c379ed560b6baed63df57c518616b592b9d6abd2378fa"
+      }
+    }
+  ]
 }
