@@ -4,6 +4,8 @@ import json
 import traceback
 from datetime import datetime
 from pathlib import Path
+import platform
+from importlib.metadata import version as lib_version
 
 from .paths import ERROR_FILENAME, METADATA_FILENAME
 
@@ -126,3 +128,20 @@ def write_error(run_dir: Path, err: BaseException) -> None:
     metadata_dict["error_message"] = f"{type(err).__name__}: {err}"
     with open(metadata_path, "w", encoding="utf-8") as f:
         json.dump(metadata_dict, f, indent=2, ensure_ascii=False)
+
+
+def collect_versions(libs: list[str]) -> dict[str, str]:
+    """Собирает версии python и библиотек
+
+    params:
+        libs - список библиотек
+
+    return: словарь с версиями
+    """
+    versions: dict[str, str] = dict()
+    versions['python'] = platform.python_version()
+
+    for name in libs:
+        versions[name] = lib_version(name)
+
+    return versions
