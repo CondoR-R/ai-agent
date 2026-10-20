@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import pytest
+import subprocess
 
 
 @pytest.fixture
@@ -48,3 +49,27 @@ def run_dir(tmp_path: Path) -> Path:
     rd = tmp_path / "runs" / "test_run"
     rd.mkdir(parents=True, exist_ok=True)
     return rd
+
+
+@pytest.fixture
+def git_repo(tmp_path: Path) -> Path:
+    """Временный git-репозиторий с одним коммитом.
+
+    Возвращает Path к каталогу репозитория. Внутри него установлены
+    user.email и user.name, чтобы коммиты не падали на чистой машине.
+    """
+    repo = tmp_path / "repo"
+    repo.mkdir()
+
+    def run(*args: str) -> None:
+        subprocess.run(args, cwd=repo, check=True, capture_output=True)
+
+    run("git", "init", "-b", "main")
+    run("git", "config", "user.email", "test@example.com")
+    run("git", "config", "user.name", "Test User")
+
+    (repo / "README.md").write_text("initial\n", encoding="utf-8")
+    run("git", "add", "README.md")
+    run("git", "commit", "-m", "initial commit")
+
+    return repo
