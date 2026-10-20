@@ -29,7 +29,9 @@ def _find_project_root(marker: str = MARKER_FILENAME) -> Path:
         if (current / marker).exists():
             return current
         if current.parent == current:
-            raise RuntimeError(f"Не удалось найти {marker}: корень проекта не определён")
+            raise RuntimeError(
+                f"Не удалось найти {marker}: корень проекта не определён"
+            )
         current = current.parent
 
 

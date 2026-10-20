@@ -72,7 +72,11 @@ def validate_config(
             raise ValueError(f"Отсутствует обязательное поле: {f}")
 
     # проверка на lr > 0
-    if "train" not in config or "lr" not in config["train"] or config["train"]["lr"] <= 0:
+    if (
+        "train" not in config
+        or "lr" not in config["train"]
+        or config["train"]["lr"] <= 0
+    ):
         raise ValueError("значение lr в train должно быть больше 0")
 
 

@@ -7,7 +7,9 @@ from pathlib import Path
 from .paths import METRICS_FILENAME, RESULTS_FILENAME
 
 
-def append_result(run_dir: Path, record: dict, required_fields: tuple[str, ...]) -> None:
+def append_result(
+    run_dir: Path, record: dict, required_fields: tuple[str, ...]
+) -> None:
     """Добавляет строку записи в results.jsonl в конец файла
 
     params:
@@ -33,7 +35,7 @@ def load_results(run_dir: Path) -> list[dict]:
         ValueError, при ошибки чтения строки
     """
     results: list[dict] = []
-    with open(run_dir / RESULTS_FILENAME, 'r', encoding="utf-8") as f:
+    with open(run_dir / RESULTS_FILENAME, encoding="utf-8") as f:
         for i, line in enumerate(f, start=1):
             line = line.strip()
             if not line:
@@ -41,7 +43,9 @@ def load_results(run_dir: Path) -> list[dict]:
             try:
                 record = json.loads(line)
             except json.JSONDecodeError as err:
-                raise ValueError(f"Ошибка при чтении строки {i}: {err.msg}. Строка: {line[:100]!r}")
+                raise ValueError(
+                    f"Ошибка при чтении строки {i}: {err.msg}. Строка: {line[:100]!r}"
+                ) from err
             results.append(record)
     return results
 

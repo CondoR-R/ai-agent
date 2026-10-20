@@ -70,8 +70,7 @@ def update_manifest(path: str | Path, name: str, entry: dict) -> None:
     p = Path(path)
     manifest = load_manifest(p)
     datasets = [
-        d for d in manifest[MANIFEST_DATASETS_KEY]
-        if d.get("name") != name
+        d for d in manifest[MANIFEST_DATASETS_KEY] if d.get("name") != name
     ]
     datasets.append({"name": name, **entry})
     manifest[MANIFEST_DATASETS_KEY] = datasets

@@ -9,6 +9,7 @@ process_one, compute_metrics_fn. Модуль не знает, что именн
 """
 
 from collections.abc import Callable
+from contextlib import suppress
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -40,7 +41,9 @@ from .reproducibility import (
 from .results import append_result, compute_metrics
 
 
-def _log_to_mlflow_stub(run_dir: Path, cfg: ConfigDict, work: str, series: str) -> None:
+def _log_to_mlflow_stub(
+    run_dir: Path, cfg: ConfigDict, work: str, series: str
+) -> None:
     """Заглушка регистрации в MLflow: ничего не делает."""
     return None
 
@@ -141,14 +144,10 @@ def run_experiment(
 
     except BaseException as exc:
         write_error(run_dir, exc)
-        try:
+        with suppress(Exception):
             update_status(run_dir, "failed")
-        except Exception:
-            pass
-        try:
+        with suppress(Exception):
             _log_to_mlflow_stub(run_dir, cfg, work, series)
-        except Exception:
-            pass
         raise
 
     # 5. Регистрация в MLflow (пока заглушка)

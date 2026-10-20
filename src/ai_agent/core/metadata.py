@@ -38,7 +38,10 @@ def write_metadata(run_dir: Path, metadata_dict: dict) -> None:
     """
     validate_metadata(metadata_dict, "running")
     metadata_path = run_dir / METADATA_FILENAME
-    metadata_path.write_text(json.dumps(metadata_dict, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    metadata_path.write_text(
+        json.dumps(metadata_dict, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
 
 
 def update_status(run_dir: Path, status: str) -> None:
@@ -52,7 +55,9 @@ def update_status(run_dir: Path, status: str) -> None:
         ValueError при некорректном статусе
     """
     if status not in FINAL_STATUSES:
-        raise ValueError(f"Статус {status} некорректен, возможные значения: completed или failed")
+        raise ValueError(
+            f"Статус {status} некорректен, возможные значения: completed или failed"
+        )
     metadata_path = run_dir / METADATA_FILENAME
     metadata_dict = json.loads(metadata_path.read_text(encoding="utf-8"))
     metadata_dict["status"] = status
@@ -94,10 +99,14 @@ def validate_metadata(data: dict, expected_status: str | None = None) -> None:
 
     # совпадение expected_status с фактическим
     if expected_status is not None and expected_status != status:
-        raise ValueError("Значение expected_status не совпадает с фактическим в поле status")
+        raise ValueError(
+            "Значение expected_status не совпадает с фактическим в поле status"
+        )
 
     # наличие finished_at при status = "completed" или "failed"
-    if (status == "completed" or status == "failed") and data.get("finished_at") is None:
+    if (status == "completed" or status == "failed") and data.get(
+        "finished_at"
+    ) is None:
         raise ValueError(
             f"При значении поля status = {status} должно быть непустое поле finished_at"
         )
@@ -138,7 +147,7 @@ def collect_versions(libs: list[str]) -> dict[str, str]:
 
     return: словарь с версиями
     """
-    versions: dict[str, str] = dict()
+    versions: dict[str, str] = {}
     versions["python"] = platform.python_version()
 
     for name in libs:

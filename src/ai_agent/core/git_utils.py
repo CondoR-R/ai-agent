@@ -14,7 +14,10 @@ def check_clean_status() -> None:
         ["git", "status", "--porcelain"], capture_output=True, text=True
     ).stdout.strip()
     if dirty:
-        raise SystemExit("Есть незакоммиченные изменения — итоговый запуск невозможен:\n" + dirty)
+        raise SystemExit(
+            "Есть незакоммиченные изменения — итоговый запуск невозможен:\n"
+            + dirty
+        )
 
 
 def get_commit_hash() -> str:

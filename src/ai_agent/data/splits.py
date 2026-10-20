@@ -23,7 +23,9 @@ def make_stratified_split(
     Для load_digits даёт 1077 / 360 / 360.
     """
     idx = np.arange(len(y))
-    rest, test = train_test_split(idx, test_size=test_size, stratify=y, random_state=random_state)
+    rest, test = train_test_split(
+        idx, test_size=test_size, stratify=y, random_state=random_state
+    )
     train, val = train_test_split(
         rest, test_size=val_size, stratify=y[rest], random_state=random_state
     )
@@ -57,13 +59,17 @@ def validate_split(split: dict[str, list[int]], y: np.ndarray) -> None:
             raise ValueError(f"Пустое поле: {p}")
 
     # проверка на пересечение
-    all_idx = np.concatenate([np.asarray(split[p], dtype=np.int64) for p in parts])
+    all_idx = np.concatenate(
+        [np.asarray(split[p], dtype=np.int64) for p in parts]
+    )
     if len(all_idx) != len(np.unique(all_idx)):
         raise ValueError("Значения присутвуют в разных частях, утечка данных")
 
     # провека на правильную длину
     if len(all_idx) != len(y):
-        raise ValueError(f"Есть {len(all_idx)} объектов в выборках, должно быть: {len(y)}")
+        raise ValueError(
+            f"Есть {len(all_idx)} объектов в выборках, должно быть: {len(y)}"
+        )
 
     # проверка на наличие всех классов в каждой части
     set_classes = set(np.unique(y))
