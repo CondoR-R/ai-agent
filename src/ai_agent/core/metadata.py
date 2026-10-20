@@ -1,11 +1,11 @@
 """Работа с файлом metadata.json в runs/<run_id>/"""
 
 import json
+import platform
 import traceback
 from datetime import datetime
-from pathlib import Path
-import platform
 from importlib.metadata import version as lib_version
+from pathlib import Path
 
 from .paths import ERROR_FILENAME, METADATA_FILENAME
 
@@ -139,7 +139,7 @@ def collect_versions(libs: list[str]) -> dict[str, str]:
     return: словарь с версиями
     """
     versions: dict[str, str] = dict()
-    versions['python'] = platform.python_version()
+    versions["python"] = platform.python_version()
 
     for name in libs:
         versions[name] = lib_version(name)
