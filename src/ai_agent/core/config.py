@@ -17,8 +17,8 @@ def load_config(path: str | Path) -> ConfigDict:
 
     return: словарь из yaml файла
     """
-    with open(path, encoding="utf-8") as f:
-        y = yaml.safe_load(f)
+    text = Path(path).read_text(encoding="utf-8")
+    y = yaml.safe_load(text)
     if y is None:
         y = {}
     return y
@@ -83,11 +83,10 @@ def save_config(path: str | Path, config: ConfigDict) -> None:
         path - путь сохранения
         config - словарь конфигурации
     """
-    with open(path, "w", encoding="utf-8") as f:
-        yaml.safe_dump(
-            config,
-            f,
-            sort_keys=False,
-            allow_unicode=True,
-            default_flow_style=False,
-        )
+    text = yaml.safe_dump(
+        config,
+        sort_keys=False,
+        allow_unicode=True,
+        default_flow_style=False,
+    )
+    Path(path).write_text(text, encoding="utf-8")

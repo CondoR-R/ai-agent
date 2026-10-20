@@ -33,7 +33,7 @@ def load_results(run_dir: Path) -> list[dict]:
         ValueError, при ошибки чтения строки
     """
     results: list[dict] = []
-    with open(run_dir / RESULTS_FILENAME, encoding="utf-8") as f:
+    with open(run_dir / RESULTS_FILENAME, 'r', encoding="utf-8") as f:
         for i, line in enumerate(f, start=1):
             line = line.strip()
             if not line:
@@ -77,5 +77,8 @@ def compute_metrics(
     """
     records = load_results(run_dir)
     metrics = metric_fn(records)
-    with open(run_dir / METRICS_FILENAME, "w", encoding="utf-8") as f:
-        json.dump(metrics, f, ensure_ascii=False, indent=2)
+    metrics_path = run_dir / METRICS_FILENAME
+    metrics_path.write_text(
+        json.dumps(metrics, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )

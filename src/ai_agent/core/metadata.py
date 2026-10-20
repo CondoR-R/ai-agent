@@ -38,8 +38,7 @@ def write_metadata(run_dir: Path, metadata_dict: dict) -> None:
     """
     validate_metadata(metadata_dict, "running")
     metadata_path = run_dir / METADATA_FILENAME
-    with open(metadata_path, "w", encoding="utf-8") as f:
-        json.dump(metadata_dict, f, indent=2, ensure_ascii=False)
+    metadata_path.write_text(json.dumps(metadata_dict, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
 
 
 def update_status(run_dir: Path, status: str) -> None:
@@ -55,13 +54,14 @@ def update_status(run_dir: Path, status: str) -> None:
     if status not in FINAL_STATUSES:
         raise ValueError(f"Статус {status} некорректен, возможные значения: completed или failed")
     metadata_path = run_dir / METADATA_FILENAME
-    with open(metadata_path, encoding="utf-8") as f:
-        metadata_dict = json.load(f)
+    metadata_dict = json.loads(metadata_path.read_text(encoding="utf-8"))
     metadata_dict["status"] = status
     metadata_dict["finished_at"] = datetime.now().isoformat(timespec="seconds")
     validate_metadata(metadata_dict, status)
-    with open(metadata_path, "w", encoding="utf-8") as f:
-        json.dump(metadata_dict, f, indent=2, ensure_ascii=False)
+    metadata_path.write_text(
+        json.dumps(metadata_dict, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
 
 
 def validate_metadata(data: dict, expected_status: str | None = None) -> None:
@@ -110,7 +110,7 @@ def validate_metadata(data: dict, expected_status: str | None = None) -> None:
 
 
 def write_error(run_dir: Path, err: BaseException) -> None:
-    """пишет traceback в error.txt и добавляет короткое error_message в metadata.json.
+    """Пишет traceback в error.txt и добавляет короткое error_message в metadata.json.
 
     params:
         run_dir - путь к директории текущего запуска
@@ -119,15 +119,15 @@ def write_error(run_dir: Path, err: BaseException) -> None:
     err_msg_list = traceback.format_exception(type(err), err, err.__traceback__)
     err_msg = "".join(err_msg_list)
 
-    with open(run_dir / ERROR_FILENAME, "w", encoding="utf-8") as f:
-        f.write(err_msg)
+    (run_dir / ERROR_FILENAME).write_text(err_msg, encoding="utf-8")
 
     metadata_path = run_dir / METADATA_FILENAME
-    with open(metadata_path, encoding="utf-8") as f:
-        metadata_dict = json.load(f)
+    metadata_dict = json.loads(metadata_path.read_text(encoding="utf-8"))
     metadata_dict["error_message"] = f"{type(err).__name__}: {err}"
-    with open(metadata_path, "w", encoding="utf-8") as f:
-        json.dump(metadata_dict, f, indent=2, ensure_ascii=False)
+    metadata_path.write_text(
+        json.dumps(metadata_dict, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
 
 
 def collect_versions(libs: list[str]) -> dict[str, str]:
