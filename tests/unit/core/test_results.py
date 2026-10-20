@@ -119,7 +119,9 @@ def test_load_results_empty_file(run_dir):
 
 def test_load_results_roundtrip(run_dir):
     """Запись и чтение дают те же объекты."""
-    records = [_make_record(i, y_true=i % 10, y_pred=(i + 1) % 10) for i in range(5)]
+    records = [
+        _make_record(i, y_true=i % 10, y_pred=(i + 1) % 10) for i in range(5)
+    ]
     for r in records:
         append_result(run_dir, r, REQUIRED)
     loaded = load_results(run_dir)

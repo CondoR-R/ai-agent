@@ -123,7 +123,9 @@ def test_successful_run(config_in_repo, runs_in_tmp):
     assert meta["finished_at"]
     assert meta["data_sha256"] == {"fake": "0" * 64}
 
-    metrics = json.loads((run_dir / METRICS_FILENAME).read_text(encoding="utf-8"))
+    metrics = json.loads(
+        (run_dir / METRICS_FILENAME).read_text(encoding="utf-8")
+    )
     assert metrics["n"] == 3
     assert metrics["acc"] == 1.0
 
@@ -142,7 +144,12 @@ def test_successful_run_writes_all_results(config_in_repo, runs_in_tmp):
         data_hashes={},
     )
 
-    lines = (run_dir / RESULTS_FILENAME).read_text(encoding="utf-8").strip().splitlines()
+    lines = (
+        (run_dir / RESULTS_FILENAME)
+        .read_text(encoding="utf-8")
+        .strip()
+        .splitlines()
+    )
     assert len(lines) == 3
     for i, line in enumerate(lines):
         assert json.loads(line)["index"] == i
@@ -199,7 +206,12 @@ def test_failure_in_process_one(config_in_repo, runs_in_tmp):
     assert "error_message" in meta
     assert "boom on record 1" in meta["error_message"]
 
-    lines = (run_dir / RESULTS_FILENAME).read_text(encoding="utf-8").strip().splitlines()
+    lines = (
+        (run_dir / RESULTS_FILENAME)
+        .read_text(encoding="utf-8")
+        .strip()
+        .splitlines()
+    )
     assert len(lines) == 1
     assert json.loads(lines[0])["index"] == 0
 
@@ -236,7 +248,10 @@ def test_failure_in_prepare(config_in_repo, runs_in_tmp):
 
     # results.jsonl не должно быть или он пуст
     results_path = run_dir / RESULTS_FILENAME
-    assert not results_path.exists() or results_path.read_text(encoding="utf-8").strip() == ""
+    assert (
+        not results_path.exists()
+        or results_path.read_text(encoding="utf-8").strip() == ""
+    )
 
 
 # --- проверки до создания каталога ---
@@ -321,8 +336,12 @@ def test_reproducibility(config_in_repo, runs_in_tmp, monkeypatch):
     lines_2 = (run_dir_2 / RESULTS_FILENAME).read_text(encoding="utf-8")
     assert lines_1 == lines_2
 
-    meta_1 = json.loads((run_dir_1 / METADATA_FILENAME).read_text(encoding="utf-8"))
-    meta_2 = json.loads((run_dir_2 / METADATA_FILENAME).read_text(encoding="utf-8"))
+    meta_1 = json.loads(
+        (run_dir_1 / METADATA_FILENAME).read_text(encoding="utf-8")
+    )
+    meta_2 = json.loads(
+        (run_dir_2 / METADATA_FILENAME).read_text(encoding="utf-8")
+    )
     # данные и seed совпадают, run_id/время — нет
     assert meta_1["seed"] == meta_2["seed"]
     assert meta_1["commit"] == meta_2["commit"]

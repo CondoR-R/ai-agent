@@ -35,6 +35,7 @@ def _entry(source: str = "scikit-learn", version: str = "1.9.1") -> dict:
 
 # --- file_sha256 ---
 
+
 def test_matches_hashlib_reference(tmp_path: Path):
     """Независимая реализация на тех же данных"""
     content = b"hello world\n" * 1000
@@ -97,6 +98,7 @@ def test_missing_file_raises(tmp_path: Path):
 
 # --- load_manifest ---
 
+
 def test_load_manifest_missing_file(tmp_path: Path):
     """Отсутствующий файл → пустой скелет"""
     result = load_manifest(tmp_path / "manifest.json")
@@ -129,6 +131,7 @@ def test_load_manifest_top_level_not_dict(tmp_path: Path):
 
 
 # --- update_manifest ---
+
 
 def test_update_manifest_creates_file(tmp_path: Path):
     """Первый вызов создаёт файл"""
@@ -194,6 +197,7 @@ def test_update_manifest_creates_parent_dir(tmp_path: Path):
 
 
 # --- find_entry ---
+
 
 def test_find_entry_returns_entry(tmp_path: Path):
     """Находит запись по имени"""
