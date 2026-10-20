@@ -79,6 +79,16 @@ def validate_config(
     ):
         raise ValueError("значение lr в train должно быть больше 0")
 
+    # проверка на epochs > 0
+    if (
+        "train" not in config
+        or "epochs" not in config["train"]
+        or config["train"]["epochs"] <= 0
+    ):
+        raise ValueError(
+            f"epochs должен быть >= 1, получено {config['train']['epochs']}"
+        )
+
 
 def save_config(path: str | Path, config: ConfigDict) -> None:
     """Сохранение YAML файла по указанному пути
