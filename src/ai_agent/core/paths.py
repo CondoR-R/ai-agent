@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from pathlib import Path
+import uuid
 
 MARKER_FILENAME = "pyproject.toml"
 
@@ -37,6 +38,8 @@ def _find_project_root(marker: str = MARKER_FILENAME) -> Path:
 
 PROJECT_ROOT = _find_project_root()
 RUNS_DIR = PROJECT_ROOT / "runs"
+DATA_DIR = PROJECT_ROOT / "data"
+MANIFEST_PATH = DATA_DIR / "manifest.json"
 
 
 def get_run_id(work: str, series: str, seed: int) -> str:
@@ -50,7 +53,8 @@ def get_run_id(work: str, series: str, seed: int) -> str:
     return: уникальное название для run_id
     """
     date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    return f"{work}_{series}_seed{seed}_{date}"
+    suffix = uuid.uuid4().hex[:6]
+    return f"{work}_{series}_seed{seed}_{date}_{suffix}"
 
 
 def create_run_id_dir(run_id: str, runs_dir: Path = RUNS_DIR) -> Path:
@@ -65,5 +69,5 @@ def create_run_id_dir(run_id: str, runs_dir: Path = RUNS_DIR) -> Path:
     """
     runs_dir.mkdir(parents=True, exist_ok=True)
     run_id_dir = runs_dir / run_id
-    run_id_dir.mkdir(parents=True, exist_ok=True)
+    run_id_dir.mkdir(parents=True, exist_ok=False)
     return run_id_dir

@@ -3,11 +3,15 @@
 import json
 import platform
 import traceback
-from datetime import datetime
+from datetime import datetime, timezone
 from importlib.metadata import version as lib_version
 from pathlib import Path
 
 from .paths import ERROR_FILENAME, METADATA_FILENAME
+
+
+VALID_STATUSES = ("running", "completed", "failed")
+FINAL_STATUSES = ("completed", "failed")
 
 REQUIRED_FIELDS = (
     "run_id",
@@ -18,16 +22,20 @@ REQUIRED_FIELDS = (
     "commit",
     "device",
     "seed",
-    "split_seed",
-    "num_threads",
     "data_sha256",
     "versions",
 )
-VALID_STATUSES = ("running", "completed", "failed")
-FINAL_STATUSES = ("completed", "failed")
 
 
-def write_metadata(run_dir: Path, metadata_dict: dict) -> None:
+def _now() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def write(
+    run_dir: Path,
+    metadata_dict: dict,
+    required_fields: tuple[str, ...] = REQUIRED_FIELDS,
+) -> None:
     """Записывает словарь в metadata.json. Ожидается, что в
     нём есть поле status со значением running.
     Создает или перезаписывает файл metadata.json
@@ -35,8 +43,9 @@ def write_metadata(run_dir: Path, metadata_dict: dict) -> None:
     params:
         run_dir - путь к директории с текущим run_id
         metadata_dict - словарь, с полями для записи в metadata.json
+        required_fields - кортеж обязательных полей, default = REQUIRED_FIELDS
     """
-    validate_metadata(metadata_dict, "running")
+    validate(metadata_dict, "running", required_fields)
     metadata_path = run_dir / METADATA_FILENAME
     metadata_path.write_text(
         json.dumps(metadata_dict, indent=2, ensure_ascii=False) + "\n",
@@ -61,21 +70,26 @@ def update_status(run_dir: Path, status: str) -> None:
     metadata_path = run_dir / METADATA_FILENAME
     metadata_dict = json.loads(metadata_path.read_text(encoding="utf-8"))
     metadata_dict["status"] = status
-    metadata_dict["finished_at"] = datetime.now().isoformat(timespec="seconds")
-    validate_metadata(metadata_dict, status)
+    metadata_dict["finished_at"] = _now()
+    validate(metadata_dict, status)
     metadata_path.write_text(
         json.dumps(metadata_dict, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
 
 
-def validate_metadata(data: dict, expected_status: str | None = None) -> None:
+def validate(
+    data: dict,
+    expected_status: str | None = None,
+    required_fields: tuple[str, ...] = REQUIRED_FIELDS,
+) -> None:
     """Валидация данных для metadata.json.
     Проверяет обязательные поля, типы, допустимые значения status.
 
     params:
         data - валидируемый словарь
         expected_status - статус, который будет присвоен после валидации
+        required_fields - кортеж обязательных полей, default = REQUIRED_FIELDS
 
     raise:
         TypeError, при неправильном типе данных
@@ -86,7 +100,7 @@ def validate_metadata(data: dict, expected_status: str | None = None) -> None:
         raise TypeError("Данные для metadata должны быть словарем (dict)")
 
     # наличие обязательных полей
-    for field in REQUIRED_FIELDS:
+    for field in required_fields:
         if field not in data:
             raise ValueError(f"Отсутствует обязательное поле {field}")
 

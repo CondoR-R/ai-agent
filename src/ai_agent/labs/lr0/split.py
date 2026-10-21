@@ -37,45 +37,50 @@ def make_stratified_split(
     }
 
 
-def validate_split(split: dict[str, list[int]], y: np.ndarray) -> None:
-    """Проверка сплита:
-    есть все части (train, val, test),
-    части не пересекаются, в сумме N элементов, в каждой есть все классы
+def validate(split: dict[str, list[int]], y: np.ndarray) -> None:
+    """Проверка разбиения.
+
+    Проверяет: есть все части (train, val, test) и они не пусты;
+    индексы лежат в диапазоне [0, len(y)); части не пересекаются и
+    в сумме дают все len(y) объектов; в каждой части есть все классы.
 
     params:
-        split - словарь с train, val и test разбиениями,
+        split - словарь с индексами train, val и test
         y - массив меток
 
     raise:
-        ValueError, при отсутсвии обязательных полей или пустые, некорректные значения
+        ValueError, при отсутствии частей, пустых частях, выходе индексов
+        за диапазон, пересечении частей, неверной сумме размеров
+        и отсутствии классов в какой-либо части
     """
     parts = ("train", "val", "test")
     for p in parts:
-        # проверка на наличие train val test
         if p not in split:
-            raise ValueError(f"Пропущено поле: {p}")
-        # проверка на пустую часть
+            raise ValueError(f"Пропущена часть: {p}")
         if not len(split[p]):
-            raise ValueError(f"Пустое поле: {p}")
+            raise ValueError(f"Пустая часть: {p}")
 
-    # проверка на пересечение
     all_idx = np.concatenate(
         [np.asarray(split[p], dtype=np.int64) for p in parts]
     )
-    if len(all_idx) != len(np.unique(all_idx)):
-        raise ValueError("Значения присутвуют в разных частях, утечка данных")
 
-    # провека на правильную длину
-    if len(all_idx) != len(y):
+    if all_idx.min() < 0 or all_idx.max() >= len(y):
         raise ValueError(
-            f"Есть {len(all_idx)} объектов в выборках, должно быть: {len(y)}"
+            f"Индексы вне диапазона [0, {len(y)}): "
+            f"min={all_idx.min()}, max={all_idx.max()}"
         )
 
-    # проверка на наличие всех классов в каждой части
-    set_classes = set(np.unique(y))
+    if len(all_idx) != len(np.unique(all_idx)):
+        raise ValueError("Индексы присутствуют в разных частях: утечка данных")
+
+    if len(all_idx) != len(y):
+        raise ValueError(
+            f"В частях {len(all_idx)} объектов, должно быть {len(y)}"
+        )
+
+    all_classes = set(np.unique(y).tolist())
     for p in parts:
-        set_part = set(y[split[p]])
-        if set_classes != set_part:
-            raise ValueError(
-                f"выборка {p} должна содержать все классы, пропущены: {set_classes - set_part}"
-            )
+        part_classes = set(y[split[p]].tolist())
+        if part_classes != all_classes:
+            missing = sorted(all_classes - part_classes)
+            raise ValueError(f"В части {p} пропущены классы: {missing}")

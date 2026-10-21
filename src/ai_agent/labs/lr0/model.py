@@ -45,6 +45,8 @@ class MLP(nn.Module):
             raise ValueError("dropout должен быть в пределах [0, 1)")
         if n_classes < 2:
             raise ValueError("n_classes должен состоять хотя бы из 2 классов")
+        if in_features < 1:
+            raise ValueError("in_features должен быть положительным")
 
         self.n_layers = n_layers
         self.hidden = hidden
@@ -52,24 +54,30 @@ class MLP(nn.Module):
         self.n_classes = n_classes
         self.in_features = in_features
 
-        layers = []
+        layers: list[nn.Module] = []
 
-        # первый скрытый слой
-        layers.append(nn.Linear(self.in_features, self.hidden))
-        layers.append(nn.ReLU())
-        layers.append(nn.Dropout(self.dropout))
-
-        # остальные скрытые слои
-        for _ in range(self.n_layers - 1):
-            layers.append(nn.Linear(self.hidden, self.hidden))
-            layers.append(nn.ReLU())
-            layers.append(nn.Dropout(self.dropout))
-
-        # выходной слой
-        layers.append(nn.Linear(self.hidden, self.n_classes))
-
+        size = in_features
+        for _ in range(n_layers):
+            layers += [nn.Linear(size, hidden), nn.ReLU(), nn.Dropout(dropout)]
+            size = hidden
+        layers.append(nn.Linear(size, n_classes))
         self.net = nn.Sequential(*layers)
 
     def forward(self, x: Tensor) -> Tensor:
         """Прямой проход: возвращает логиты формы (batch, n_classes)."""
         return self.net(x)
+
+
+def build_model(model_cfg: dict) -> MLP:
+    """Создаёт MLP из секции model конфигурации
+
+    params:
+        model_cfg - словарь {n_layers, hidden, dropout}
+
+    return: модель с заданными параметрами
+    """
+    return MLP(
+        n_layers=model_cfg["n_layers"],
+        hidden=model_cfg["hidden"],
+        dropout=model_cfg["dropout"],
+    )

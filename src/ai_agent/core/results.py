@@ -1,4 +1,4 @@
-"""Работа с файлами results.jsonl и metrics.json"""
+"""Работа с файлом results.jsonl runs/<run_id>/"""
 
 import json
 from collections.abc import Callable
@@ -7,7 +7,7 @@ from pathlib import Path
 from .paths import METRICS_FILENAME, RESULTS_FILENAME
 
 
-def append_result(
+def append(
     run_dir: Path, record: dict, required_fields: tuple[str, ...]
 ) -> None:
     """Добавляет строку записи в results.jsonl в конец файла
@@ -17,13 +17,13 @@ def append_result(
         record - словарь с записью в results.jsonl
         required_fields - кортеж ожидаемых полей
     """
-    validate_result(record, required_fields)
+    validate(record, required_fields)
     with open(run_dir / RESULTS_FILENAME, "a", encoding="utf-8") as f:
         f.write(json.dumps(record, ensure_ascii=False) + "\n")
         f.flush()
 
 
-def load_results(run_dir: Path) -> list[dict]:
+def load(run_dir: Path) -> list[dict]:
     """Чтение results.jsonl
 
     params:
@@ -50,7 +50,7 @@ def load_results(run_dir: Path) -> list[dict]:
     return results
 
 
-def validate_result(record: dict, required_fields: tuple[str, ...]) -> None:
+def validate(record: dict, required_fields: tuple[str, ...]) -> None:
     """Валидация записи для results.jsonl
     params:
         record - словарь с записью
@@ -67,22 +67,3 @@ def validate_result(record: dict, required_fields: tuple[str, ...]) -> None:
     for field in required_fields:
         if field not in record:
             raise ValueError(f"Отсутствует обязательное поле {field}")
-
-
-def compute_metrics(
-    run_dir: Path,
-    metric_fn: Callable[[list[dict]], dict],
-) -> None:
-    """Вычисление метрик и запись в файл metrics.json
-
-    params:
-        run_dir - путь к текущей директории runs/<run_id>/
-        metric_fn - функция вычисления метрик из записей
-    """
-    records = load_results(run_dir)
-    metrics = metric_fn(records)
-    metrics_path = run_dir / METRICS_FILENAME
-    metrics_path.write_text(
-        json.dumps(metrics, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )

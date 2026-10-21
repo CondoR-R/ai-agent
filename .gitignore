@@ -29,3 +29,6 @@ data/processed/*
 mlflow.db
 optuna.db
 .env
+
+# pytest
+.pytest_cahce
