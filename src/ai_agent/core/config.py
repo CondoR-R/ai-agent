@@ -41,7 +41,7 @@ def merge(f_dict: ConfigDict, cli_dict: ConfigDict) -> ConfigDict:
 
 def validate(
     config: ConfigDict,
-    fields: tuple[str, ...] = ("experiment", "seed"),
+    fields: tuple[str, ...] = ("experiment", "seed", "tracked_libs"),
 ) -> None:
     """Проверка присутствия обязательных полей
 

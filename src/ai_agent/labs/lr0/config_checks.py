@@ -2,7 +2,15 @@
 
 from ai_agent.core import config as core_config
 
-LR0_FIELDS = ("experiment", "split_seed", "seed", "model", "train", "runtime")
+LR0_FIELDS = (
+    "experiment",
+    "split_seed",
+    "seed",
+    "model",
+    "train",
+    "runtime",
+    "tracked_libs",
+)
 
 
 def validate_lr0(config: core_config.ConfigDict) -> None:

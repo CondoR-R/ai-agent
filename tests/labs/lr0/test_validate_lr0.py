@@ -24,6 +24,7 @@ def valid_config() -> core_config.ConfigDict:
         "model": {},  # при необходимости добавьте обязательные поля
         "train": {"lr": 0.001, "epochs": 10},
         "runtime": {},  # при необходимости добавьте обязательные поля
+        "tracked_libs": {},
     }
 
 

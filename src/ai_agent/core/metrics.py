@@ -1,7 +1,7 @@
 """Работа с файлом metrics.json в runs/<run_id>/"""
 
 from pathlib import Path
-from .paths import METRICS_FILENAME
+from .paths import METRICS_FILENAME, RESULTS_FILENAME
 import json
 from typing import Callable
 from . import results
@@ -19,7 +19,7 @@ def compute(
 
     return: словарь с подсчитанными метриками
     """
-    records = results.load(run_dir)
+    records = results.load(run_dir / RESULTS_FILENAME)
     metrics = metric_fn(records)
     return metrics
 
