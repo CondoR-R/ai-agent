@@ -4,17 +4,6 @@ from torch import Tensor, nn
 
 
 class MLP(nn.Module):
-    """Полносвязная сеть: in_features → n_layers скрытых слоёв → n_classes.
-
-    Каждый скрытый слой: Linear → ReLU → Dropout. Выходной слой —
-    Linear без активации, возвращает логиты для CrossEntropyLoss.
-
-    Пример архитектуры при n_layers=2:
-        64 → hidden → ReLU → Dropout
-        hidden → hidden → ReLU → Dropout
-        hidden → 10 (логиты)
-    """
-
     def __init__(
         self,
         n_layers: int,

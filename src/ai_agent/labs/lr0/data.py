@@ -100,7 +100,7 @@ def validate_split(y: np.ndarray, split: dict[str, list[int]]):
 
     raise: ValueError, при некорректных значениях
     """
-    parts = ['train', 'val', 'test']
+    parts = ["train", "val", "test"]
     all_idx = np.concatenate(
         [np.asarray(split[p], dtype=np.int64) for p in parts]
     )
@@ -118,4 +118,3 @@ def validate_split(y: np.ndarray, split: dict[str, list[int]]):
         if part_classes != all_classes:
             missing = sorted(all_classes - part_classes)
             raise ValueError(f"В части {p} пропущены классы: {missing}")
-
