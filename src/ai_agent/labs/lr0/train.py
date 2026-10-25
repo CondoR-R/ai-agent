@@ -1,26 +1,28 @@
-from .model import MLP
+"""Обучение модели"""
+
 import torch
-from torch import nn, optim
+from torch.utils.data import DataLoader
+from torch import nn
 
-class Trainer:
-    def __init__(self, model: MLP, train_cfg: dict) -> None:
-        """Создает тренера для MLP модели
-        
-        params:
-            model - MLP модель
-            train_cfg - конфигурация обучения, словарь с полями:
-                {"lr", "weight_decay", "batch_size", "epochs"}
-        """
-        self.model = model
-        self.loss = nn.CrossEntropyLoss()
-        self.optimizer = optim.Adam(
-            self.model.parameters(),
-            train_cfg['lr'],
-            weight_decay=train_cfg['weight_decay']
-        )
-        self.n_epochs = train_cfg['epochs']
+from .model import MLP
 
 
+def train(model: MLP, train_cfg: dict, loader: DataLoader):
+    """Обучение модели
+    
+    params:
+        model - обучаемая модель
+        train_cfg - поле train из конфигурации
+        loader - даталоадер
+    """
+    optimizer = torch.optim.Adam(model.parameters(), train_cfg['lr'], weight_decay=train_cfg['weight_decay'])
+    loss_fn = nn.CrossEntropyLoss()
 
-
-
+    for _ in range(1, train_cfg['epochs'] + 1):
+        model.train()
+        for x, y in loader:
+            optimizer.zero_grad()
+            logits = model(x)
+            loss = loss_fn(logits, y)
+            loss.backward()
+            optimizer.step()
