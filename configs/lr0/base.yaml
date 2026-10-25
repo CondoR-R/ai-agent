@@ -16,11 +16,3 @@ train:
 runtime:
   device: cpu
   num_threads: 1
-
-tracked_libs:
-  - torch
-  - scikit-learn
-  - numpy
-  - mlflow
-  - optuna
-  - pyyaml
