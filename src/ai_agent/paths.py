@@ -1,6 +1,7 @@
 """Пути, имена файлов"""
 
 from pathlib import Path
+from datetime import datetime
 
 MARKER_FILENAME = "pyproject.toml"
 
@@ -39,3 +40,34 @@ PROJECT_ROOT = _find_project_root()
 RUNS_DIR = PROJECT_ROOT / "runs"
 DATA_DIR = PROJECT_ROOT / "data"
 MANIFEST_PATH = DATA_DIR / "manifest.json"
+
+
+def timestamp(fmt: str = "%Y-%m-%d_%H-%M-%S") -> str:
+    """Текущее время в формате ГОД-МЕСЯЦ-ДЕНЬ_ЧАС-МИНУТЫ-СЕКУНДЫ."""
+    return datetime.now().strftime(fmt)
+
+def get_run_id(work: str, experiment: int) -> Path:
+    """Генерация названия <run_id>/
+
+    params:
+        work - название работы
+        experiment - номер эксперимента
+
+    return: название директории
+    """
+    return Path(f"{work}-experiment{experiment}-{timestamp()}")
+
+def create_run_dir(dir_name: Path) -> Path:
+    """Создание директории запуска в runs/
+
+    params:
+        dir_name - название директории <run_id>/
+
+    return: путь к директории запуска
+    """
+    dir_path = RUNS_DIR / dir_name
+
+    dir_name.parent.mkdir(parents=True, exist_ok=True)
+    dir_name.mkdir(parents=True, exist_ok=False)
+
+    return dir_path

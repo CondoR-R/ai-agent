@@ -1,8 +1,8 @@
 """Обучение модели"""
 
 import torch
-from torch.utils.data import DataLoader
 from torch import nn
+from torch.utils.data import DataLoader
 
 from .model import MLP
 
