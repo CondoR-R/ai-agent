@@ -23,20 +23,22 @@ def main():
 
     # сохранение в manifest.json
     manifest = {
-        "source": "scikit-learn",
-        "version": version("scikit-learn"),
-        "rule": {
-            "test_size": TEST_SIZE,
-            "val_size": VAL_SIZE,
-            "split_seed": SPLIT_SEED,
-            "stratify": "y",
-        },
-        "sizes": {
-            "train": len(split["train"]),
-            "val": len(split["val"]),
-            "test": len(split["test"]),
-        },
-        "sha256": split_sha256,
+        "lr0": {
+            "source": "scikit-learn",
+            "version": version("scikit-learn"),
+            "rule": {
+                "test_size": TEST_SIZE,
+                "val_size": VAL_SIZE,
+                "split_seed": SPLIT_SEED,
+                "stratify": "y",
+            },
+            "sizes": {
+                "train": len(split["train"]),
+                "val": len(split["val"]),
+                "test": len(split["test"]),
+            },
+            "sha256": split_sha256,
+        }
     }
     data.write_manifest(manifest, paths.MANIFEST_PATH)
 

@@ -57,11 +57,12 @@ class MLP(nn.Module):
         return self.net(x)
 
 
-def build_model(model_cfg: dict) -> MLP:
+def build_model(model_cfg: dict, device: str) -> MLP:
     """Создаёт MLP из секции model конфигурации
 
     params:
         model_cfg - словарь {n_layers, hidden, dropout}
+        devide - устройство, на котором будет модель
 
     return: модель с заданными параметрами
     """
@@ -69,4 +70,4 @@ def build_model(model_cfg: dict) -> MLP:
         n_layers=model_cfg["n_layers"],
         hidden=model_cfg["hidden"],
         dropout=model_cfg["dropout"],
-    )
+    ).to(device)

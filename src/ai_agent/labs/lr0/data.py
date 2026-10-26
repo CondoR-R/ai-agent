@@ -5,8 +5,10 @@ import json
 from pathlib import Path
 
 import numpy as np
+import torch
 from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
+from torch.utils.data import DataLoader, TensorDataset
 
 from ai_agent import paths
 
@@ -118,3 +120,48 @@ def validate_split(y: np.ndarray, split: dict[str, list[int]]):
         if part_classes != all_classes:
             missing = sorted(all_classes - part_classes)
             raise ValueError(f"В части {p} пропущены классы: {missing}")
+
+
+def load_split(path: Path) -> dict[str, list[int]]:
+    """Загрузка сплита из файла
+
+    params:
+        path - путь к файлу
+
+    return: словарь со сплитом
+
+    raise: FileNotFoundError, при отсутвии файла
+    """
+    if not path.exists():
+        raise FileNotFoundError("Файл не найден по указанному пути")
+    with open(path, encoding="utf-8") as f:
+        split = json.load(f)
+    return split
+
+
+def get_loader(
+    features: np.ndarray,
+    labels: np.ndarray,
+    bs: int,
+    g: torch.Generator,
+    shuffle: bool = False,
+) -> DataLoader:
+    """Получение DataLoader
+
+    params:
+        features - numpy массив признаков
+        labels - numpy массив меток
+        bs - размер батча
+        g - генератор
+        shuffle - нужно ли перемешивать (по умолчанию False)
+
+    return: DataLoader
+    """
+    features_t = torch.from_numpy(features)
+    labels_t = torch.from_numpy(labels).long()
+
+    dataset = TensorDataset(features_t, labels_t)
+    loader = DataLoader(
+        dataset=dataset, batch_size=bs, shuffle=shuffle, generator=g
+    )
+    return loader

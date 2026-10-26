@@ -1,16 +1,18 @@
 {
-  "source": "scikit-learn",
-  "version": "1.9.1",
-  "rule": {
-    "test_size": 0.2,
-    "val_size": 0.25,
-    "split_seed": 0,
-    "stratify": "y"
-  },
-  "sizes": {
-    "train": 1077,
-    "val": 360,
-    "test": 360
-  },
-  "sha256": "15784ba5a76de42db28c379ed560b6baed63df57c518616b592b9d6abd2378fa"
+  "lr0": {
+    "source": "scikit-learn",
+    "version": "1.9.1",
+    "rule": {
+      "test_size": 0.2,
+      "val_size": 0.25,
+      "split_seed": 0,
+      "stratify": "y"
+    },
+    "sizes": {
+      "train": 1077,
+      "val": 360,
+      "test": 360
+    },
+    "sha256": "15784ba5a76de42db28c379ed560b6baed63df57c518616b592b9d6abd2378fa"
+  }
 }

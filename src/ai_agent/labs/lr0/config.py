@@ -7,7 +7,7 @@ from ai_agent import paths
 
 def load(path: Path) -> dict:
     """Чтение YAML файла
-    
+
     params:
         path - путь к файлу
     return: словарь с конфигурацией"""
@@ -17,8 +17,8 @@ def load(path: Path) -> dict:
 
 
 def get_cfg_path(filename: Path | str) -> Path:
-    """Получение пути к файлу """
-    return paths.PROJECT_ROOT / 'configs' / 'lr0' / filename
+    """Получение пути к файлу"""
+    return paths.PROJECT_ROOT / "configs" / "lr0" / filename
 
 
 def merge(file_cfg: dict, cli_cfg: dict) -> dict:
@@ -35,10 +35,10 @@ def merge(file_cfg: dict, cli_cfg: dict) -> dict:
 
 def save(path: Path, cfg: dict):
     """Сохранение файла конфигурации
-    
+
     params:
         path - путь к файлу
         cfg - словрь конфигурации
     """
-    with open(path, 'w', encoding='utf-8') as f:
+    with open(path, "w", encoding="utf-8") as f:
         yaml.safe_dump(cfg, f, allow_unicode=True, sort_keys=False)
