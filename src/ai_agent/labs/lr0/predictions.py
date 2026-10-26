@@ -1,12 +1,12 @@
 """Работа с файлом <run_id>/predictions.csv"""
 
+import csv
+from pathlib import Path
+
 import torch
 from torch.utils.data import DataLoader
 
 from .model import MLP
-from pathlib import Path
-
-import csv
 
 
 @torch.no_grad()
@@ -47,8 +47,6 @@ def get_preds(
     return records
 
 
-
-
 def write(path: Path, preds: list[dict]) -> None:
     """Записывает предсказания в predictions.csv.
 
@@ -69,3 +67,4 @@ def write(path: Path, preds: list[dict]) -> None:
         writer = csv.DictWriter(f, fieldnames=list(preds[0].keys()))
         writer.writeheader()
         writer.writerows(preds)
+

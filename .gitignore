@@ -31,4 +31,4 @@ optuna.db
 .env
 
 # pytest
-.pytest_cahce
+.pytest_cache

@@ -11,6 +11,7 @@ from ai_agent.labs.lr0 import (
     metadata,
     predictions,
     train,
+    metrics, utils,
 )
 from ai_agent.labs.lr0.model import build_model
 
@@ -102,10 +103,11 @@ def main(config_path: Path, cli_cfg: dict, eval_test: bool, experiment: int):
 
     # обучение модели
     model = build_model(cfg["model"], device)
+    history_path = run_dir / "history.csv"
     for record in train.train(
         model, cfg["train"], train_loader, val_loader, device
     ):
-        history.update(run_dir / "history.csv", record)
+        history.update(history_path, record)
 
     # predictions
     preds = predictions.get_preds(
@@ -117,7 +119,33 @@ def main(config_path: Path, cli_cfg: dict, eval_test: bool, experiment: int):
                 model, test_loader, split["test"], "test", device
             )
         )
-    predictions.write(run_dir / 'predictions.csv', preds)
+    predictions_path = run_dir / "predictions.csv"
+    predictions.write(predictions_path, preds)
+
+    # metrics
+    h = utils.read_csv(history_path, cast={
+        "val_loss": float,
+        "time_epoch": float,
+    },)
+    val_loss = metrics.get_val_loss(h)
+    train_time = metrics.get_train_time(h)
+    p = utils.read_csv(predictions_path, cast={
+        'y_true': int,
+        'y_pred': int,
+    },)
+    val_acc = metrics.get_acc(p, 'val')
+
+    metrics_dict = {
+        "val_acc": val_acc,
+        "val_loss": val_loss,
+        "train_time": train_time,
+    }
+    if eval_test:
+        metrics_dict['test_acc'] = metrics.get_acc(p, 'test')
+
+    metrics.write(run_dir / "metrics.json ", metrics_dict)
+
+
 
 if __name__ == "__main__":
     args = parse_args()
