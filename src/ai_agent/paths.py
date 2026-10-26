@@ -66,7 +66,7 @@ def create_run_dir(dir_name: Path | str) -> Path:
     dir_name = Path(dir_name)
     dir_path = RUNS_DIR / dir_name
 
-    dir_name.parent.mkdir(parents=True, exist_ok=True)
-    dir_name.mkdir(parents=True, exist_ok=False)
+    dir_path.parent.mkdir(parents=True, exist_ok=True)
+    dir_path.mkdir(parents=True, exist_ok=False)
 
     return dir_path
