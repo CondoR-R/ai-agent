@@ -1,65 +1,39 @@
-"""Скрипт экспериментов"""
+"""Скрипт одного запуска"""
 
-import argparse
 from pathlib import Path
 
-from ai_agent import git_utils, paths, reproducibility
+from ai_agent import cli, files, reproducibility, utils
 from ai_agent.labs.lr0 import (
-    config,
     data,
-    history,
-    metadata,
-    predictions,
+    metrics,
     train,
-    metrics, utils,
 )
 from ai_agent.labs.lr0.model import build_model
 
 
-def parse_args() -> argparse.Namespace:
-    """Обработка аргументов командной строки"""
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", required=True)
-    parser.add_argument("--seed")
-    parser.add_argument("--split-seed")
-    parser.add_argument("--eval-test", action="store_true")
-
-    return parser.parse_args()
-
-
-def get_cli_cfg(args: argparse.Namespace) -> dict:
-    cfg = {}
-    if args.seed is not None:
-        cfg["seed"] = int(args.seed)
-    if args.split_seed is not None:
-        cfg["split_seed"] = int(args.split_seed)
-
-    return cfg
-
-
 def main(config_path: Path, cli_cfg: dict, eval_test: bool, experiment: int):
     # проверка чистоты дерева
-    git_utils.check_git()
+    utils.check_git()
 
     # конфигурация
-    file_cfg = config.load(config_path)
-    cfg = config.merge(file_cfg, cli_cfg)
+    file_cfg = files.read_yaml(config_path)
+    cfg = utils.merge_cfgs(file_cfg, cli_cfg)
 
     # фиксация воспроизводимости
     reproducibility.set_seed(cfg["seed"], cfg["runtime"]["num_threads"])
     generator = reproducibility.make_generator(cfg["seed"])
 
     # создание директории <run_id>/
-    run_id = paths.get_run_id(cfg["experiment"], experiment)
-    run_dir = paths.create_run_dir(run_id)
+    run_id = files.get_run_id(cfg["experiment"], experiment)
+    run_dir = files.create_run_dir(run_id)
 
     # сохранение конфигурации
-    config.save(run_dir / paths.CONFIG_FILENAME, cfg)
+    files.write_yaml(run_dir / files.CONFIG_FILENAME, cfg)
 
     # начальное состояние metadata.json
-    split_path = paths.DATA_DIR / "split.json"
-    split_sha256 = data.file_sha256(split_path)
-    m = metadata.get_metadata(
+    split_path = files.DATA_DIR / "split.json"
+    split_sha256 = files.get_sha256(split_path)
+    m = utils.get_metadata(
         run_id,
         "test",
         cfg["runtime"]["num_threads"],
@@ -67,11 +41,11 @@ def main(config_path: Path, cli_cfg: dict, eval_test: bool, experiment: int):
         ["torch", "scikit-learn", "optuna", "mlflow"],
         {"split.json": split_sha256},
     )
-    metadata.write(run_dir / paths.METADATA_FILENAME, m)
+    files.write_json(run_dir / files.METADATA_FILENAME, m)
 
     # получение данных
     features, labels = data.load_data()
-    split = data.load_split(split_path)
+    split = files.read_json(split_path)
 
     train_features, train_labels = (
         features[split["train"]],
@@ -107,33 +81,35 @@ def main(config_path: Path, cli_cfg: dict, eval_test: bool, experiment: int):
     for record in train.train(
         model, cfg["train"], train_loader, val_loader, device
     ):
-        history.update(history_path, record)
+        files.update_csv(history_path, record)
 
     # predictions
-    preds = predictions.get_preds(
-        model, val_loader, split["val"], "val", device
-    )
+    preds = train.get_preds(model, val_loader, split["val"], "val", device)
     if eval_test:
         preds.extend(
-            predictions.get_preds(
-                model, test_loader, split["test"], "test", device
-            )
+            train.get_preds(model, test_loader, split["test"], "test", device)
         )
     predictions_path = run_dir / "predictions.csv"
-    predictions.write(predictions_path, preds)
+    files.write_csv(predictions_path, preds)
 
     # metrics
-    h = utils.read_csv(history_path, cast={
-        "val_loss": float,
-        "time_epoch": float,
-    },)
+    h = files.read_csv(
+        history_path,
+        cast={
+            "val_loss": float,
+            "time_epoch": float,
+        },
+    )
     val_loss = metrics.get_val_loss(h)
     train_time = metrics.get_train_time(h)
-    p = utils.read_csv(predictions_path, cast={
-        'y_true': int,
-        'y_pred': int,
-    },)
-    val_acc = metrics.get_acc(p, 'val')
+    p = files.read_csv(
+        predictions_path,
+        cast={
+            "y_true": int,
+            "y_pred": int,
+        },
+    )
+    val_acc = metrics.get_acc(p, "val")
 
     metrics_dict = {
         "val_acc": val_acc,
@@ -141,15 +117,17 @@ def main(config_path: Path, cli_cfg: dict, eval_test: bool, experiment: int):
         "train_time": train_time,
     }
     if eval_test:
-        metrics_dict['test_acc'] = metrics.get_acc(p, 'test')
+        metrics_dict["test_acc"] = metrics.get_acc(p, "test")
 
-    metrics.write(run_dir / "metrics.json ", metrics_dict)
+    files.write_json(run_dir / "metrics.json ", metrics_dict)
 
+    # добавить обновление статуса в metadata
+    # округление до 4 знаков после запятой при записи
 
 
 if __name__ == "__main__":
-    args = parse_args()
+    args = cli.parse_args()
     config_path = Path(args.config)
-    cli_cfg = get_cli_cfg(args)
+    cli_cfg = cli.get_cli_cfg(args)
     eval_test = args.eval_test
     main(config_path, cli_cfg, eval_test, 0)

@@ -2,7 +2,7 @@
 
 from importlib.metadata import version
 
-from ai_agent import paths
+from ai_agent import files
 from ai_agent.labs.lr0 import data
 
 TEST_SIZE = 0.2
@@ -17,9 +17,9 @@ def main():
     data.validate_split(labels, split)
 
     # сохранение разбиения
-    split_path = paths.DATA_DIR / "split.json"
-    data.save_split(split_path, split)
-    split_sha256 = data.file_sha256(split_path)
+    split_path = files.DATA_DIR / "split.json"
+    files.write_json(split_path, split)
+    split_sha256 = files.get_sha256(split_path)
 
     # сохранение в manifest.json
     manifest = {
@@ -40,7 +40,7 @@ def main():
             "sha256": split_sha256,
         }
     }
-    data.write_manifest(manifest, paths.MANIFEST_PATH)
+    files.write_json(files.MANIFEST_PATH, manifest)
 
 
 if __name__ == "__main__":
