@@ -17,6 +17,7 @@ wheels/
 .DS_Store
 
 # project files
+experiments/
 runs/
 mlartifacts/
 mlruns/
@@ -32,3 +33,4 @@ optuna.db
 
 # pytest
 .pytest_cache
+
