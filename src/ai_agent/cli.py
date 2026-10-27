@@ -6,9 +6,20 @@ import argparse
 def parse_args() -> argparse.Namespace:
     """Обработка аргументов командной строки"""
     parser = argparse.ArgumentParser()
+    # номер эксперимента
+    parser.add_argument("--exp", required=True)
+
+    # серия эксперимента
+    parser.add_argument("--series", default="base")
+
+    # путь к конфигу
     parser.add_argument("--config", required=True)
+
+    # переопределение конфига
     parser.add_argument("--seed")
     parser.add_argument("--split-seed")
+
+    # включать ли тестовые данные
     parser.add_argument("--eval-test", action="store_true")
 
     return parser.parse_args()
