@@ -60,7 +60,9 @@ def run(
     print('Сохранено начальное состояние metadata.json')
 
     try:
+        print('Начало выполнения скрипта лабы')
         lab_fn(cfg, run_dir, eval_test)
+        print('Скрипт лабы выполнен')
         # будущие лабы: логика работы с metric.json должна быть здесь
         metadata.update(run_dir, 'completed')
     except BaseException as exc:
