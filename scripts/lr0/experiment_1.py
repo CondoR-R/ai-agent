@@ -15,15 +15,14 @@ def main():
     eval_test = args.eval_test
     series = args.series
 
-    run_dirs = []
+    run_dirs = {}
 
     # 1 Запуск базовой конфигурации дважды с seed 0.
     cli_cfg["seed"] = 0
     run_dir_1_1 = run(config_path, cli_cfg, exp, series, eval_test)
     run_dir_1_2 = run(config_path, cli_cfg, exp, series, eval_test)
 
-    run_dirs.append(run_dir_1_1)
-    run_dirs.append(run_dir_1_2)
+    run_dirs['task_1'] = [str(run_dir_1_1), str(run_dir_1_2)]
 
     # Файлы history.csv и predictions.csv должны совпасть
     assert compare_csv(
@@ -38,10 +37,11 @@ def main():
     )
 
     # 2 Серия base_seeds: базовая конфигурация с seed от 1 до 5.
+    run_dirs["task_2"] = []
     for seed in range(1, 6):
         cli_cfg["seed"] = seed
         run_dir_2 = run(config_path, cli_cfg, exp, "base_seeds", eval_test)
-        run_dirs.append(run_dir_2)
+        run_dirs["task_2"].append(str(run_dir_2))
 
     # 3 Сравнение предсказаний двух запусков с разными seed
     cli_cfg["seed"] = 0
@@ -49,13 +49,14 @@ def main():
     cli_cfg["seed"] = 1
     run_dir_3_2 = run(config_path, cli_cfg, exp, series, eval_test)
 
-    run_dirs.append(run_dir_3_1)
-    run_dirs.append(run_dir_3_2)
+    run_dirs["task_3"] = []
+    run_dirs['task_3'].append(run_dir_3_1)
+    run_dirs['task_3'].append(run_dir_3_2)
 
     # Сохранение путей к запускам в JSON
     files.write_json(
         files.PROJECT_ROOT / "experiments" / "lr0.json",
-        {"exp_1": [str(p) for p in run_dirs]},
+        {"exp_1": run_dirs},
     )
 
 
