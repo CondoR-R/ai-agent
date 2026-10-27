@@ -4,6 +4,7 @@ import csv
 import hashlib
 import json
 from pathlib import Path
+import traceback
 
 import yaml
 
@@ -223,3 +224,17 @@ def read_csv(path: Path, cast: dict[str, type] | None = None) -> list[dict]:
             rows.append(row)
 
     return rows
+
+
+def write_error(path: Path, exc: BaseException) -> None:
+    """Записывает трейсбек исключения в текстовый файл.
+
+    params:
+        path - путь к файлу (например, runs/<run_id>/error.txt)
+        exc  - пойманное исключение
+    """
+
+    text = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
+
+    with path.open("w", encoding="utf-8") as f:
+        f.write(text)

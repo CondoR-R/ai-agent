@@ -19,8 +19,6 @@ def main():
 
     run.run(config_path, cli_cfg, exp, series, sha256, lr0_run, eval_test)
 
-    # добавить обновление статуса в metadata
-
 
 if __name__ == "__main__":
     main()

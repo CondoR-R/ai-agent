@@ -56,9 +56,10 @@ def run(
     try:
         lab_fn(cfg, run_dir, eval_test)
         # будущие лабы: логика работы с metric.json должна быть здесь
-
-    except BaseException as ex:
-        raise Exception from ex
+        metadata.update(run_dir, 'completed')
+    except BaseException as exc:
+        metadata.update(run_dir, 'failed')
+        files.write_error(run_dir / files.ERROR_FILENAME, exc)
 
     # добавить обновление статуса в metadata
     # округление до 4 знаков после запятой при записи
