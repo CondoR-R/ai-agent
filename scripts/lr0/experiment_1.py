@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from ai_agent import cli, files
+from run import main as run
 
-from .run import main as run
+from ai_agent import cli, files
 
 
 def main():
@@ -10,14 +10,19 @@ def main():
 
     config_path = Path(args.config)
     cli_cfg = cli.get_cli_cfg(args)
-    exp = int(args.exp)
+    exp = 1
     eval_test = args.eval_test
     series = args.series
+
+    run_dirs = []
 
     # 1 Запуск базовой конфигурации дважды с seed 0.
     cli_cfg["seed"] = 0
     run_dir_1_1 = run(config_path, cli_cfg, exp, series, eval_test)
     run_dir_1_2 = run(config_path, cli_cfg, exp, series, eval_test)
+
+    run_dirs.append(run_dir_1_1)
+    run_dirs.append(run_dir_1_2)
 
     # Файлы history.csv и predictions.csv должны совпасть полностью
     assert files.get_sha256(run_dir_1_1 / "history.csv") == files.get_sha256(
@@ -30,6 +35,21 @@ def main():
     for seed in range(1, 6):
         cli_cfg["seed"] = seed
         run_dir_2 = run(config_path, cli_cfg, exp, "base_seeds", eval_test)
+        run_dirs.append(run_dir_2)
+
+    # 3 Сравнение предсказаний двух запусков с разными seed
+    cli_cfg["seed"] = 0
+    run_dir_3_1 = run(config_path, cli_cfg, exp, series, eval_test)
+    cli_cfg["seed"] = 1
+    run_dir_3_2 = run(config_path, cli_cfg, exp, series, eval_test)
+
+    run_dirs.append(run_dir_3_1)
+    run_dirs.append(run_dir_3_2)
+
+    # Сохранение путей к запускам в JSON
+    files.write_json(
+        files.PROJECT_ROOT / "experiments" / "lr0.json", {"exp_1": run_dirs}
+    )
 
 
 if __name__ == "__main__":

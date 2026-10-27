@@ -101,6 +101,7 @@ def write_json(path: Path, record: dict) -> None:
         path - путь к файлу
         record - записываемый словарь, сериализуемый в JSON)
     """
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         json.dump(record, f, ensure_ascii=False, indent=2)
         f.write("\n")

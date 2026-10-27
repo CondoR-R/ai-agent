@@ -7,7 +7,7 @@ def parse_args() -> argparse.Namespace:
     """Обработка аргументов командной строки"""
     parser = argparse.ArgumentParser()
     # номер эксперимента
-    parser.add_argument("--exp", required=True)
+    parser.add_argument("--exp")
 
     # серия эксперимента
     parser.add_argument("--series", default="base")
