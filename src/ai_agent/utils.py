@@ -50,7 +50,7 @@ def get_versions(libs: tuple[str, ...]) -> dict[str, str]:
     return: словарь с версиями
     """
     v = {
-        "python": platform.version(),
+        "python": platform.python_version(),
     }
     for lib in libs:
         v[lib] = version(lib)
