@@ -36,14 +36,14 @@ def init(
 
 def update(run_dir: Path, status: str) -> None:
     """Обновление статуса в metadata.json
-    
+
     params:
         run_dir - директория запуска
         status - обновленный статус (completed или failed)
     """
     metadata = files.read_json(run_dir / files.METADATA_FILENAME)
-    metadata['status'] = status
-    metadata['finished_at'] = utils.time_now()
+    metadata["status"] = status
+    metadata["finished_at"] = utils.time_now()
     files.write_json(run_dir / files.METADATA_FILENAME, metadata)
 
 

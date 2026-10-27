@@ -17,8 +17,8 @@ def lr0_run(cfg: dict, run_dir: Path, eval_test: bool) -> None:
         eval_test - флаг тестовых данных
     """
     # проверка lr >= 0
-    if cfg['train']['lr'] < 0:
-        raise ValueError('lr должен быть положительным')
+    if cfg["train"]["lr"] < 0:
+        raise ValueError("lr должен быть положительным")
     # получение данных
     features, labels = data.load_data()
     split = files.read_json(files.DATA_DIR / "split.json")

@@ -3,8 +3,8 @@
 import csv
 import hashlib
 import json
-from pathlib import Path
 import traceback
+from pathlib import Path
 
 import yaml
 
@@ -238,7 +238,9 @@ def write_error(path: Path, exc: BaseException) -> None:
         exc  - пойманное исключение
     """
 
-    text = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
+    text = "".join(
+        traceback.format_exception(type(exc), exc, exc.__traceback__)
+    )
 
     with path.open("w", encoding="utf-8") as f:
         f.write(text)
