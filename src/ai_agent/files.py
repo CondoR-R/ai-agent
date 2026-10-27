@@ -5,6 +5,7 @@ import hashlib
 import json
 import traceback
 from pathlib import Path
+import uuid
 
 import yaml
 
@@ -62,7 +63,8 @@ def get_run_id(work: str, experiment: int) -> str:
 
     return: название директории
     """
-    return f"{work}-experiment{experiment}-{utils.time_now()}"
+    suffix = uuid.uuid4().hex[:6]
+    return f"{work}-experiment{experiment}-{utils.time_now()}-{suffix}"
 
 
 def create_run_dir(dir_name: Path | str) -> Path:
