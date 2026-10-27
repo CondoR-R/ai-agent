@@ -25,8 +25,10 @@ def compare_csv(
     """
     path_a, path_b = Path(path_a), Path(path_b)
 
-    with path_a.open("r", newline="", encoding="utf-8") as fa, \
-         path_b.open("r", newline="", encoding="utf-8") as fb:
+    with (
+        path_a.open("r", newline="", encoding="utf-8") as fa,
+        path_b.open("r", newline="", encoding="utf-8") as fb,
+    ):
         reader_a = csv.DictReader(fa)
         reader_b = csv.DictReader(fb)
 
@@ -40,7 +42,7 @@ def compare_csv(
         if missing_b:
             raise KeyError(f"В {path_b} нет колонок: {missing_b}")
 
-        for _, (row_a, row_b) in enumerate(zip(reader_a, reader_b)):
+        for _, (row_a, row_b) in enumerate(zip(reader_a, reader_b, strict=False)):
             for col in columns:
                 if row_a[col] != row_b[col]:
                     return False

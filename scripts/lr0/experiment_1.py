@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from run import main as run
 from compare_csv import compare_csv
+from run import main as run
 
 from ai_agent import cli, files
 
@@ -26,10 +26,16 @@ def main():
     run_dirs.append(run_dir_1_2)
 
     # Файлы history.csv и predictions.csv должны совпасть
-    assert compare_csv(run_dir_1_1 / "history.csv", run_dir_1_2 / "history.csv", 
-                       columns=["epoch", "train_loss", "val_loss", "val_acc"],)
-    assert compare_csv(run_dir_1_1 / "predictions.csv", run_dir_1_2 / "predictions.csv",
-                       columns=['split', "index", 'y_true', 'y_pred'])
+    assert compare_csv(
+        run_dir_1_1 / "history.csv",
+        run_dir_1_2 / "history.csv",
+        columns=["epoch", "train_loss", "val_loss", "val_acc"],
+    )
+    assert compare_csv(
+        run_dir_1_1 / "predictions.csv",
+        run_dir_1_2 / "predictions.csv",
+        columns=["split", "index", "y_true", "y_pred"],
+    )
 
     # 2 Серия base_seeds: базовая конфигурация с seed от 1 до 5.
     for seed in range(1, 6):
@@ -48,7 +54,8 @@ def main():
 
     # Сохранение путей к запускам в JSON
     files.write_json(
-        files.PROJECT_ROOT / "experiments" / "lr0.json", {"exp_1": run_dirs}
+        files.PROJECT_ROOT / "experiments" / "lr0.json",
+        {"exp_1": [str(p) for p in run_dirs]},
     )
 
 
