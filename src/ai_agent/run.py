@@ -28,20 +28,25 @@ def run(
     """
     # проверка чистоты дерева
     utils.check_git()
+    print('Дерево проекта проверено')
 
     # конфигурация
     file_cfg = files.read_yaml(config_path)
     cfg = utils.merge_cfgs(file_cfg, cli_cfg)
+    print('получена конфигурация')
 
     # создание директории <run_id>/
     run_id = files.get_run_id(cfg["experiment"], exp)
     run_dir = files.create_run_dir(run_id)
+    print(f'создана директория runs/{run_id}/')
 
     # сохранение конфигурации
     files.write_yaml(run_dir / files.CONFIG_FILENAME, cfg)
+    print('Конфигурация сохранена')
 
     # фиксация воспроизводимости
     reproducibility.set_seed(cfg["seed"], cfg["runtime"]["num_threads"])
+    print('Воспроизводимость зафиксирована')
 
     # начальное состояние metadata.json
     metadata.init(
@@ -52,14 +57,15 @@ def run(
         ("torch", "scikit-learn", "optuna", "mlflow"),
         sha256,
     )
+    print('Сохранено начальное состояние metadata.json')
 
     try:
         lab_fn(cfg, run_dir, eval_test)
         # будущие лабы: логика работы с metric.json должна быть здесь
         metadata.update(run_dir, 'completed')
     except BaseException as exc:
+        print('Ошибка при выполнении сприпта лабы')
         metadata.update(run_dir, 'failed')
         files.write_error(run_dir / files.ERROR_FILENAME, exc)
 
-    # добавить обновление статуса в metadata
-    # округление до 4 знаков после запятой при записи
+    print('Экспреримент завершен')
