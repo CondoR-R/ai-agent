@@ -48,6 +48,10 @@ RUNS_DIR = PROJECT_ROOT / "runs"
 DATA_DIR = PROJECT_ROOT / "data"
 MANIFEST_PATH = DATA_DIR / "manifest.json"
 
+MLFLOW_DB = PROJECT_ROOT / "mlflow.db"
+MLFLOW_TRACKING_URI = f"sqlite:///{MLFLOW_DB.as_posix()}"
+MLFLOW_ARTIFACTS_DIR = PROJECT_ROOT / "mlartifacts"
+
 
 def get_run_id(work: str, experiment: int) -> str:
     """Генерация названия <run_id>/

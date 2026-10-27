@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from ai_agent import files, reproducibility
+from ai_agent import files, reproducibility, tracking
 
 from . import data, metrics, train
 from .model import build_model
@@ -56,6 +56,7 @@ def lr0_run(cfg: dict, run_dir: Path, eval_test: bool) -> None:
         model, cfg["train"], train_loader, val_loader, device
     ):
         files.update_csv(history_path, record)
+        tracking.log_epoch(record)
 
     # predictions
     preds = train.get_preds(model, val_loader, split["val"], "val", device)

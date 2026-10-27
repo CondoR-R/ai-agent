@@ -3,7 +3,7 @@
 from collections.abc import Callable
 from pathlib import Path
 
-from . import files, metadata, reproducibility, utils
+from . import files, metadata, reproducibility, utils, tracking
 
 
 def run(
@@ -60,14 +60,20 @@ def run(
     print('Сохранено начальное состояние metadata.json')
 
     try:
+        tracking.start(run_id, cfg, series, run_dir)
+        print('Запись MLflow открыта')
+
         print('Начало выполнения скрипта лабы')
         lab_fn(cfg, run_dir, eval_test)
         print('Скрипт лабы выполнен')
-        # будущие лабы: логика работы с metric.json должна быть здесь
+
         metadata.update(run_dir, 'completed')
     except BaseException as exc:
-        print('Ошибка при выполнении сприпта лабы')
+        print('Ошибка при выполнении скрипта лабы')
         metadata.update(run_dir, 'failed')
         files.write_error(run_dir / files.ERROR_FILENAME, exc)
+        tracking.finish(run_dir, error=f"{type(exc).__name__}: {exc}")
+        raise BaseException from exc
 
-    print('Экспреримент завершен')
+    tracking.finish(run_dir)
+    print('Эксперимент завершён')
