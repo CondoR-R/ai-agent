@@ -1,13 +1,15 @@
 {
-  "exp_1": [
-    "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-09-17",
-    "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-09-19",
-    "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-09-20",
-    "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-09-21",
-    "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-09-22",
-    "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-09-23",
-    "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-09-24",
-    "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-09-26",
-    "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-09-27"
-  ]
-}
+  "exp_1": {
+    "task_1": [
+      "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-14-01",
+      "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-14-03"
+    ],
+    "task_2": [
+      "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-14-04",
+      "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-14-05",
+      "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-14-06",
+      "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-14-07",
+      "/Users/dmitry/projects/ml/ai-agent/runs/lr0-experiment1-2026-10-27_16-14-08"
+    ],
+    "task_3": [
+      

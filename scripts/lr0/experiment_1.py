@@ -50,8 +50,8 @@ def main():
     run_dir_3_2 = run(config_path, cli_cfg, exp, series, eval_test)
 
     run_dirs["task_3"] = []
-    run_dirs['task_3'].append(run_dir_3_1)
-    run_dirs['task_3'].append(run_dir_3_2)
+    run_dirs['task_3'].append(str(run_dir_3_1))
+    run_dirs['task_3'].append(str(run_dir_3_2))
 
     # Сохранение путей к запускам в JSON
     files.write_json(
