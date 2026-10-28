@@ -18,7 +18,7 @@ EXCLUDED_PARAMS = ("tracked_libs",)
 FINAL_PREFIX = "final_"
 
 
-def setup(experiment: str) -> None:
+def setup(experiment: str) -> str:
     """Подключает хранилище и выбирает эксперимент MLflow.
 
     Расположение артефактов задаётся явно: иначе оно зависит от каталога,
@@ -26,13 +26,19 @@ def setup(experiment: str) -> None:
 
     params:
         experiment - имя эксперимента (например, lr0)
+
+    return: идентификатор эксперимента
     """
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-    if mlflow.get_experiment_by_name(experiment) is None:
-        mlflow.create_experiment(
+    existing = mlflow.get_experiment_by_name(experiment)
+    if existing is None:
+        experiment_id = mlflow.create_experiment(
             experiment, artifact_location=MLFLOW_ARTIFACTS_DIR.as_uri()
         )
-    mlflow.set_experiment(experiment)
+    else:
+        experiment_id = existing.experiment_id
+    mlflow.set_experiment(experiment_id=experiment_id)
+    return experiment_id
 
 
 def flatten(data: dict[str, Any], prefix: str = "") -> dict[str, Any]:

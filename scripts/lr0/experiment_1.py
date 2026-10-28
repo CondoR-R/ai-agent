@@ -53,10 +53,16 @@ def main():
     run_dirs['task_3'].append(str(run_dir_3_1))
     run_dirs['task_3'].append(str(run_dir_3_2))
 
+    try:
+        exp_lr0 = files.read_json(files.PROJECT_ROOT / "experiments" / "lr0.json")
+    except FileNotFoundError:
+        exp_lr0 = {}
+
+    exp_lr0["exp_1"] = run_dirs
     # Сохранение путей к запускам в JSON
     files.write_json(
         files.PROJECT_ROOT / "experiments" / "lr0.json",
-        {"exp_1": run_dirs},
+        exp_lr0,
     )
 
 
