@@ -1,0 +1,119 @@
+{
+  "seeds": {
+    "101": {
+      "base_run_id": "lr0-experiment3-2026-10-28_14-36-00-cbf631",
+      "best_run_id": "lr0-experiment3-2026-10-28_14-36-03-ca401c",
+      "base": {
+        "val_acc": 0.9555555555555556,
+        "test_acc": 0.9527777777777777
+      },
+      "best": {
+        "val_acc": 0.9722222222222222,
+        "test_acc": 0.9722222222222222
+      },
+      "delta_val_acc": 0.016666666666666607,
+      "delta_test_acc": 0.019444444444444486,
+      "test_counts": {
+        "both_correct": 340,
+        "corrected": 10,
+        "spoiled": 3,
+        "both_wrong": 7
+      }
+    },
+    "102": {
+      "base_run_id": "lr0-experiment3-2026-10-28_14-36-05-03eeb5",
+      "best_run_id": "lr0-experiment3-2026-10-28_14-36-05-d8c3b2",
+      "base": {
+        "val_acc": 0.9611111111111111,
+        "test_acc": 0.9444444444444444
+      },
+      "best": {
+        "val_acc": 0.9694444444444444,
+        "test_acc": 0.9583333333333334
+      },
+      "delta_val_acc": 0.008333333333333304,
+      "delta_test_acc": 0.01388888888888895,
+      "test_counts": {
+        "both_correct": 331,
+        "corrected": 14,
+        "spoiled": 9,
+        "both_wrong": 6
+      }
+    },
+    "103": {
+      "base_run_id": "lr0-experiment3-2026-10-28_14-36-07-6e581a",
+      "best_run_id": "lr0-experiment3-2026-10-28_14-36-08-a7261f",
+      "base": {
+        "val_acc": 0.95,
+        "test_acc": 0.9388888888888889
+      },
+      "best": {
+        "val_acc": 0.975,
+        "test_acc": 0.9611111111111111
+      },
+      "delta_val_acc": 0.025000000000000022,
+      "delta_test_acc": 0.022222222222222254,
+      "test_counts": {
+        "both_correct": 335,
+        "corrected": 11,
+        "spoiled": 3,
+        "both_wrong": 11
+      }
+    },
+    "104": {
+      "base_run_id": "lr0-experiment3-2026-10-28_14-36-10-800fa3",
+      "best_run_id": "lr0-experiment3-2026-10-28_14-36-11-f6cbb1",
+      "base": {
+        "val_acc": 0.9527777777777777,
+        "test_acc": 0.9472222222222222
+      },
+      "best": {
+        "val_acc": 0.9722222222222222,
+        "test_acc": 0.9777777777777777
+      },
+      "delta_val_acc": 0.019444444444444486,
+      "delta_test_acc": 0.030555555555555558,
+      "test_counts": {
+        "both_correct": 340,
+        "corrected": 12,
+        "spoiled": 1,
+        "both_wrong": 7
+      }
+    },
+    "105": {
+      "base_run_id": "lr0-experiment3-2026-10-28_14-36-12-31f542",
+      "best_run_id": "lr0-experiment3-2026-10-28_14-36-13-76d7c2",
+      "base": {
+        "val_acc": 0.9527777777777777,
+        "test_acc": 0.9555555555555556
+      },
+      "best": {
+        "val_acc": 0.975,
+        "test_acc": 0.9777777777777777
+      },
+      "delta_val_acc": 0.022222222222222254,
+      "delta_test_acc": 0.022222222222222143,
+      "test_counts": {
+        "both_correct": 344,
+        "corrected": 8,
+        "spoiled": 0,
+        "both_wrong": 8
+      }
+    }
+  },
+  "summary": {
+    "n_seeds": 5,
+    "n_test": 1800,
+    "corrected": 55,
+    "spoiled": 16,
+    "net": 39,
+    "delta_test_total": 0.021666666666666667,
+    "median_delta_val_acc": 0.019444444444444486,
+    "min_delta_val_acc": 0.008333333333333304,
+    "max_delta_val_acc": 0.025000000000000022,
+    "median_delta_test_acc": 0.022222222222222143,
+    "min_delta_test_acc": 0.01388888888888895,
+    "max_delta_test_acc": 0.030555555555555558
+  },
+  "series": "final"
+}

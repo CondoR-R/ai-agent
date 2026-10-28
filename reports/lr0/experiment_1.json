@@ -1,0 +1,91 @@
+{
+  "task_2": {
+    "seeds": {
+      "1": {
+        "run_id": "lr0-experiment1-2026-10-28_17-24-09-4fd02f",
+        "val_acc": 0.9583333333333334,
+        "train_time": 0.5967276651063003
+      },
+      "2": {
+        "run_id": "lr0-experiment1-2026-10-28_17-24-10-e55ecf",
+        "val_acc": 0.9583333333333334,
+        "train_time": 0.5877207510056905
+      },
+      "3": {
+        "run_id": "lr0-experiment1-2026-10-28_17-24-11-bbeac5",
+        "val_acc": 0.9527777777777777,
+        "train_time": 0.5886115022003651
+      },
+      "4": {
+        "run_id": "lr0-experiment1-2026-10-28_17-24-12-24b047",
+        "val_acc": 0.9527777777777777,
+        "train_time": 0.5913707091240212
+      },
+      "5": {
+        "run_id": "lr0-experiment1-2026-10-28_17-24-13-716acd",
+        "val_acc": 0.9611111111111111,
+        "train_time": 0.5918401230592281
+      }
+    },
+    "summary": {
+      "min_acc": 0.9527777777777777,
+      "median_acc": 0.9583333333333334,
+      "max_acc": 0.9611111111111111
+    }
+  },
+  "task_3": {
+    "counts": {
+      "both_correct": 341,
+      "only_first_correct": 1,
+      "only_second_correct": 4,
+      "both_wrong": 14
+    },
+    "first_acc": 0.95,
+    "second_acc": 0.9583333333333334,
+    "delta_acc": 0.008333333333333333,
+    "examples": [
+      {
+        "index": 177,
+        "y_true": 1,
+        "first_pred": 9,
+        "second_pred": 1
+      },
+      {
+        "index": 489,
+        "y_true": 3,
+        "first_pred": 5,
+        "second_pred": 3
+      },
+      {
+        "index": 1229,
+        "y_true": 0,
+        "first_pred": 5,
+        "second_pred": 0
+      },
+      {
+        "index": 1283,
+        "y_true": 0,
+        "first_pred": 5,
+        "second_pred": 0
+      },
+      {
+        "index": 1790,
+        "y_true": 8,
+        "first_pred": 8,
+        "second_pred": 1
+      }
+    ],
+    "run_ids": [
+      "lr0-experiment1-2026-10-28_17-24-06-b10609",
+      "lr0-experiment1-2026-10-28_17-24-09-4fd02f"
+    ],
+    "n_val": 360
+  },
+  "task_1": {
+    "run_ids": [
+      "lr0-experiment1-2026-10-28_17-24-06-b10609",
+      "lr0-experiment1-2026-10-28_17-24-08-53aab0"
+    ],
+    "identical": true
+  }
+}
