@@ -1,3 +1,5 @@
+"""Эксперимент 1: проверка воспроизводимости базовой конфигурации"""
+
 from pathlib import Path
 
 from compare_csv import compare_csv

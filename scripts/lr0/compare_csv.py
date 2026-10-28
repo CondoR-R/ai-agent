@@ -1,3 +1,4 @@
+"""сравнение 2х csv файлов по указанным колонкам"""
 import csv
 from pathlib import Path
 
