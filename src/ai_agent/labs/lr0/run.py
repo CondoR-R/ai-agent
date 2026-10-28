@@ -1,15 +1,15 @@
 """Эксперимент для lr0"""
 
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 
-from ai_agent import files, reproducibility, tracking
 import numpy as np
-
-from . import data, metrics, train
-from .model import build_model, MLP
 from torch.utils.data import DataLoader
 
+from ai_agent import files, reproducibility, tracking
+
+from . import data, metrics, train
+from .model import MLP, build_model
 
 
 @dataclass
@@ -32,6 +32,7 @@ def load_inputs() -> tuple[np.ndarray, np.ndarray, dict]:
     split = files.read_json(files.DATA_DIR / "split.json")
     return features, labels, split
 
+
 def prepare(cfg: dict, features, labels, split: dict) -> Prepared:
     """Загрузчики и модель для одной конфигурации.
 
@@ -46,19 +47,27 @@ def prepare(cfg: dict, features, labels, split: dict) -> Prepared:
 
     return: объект Prepared с моделью и загрузчиками
     """
-    train_features, train_labels = features[split["train"]], labels[split["train"]]
+    train_features, train_labels = (
+        features[split["train"]],
+        labels[split["train"]],
+    )
     val_features, val_labels = features[split["val"]], labels[split["val"]]
     test_features, test_labels = features[split["test"]], labels[split["test"]]
 
     device = cfg["runtime"]["device"]
     generator = reproducibility.make_generator(cfg["seed"])
     train_loader = data.get_loader(
-        train_features, train_labels, cfg["train"]["batch_size"], generator, shuffle=True
+        train_features,
+        train_labels,
+        cfg["train"]["batch_size"],
+        generator,
+        shuffle=True,
     )
     val_loader = data.get_loader(val_features, val_labels, 1, generator)
     test_loader = data.get_loader(test_features, test_labels, 1, generator)
     model = build_model(cfg["model"], device)
     return Prepared(model, train_loader, val_loader, test_loader, device)
+
 
 def lr0_run(cfg: dict, run_dir: Path, eval_test: bool) -> None:
     """Один запуск lr0
@@ -84,10 +93,14 @@ def lr0_run(cfg: dict, run_dir: Path, eval_test: bool) -> None:
         tracking.log_epoch(record)
 
     # predictions
-    preds = train.get_preds(ctx.model, ctx.val_loader, split["val"], "val", ctx.device)
+    preds = train.get_preds(
+        ctx.model, ctx.val_loader, split["val"], "val", ctx.device
+    )
     if eval_test:
         preds.extend(
-            train.get_preds(ctx.model, ctx.test_loader, split["test"], "test", ctx.device)
+            train.get_preds(
+                ctx.model, ctx.test_loader, split["test"], "test", ctx.device
+            )
         )
     predictions_path = run_dir / "predictions.csv"
     files.write_csv(predictions_path, preds)

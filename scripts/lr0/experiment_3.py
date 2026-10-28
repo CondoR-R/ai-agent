@@ -2,10 +2,9 @@
 
 from pathlib import Path
 
-from compare_csv import compare_csv
 from run import main as run
 
-from ai_agent import cli, files
+from ai_agent import files
 
 
 def main():
@@ -13,23 +12,25 @@ def main():
     series = "final"
     base_path = Path("configs/lr0/base.yaml")
     best_path = Path("configs/lr0/best.yaml")
-    seeds = [i for i in range(101, 106)]
+    seeds = list(range(101, 106))
     eval_test = True
 
     run_dirs = {
-        'base': [],
-        'best': [],
+        "base": [],
+        "best": [],
     }
     for seed in seeds:
-        cli_cfg = {'seed': seed}
+        cli_cfg = {"seed": seed}
         run_dir_base = run(base_path, cli_cfg, 3, series, eval_test)
         run_dir_best = run(best_path, cli_cfg, 3, series, eval_test)
 
-        run_dirs['base'].append(str(run_dir_base))
-        run_dirs['best'].append(str(run_dir_best))
+        run_dirs["base"].append(str(run_dir_base))
+        run_dirs["best"].append(str(run_dir_best))
 
     try:
-        exp_lr0 = files.read_json(files.PROJECT_ROOT / "experiments" / "lr0.json")
+        exp_lr0 = files.read_json(
+            files.PROJECT_ROOT / "experiments" / "lr0.json"
+        )
     except FileNotFoundError:
         exp_lr0 = {}
 

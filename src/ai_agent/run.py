@@ -75,7 +75,7 @@ def run(
         metadata.update(run_dir, "failed")
         files.write_error(run_dir / files.ERROR_FILENAME, exc)
         tracking.finish(run_dir, error=f"{type(exc).__name__}: {exc}")
-        raise BaseException from exc
+        raise exc
 
     tracking.finish(run_dir)
     print("запуск завершён")

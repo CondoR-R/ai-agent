@@ -2,8 +2,9 @@
 
 import copy
 import math
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 import mlflow
 import optuna
@@ -47,15 +48,21 @@ def suggest(trial: optuna.Trial, name: str, spec: dict) -> Any:
     """
     kind = spec["type"]
     if kind == "float":
-        return trial.suggest_float(name, spec["low"], spec["high"], log=spec.get("log", False))
+        return trial.suggest_float(
+            name, spec["low"], spec["high"], log=spec.get("log", False)
+        )
     if kind == "int":
-        return trial.suggest_int(name, spec["low"], spec["high"], log=spec.get("log", False))
+        return trial.suggest_int(
+            name, spec["low"], spec["high"], log=spec.get("log", False)
+        )
     if kind == "categorical":
         return trial.suggest_categorical(name, spec["choices"])
     raise ValueError(f"Неизвестный тип параметра {name}: {kind}")
 
 
-def build_trial_cfg(base_cfg: dict, space: dict, params: dict[str, Any]) -> dict:
+def build_trial_cfg(
+    base_cfg: dict, space: dict, params: dict[str, Any]
+) -> dict:
     """Конфигурация trial: базовая плюс значения параметров поиска
 
     params:
@@ -84,13 +91,19 @@ def make_objective(
     """
 
     def objective(trial: optuna.Trial) -> float:
-        params = {name: suggest(trial, name, spec) for name, spec in space.items()}
+        params = {
+            name: suggest(trial, name, spec) for name, spec in space.items()
+        }
         cfg = build_trial_cfg(base_cfg, space, params)
 
         mlflow.start_run(run_name=f"trial-{trial.number}", nested=True)
         status = "FINISHED"
         try:
-            logged = {k: v for k, v in cfg.items() if k not in tracking.EXCLUDED_PARAMS}
+            logged = {
+                k: v
+                for k, v in cfg.items()
+                if k not in tracking.EXCLUDED_PARAMS
+            }
             mlflow.log_params(tracking.flatten(logged))
             mlflow.set_tags({"trial_number": trial.number, "series": "search"})
 
@@ -99,7 +112,11 @@ def make_objective(
 
             val_acc = float("nan")
             for record in train.train(
-                ctx.model, cfg["train"], ctx.train_loader, ctx.val_loader, ctx.device
+                ctx.model,
+                cfg["train"],
+                ctx.train_loader,
+                ctx.val_loader,
+                ctx.device,
             ):
                 tracking.log_epoch(record)
                 val_acc = record["val_acc"]
@@ -118,7 +135,12 @@ def make_objective(
         except optuna.TrialPruned:
             raise
         except BaseException as exc:
-            mlflow.set_tags({"state": "FAIL", "error_message": f"{type(exc).__name__}: {exc}"})
+            mlflow.set_tags(
+                {
+                    "state": "FAIL",
+                    "error_message": f"{type(exc).__name__}: {exc}",
+                }
+            )
             status = "FAILED"
             raise
         finally:
@@ -182,7 +204,7 @@ def run_search(
     # if parent_id:
     #     parent = mlflow.start_run(run_id=parent_id)
     if not parent_id:
-    # else:
+        # else:
         # parent = mlflow.start_run(run_name=name)
         mlflow.log_params(
             {
@@ -207,7 +229,10 @@ def run_search(
             callbacks=[MaxTrialsCallback(target, states=None)],
         )
         mlflow.set_tags(
-            {f"n_{s.name.lower()}": len(study.get_trials(states=(s,))) for s in TrialState}
+            {
+                f"n_{s.name.lower()}": len(study.get_trials(states=(s,)))
+                for s in TrialState
+            }
         )
         mlflow.end_run()
     except BaseException:
@@ -217,7 +242,10 @@ def run_search(
 
 
 def save_best_config(
-    study: optuna.Study, base_config_path: Path, search_path: Path, out_path: Path
+    study: optuna.Study,
+    base_config_path: Path,
+    search_path: Path,
+    out_path: Path,
 ) -> dict:
     """Записывает параметры лучшего trial в конфигурацию (configs/lr0/best.yaml)
 
