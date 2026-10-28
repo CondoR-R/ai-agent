@@ -34,3 +34,6 @@ optuna.db
 # pytest
 .pytest_cache
 
+# matplotlib cache
+.cache/
+

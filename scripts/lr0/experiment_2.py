@@ -5,6 +5,7 @@ from pathlib import Path
 
 from optuna.trial import TrialState
 
+from ai_agent import files
 from ai_agent.labs.lr0 import search
 
 
@@ -13,7 +14,7 @@ def main() -> None:
     parser.add_argument("--config", default="configs/lr0/base.yaml")
     parser.add_argument("--search", default="configs/lr0/search_space.yaml")
     parser.add_argument(
-        "--trials", type=int, default=None, help="общее число trial в study"
+        "--trials", type=int, default=40, help="общее число trial в study"
     )
     parser.add_argument(
         "--save-best", default=None, help="куда записать best.yaml"
@@ -51,6 +52,26 @@ def main() -> None:
             study, Path(args.config), Path(args.search), Path(args.save_best)
         )
         print(f"[EXP2] best.yaml: {args.save_best}", flush=True)
+
+    base_cfg = files.read_yaml(Path(args.config))
+    search_cfg = files.read_yaml(Path(args.search))
+    from ai_agent.labs.lr0 import search_report
+
+    report = search_report.save_search_report(
+        study,
+        epochs_per_trial=base_cfg["train"]["epochs"],
+        target_trials=search_cfg["n_trials"],
+    )
+    print(f"[EXP2] отчёт: {report['report_path']}", flush=True)
+    if report["plots"]:
+        print(
+            "[EXP2] графики: " + ", ".join(report["plots"].values()),
+            flush=True,
+        )
+    if report["plot_errors"]:
+        print(
+            f"[EXP2] ошибки графиков: {report['plot_errors']}", flush=True
+        )
 
 
 if __name__ == "__main__":
