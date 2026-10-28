@@ -142,7 +142,6 @@ def main():
     cli_cfg["seed"] = 0
     run_dir_1_1 = run(config_path, cli_cfg, exp, series, eval_test)
     run_dir_1_2 = run(config_path, cli_cfg, exp, series, eval_test)
-    analyze_task1([run_dir_1_1, run_dir_1_2])
 
     # 2 Серия base_seeds: базовая конфигурация с seed от 1 до 5.
     run_dirs_2 = []
@@ -150,13 +149,14 @@ def main():
         cli_cfg["seed"] = seed
         run_dir_2 = run(config_path, cli_cfg, exp, "base_seeds", eval_test)
         run_dirs_2.append(run_dir_2)
-    analyze_task2(run_dirs_2)
 
     # 3 Сравнение предсказаний двух запусков с разными seed
     cli_cfg["seed"] = 0
     run_dir_3_1 = run(config_path, cli_cfg, exp, series, eval_test)
     cli_cfg["seed"] = 1
     run_dir_3_2 = run(config_path, cli_cfg, exp, series, eval_test)
+    analyze_task1([run_dir_1_1, run_dir_1_2])
+    analyze_task2(run_dirs_2)
     analyze_task3([run_dir_3_1, run_dir_3_2])
 
 
