@@ -25,8 +25,8 @@ def main():
         run_dir_base = run(base_path, cli_cfg, 3, series, eval_test)
         run_dir_best = run(best_path, cli_cfg, 3, series, eval_test)
 
-        run_dirs['base'].append(run_dir_base)
-        run_dirs['best'].append(run_dir_best)
+        run_dirs['base'].append(str(run_dir_base))
+        run_dirs['best'].append(str(run_dir_best))
 
     try:
         exp_lr0 = files.read_json(files.PROJECT_ROOT / "experiments" / "lr0.json")
