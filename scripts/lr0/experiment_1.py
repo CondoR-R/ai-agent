@@ -86,11 +86,13 @@ def main() -> None:
     eval_test = False
 
     # 1. Базовая конфигурация дважды с seed 0.
+    print("[EXP1] 1/3: повторяемость — 2 запуска с seed=0", flush=True)
     cli_cfg["seed"] = 0
     run_dir_1_1 = run(config_path, cli_cfg, exp, series, eval_test)
     run_dir_1_2 = run(config_path, cli_cfg, exp, series, eval_test)
 
     # 2. Серия base_seeds: seed от 1 до 5.
+    print("[EXP1] 2/3: серия base_seeds — seeds 1..5", flush=True)
     run_dirs_2 = []
     for seed in range(1, 6):
         cli_cfg["seed"] = seed
@@ -98,9 +100,11 @@ def main() -> None:
         run_dirs_2.append(run_dir_2)
 
     # 3. Сравниваем seed 0 из task_1 и seed 1 из task_2.
+    print("[EXP1] 3/3: сравнение предсказаний seed 0 и seed 1", flush=True)
     analyze_task1([run_dir_1_1, run_dir_1_2])
     analyze_task2(run_dirs_2)
     analyze_task3([run_dir_1_1, run_dirs_2[0]])
+    print("[EXP1] отчёт: reports/lr0/experiment_1.json", flush=True)
 
 
 if __name__ == "__main__":

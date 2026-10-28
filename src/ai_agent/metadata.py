@@ -12,7 +12,7 @@ def init(
     cfg: dict,
     libs: tuple[str, ...],
     sha256: dict[str, str],
-):
+) -> dict:
     """Запись начального состояния metadata.json
 
     params:
@@ -22,6 +22,8 @@ def init(
         cfg - словарь конфигурации
         libs - кортеж библиотек
         sha256 - словарь с sha256 файлов, ключ - название файла
+
+    return: записанный словарь metadata
     """
     m = get_metadata(
         run_id,
@@ -32,6 +34,7 @@ def init(
         sha256,
     )
     files.write_json(run_dir / files.METADATA_FILENAME, m)
+    return m
 
 
 def update(run_dir: Path, status: str) -> None:

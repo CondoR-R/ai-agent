@@ -1,12 +1,13 @@
 """Эксперимент для lr0"""
 
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
 from torch.utils.data import DataLoader
 
-from ai_agent import files, reproducibility, tracking
+from ai_agent import console, files, reproducibility, tracking
 
 from . import data, metrics, train
 from .model import MLP, build_model
@@ -77,20 +78,50 @@ def lr0_run(cfg: dict, run_dir: Path, eval_test: bool) -> None:
         run_dir - директория запуска
         eval_test - флаг тестовых данных
     """
-    # проверка lr >= 0
-    if cfg["train"]["lr"] < 0:
-        raise ValueError("lr должен быть положительным")
+    # проверка lr > 0
+    if cfg["train"]["lr"] <= 0:
+        raise ValueError("lr должен быть больше 0")
+
     # получение данных
     features, labels, split = load_inputs()
+    n_features = features.shape[1]
+    n_classes = len(np.unique(labels))
+    console.info(
+        f"данные: train={len(split['train'])}, val={len(split['val'])}, "
+        f"test={len(split['test'])}; признаки={n_features}, "
+        f"классы={n_classes}"
+    )
+
     ctx = prepare(cfg, features, labels, split)
+
+    model_cfg = cfg["model"]
+    n_params = sum(p.numel() for p in ctx.model.parameters())
+    params_text = f"{n_params:,}".replace(",", " ")
+    console.info(
+        f"модель: {n_features} → {model_cfg['n_layers']}×"
+        f"[Linear({model_cfg['hidden']})+ReLU+"
+        f"Dropout({model_cfg['dropout']})] → {n_classes}; "
+        f"параметров={params_text}"
+    )
+
+    train_cfg = cfg["train"]
+    console.info(
+        f"обучение: старт ({train_cfg['epochs']} эпох, "
+        f"batch={train_cfg['batch_size']}, lr={train_cfg['lr']}, "
+        f"устройство={ctx.device})"
+    )
 
     # обучение модели
     history_path = run_dir / "history.csv"
+    train_started = time.perf_counter()
     for record in train.train(
         ctx.model, cfg["train"], ctx.train_loader, ctx.val_loader, ctx.device
     ):
         files.update_csv(history_path, record)
         tracking.log_epoch(record)
+    console.info(
+        f"обучение: готово за {time.perf_counter() - train_started:.2f} с"
+    )
 
     # predictions
     preds = train.get_preds(
@@ -104,6 +135,13 @@ def lr0_run(cfg: dict, run_dir: Path, eval_test: bool) -> None:
         )
     predictions_path = run_dir / "predictions.csv"
     files.write_csv(predictions_path, preds)
+
+    eval_parts = [f"val={len(split['val'])}"]
+    if eval_test:
+        eval_parts.append(f"test={len(split['test'])}")
+    else:
+        eval_parts.append("test не оценивается")
+    console.info("оценка: " + ", ".join(eval_parts))
 
     # metrics
     h = files.read_csv(

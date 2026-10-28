@@ -60,7 +60,7 @@ def flatten(data: dict[str, Any], prefix: str = "") -> dict[str, Any]:
     return flat
 
 
-def start(run_id: str, cfg: dict, series: str, run_dir: Path) -> None:
+def start(run_id: str, cfg: dict, series: str, run_dir: Path) -> str:
     """Открывает запись MLflow, пишет параметры конфигурации и теги.
 
     Коммит берётся из metadata.json запуска. Если уже есть активная
@@ -71,11 +71,15 @@ def start(run_id: str, cfg: dict, series: str, run_dir: Path) -> None:
         cfg - итоговая конфигурация
         series - серия эксперимента
         run_dir - каталог запуска
+
+    return: идентификатор записи MLflow
     """
     meta = json.loads((run_dir / files.METADATA_FILENAME).read_text("utf-8"))
 
     setup(cfg["experiment"])
-    mlflow.start_run(run_name=run_id, nested=mlflow.active_run() is not None)
+    active_run = mlflow.start_run(
+        run_name=run_id, nested=mlflow.active_run() is not None
+    )
 
     params = {k: v for k, v in cfg.items() if k not in EXCLUDED_PARAMS}
     mlflow.log_params(flatten(params))
@@ -88,6 +92,7 @@ def start(run_id: str, cfg: dict, series: str, run_dir: Path) -> None:
             "run_id": run_id,
         }
     )
+    return active_run.info.run_id
 
 
 def log_epoch(record: dict[str, Any]) -> None:

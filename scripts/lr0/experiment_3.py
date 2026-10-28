@@ -126,21 +126,39 @@ def main() -> None:
     eval_test = True
 
     pairs: dict[int, tuple[Path, Path]] = {}
+    print(
+        f"[EXP3] серия {series}: seeds {SEEDS.start}..{SEEDS.stop - 1}, "
+        "base+best, eval_test=True",
+        flush=True,
+    )
     for seed in SEEDS:
         cli_cfg = {"seed": seed}
         base_dir = run(base_path, cli_cfg, 3, series, eval_test)
         best_dir = run(best_path, cli_cfg, 3, series, eval_test)
         pairs[seed] = (base_dir, best_dir)
+        print(f"[EXP3] seed {seed}: base + best готовы", flush=True)
 
     statistic = analyze(pairs)
     statistic["series"] = series
     save_report(statistic)
 
+    for seed, data in statistic["seeds"].items():
+        print(
+            f"[EXP3] seed {seed}: Δval={data['delta_val_acc']:+.4f}, "
+            f"Δtest={data['delta_test_acc']:+.4f}",
+            flush=True,
+        )
+
     summary = statistic["summary"]
     print(
-        f"Δ test: медиана {summary['median_delta_test_acc']:+.4f}, "
-        f"исправлено {summary['corrected']}, "
-        f"испорчено {summary['spoiled']} из {summary['n_test']}"
+        f"[EXP3] итог: corrected={summary['corrected']}, "
+        f"spoiled={summary['spoiled']} из {summary['n_test']}; "
+        f"Δ test={summary['delta_test_total'] * 100:+.2f} п.п.",
+        flush=True,
+    )
+    print(
+        f"[EXP3] отчёт: {REPORT_PATH.relative_to(files.PROJECT_ROOT)}",
+        flush=True,
     )
 
 
