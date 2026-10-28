@@ -179,10 +179,11 @@ def run_search(
     inputs = load_inputs()
     study = create_study(search_cfg)
 
-    if parent_id:
-        parent = mlflow.start_run(run_id=parent_id)
-    else:
-        parent = mlflow.start_run(run_name=name)
+    # if parent_id:
+    #     parent = mlflow.start_run(run_id=parent_id)
+    if not parent_id:
+    # else:
+        # parent = mlflow.start_run(run_name=name)
         mlflow.log_params(
             {
                 "study_name": name,

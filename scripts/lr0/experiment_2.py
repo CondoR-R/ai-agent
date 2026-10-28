@@ -4,7 +4,6 @@ import argparse
 from pathlib import Path
 
 from ai_agent.labs.lr0 import search
-from ai_agent import cli
 
 
 def main() -> None:
