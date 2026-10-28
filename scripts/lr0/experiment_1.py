@@ -29,7 +29,7 @@ def analyze_task2(run_dirs: list[Path]) -> None:
         "summury": {},
     }
     for run_dir in run_dirs:
-        seed = files.read_json(run_dir)["seed"]
+        seed = files.read_json(run_dir / 'metrics.json')["seed"]
         metrics = files.read_json(run_dir)
         val_acc, train_time = metrics["val_acc"], metrics["train_time"]
         statistic["seeds"][seed] = {
