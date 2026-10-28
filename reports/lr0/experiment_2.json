@@ -1,0 +1,53 @@
+{
+  "study_name": "lr0_search",
+  "n_trials": 40,
+  "target_trials": 40,
+  "epochs_per_trial": 30,
+  "states": {
+    "RUNNING": 0,
+    "COMPLETE": 25,
+    "PRUNED": 15,
+    "FAIL": 0,
+    "WAITING": 0
+  },
+  "epochs": {
+    "planned_40": 1200,
+    "planned_actual": 1200,
+    "executed": 829,
+    "executed_share_40": 0.6908333333333333,
+    "pruner_saved": 371,
+    "pruner_saved_share_40": 0.30916666666666665
+  },
+  "time": {
+    "search_seconds": 59.921636,
+    "avg_epoch_seconds": 0.07474246666666667,
+    "pruner_saved_seconds": 27.729455133333335,
+    "full_estimate_seconds": 89.69096
+  },
+  "best_trial": {
+    "number": 27,
+    "value": 0.9805555555555555,
+    "params": {
+      "lr": 0.004695179443797484,
+      "n_layers": 3,
+      "hidden": 458,
+      "dropout": 0.23577625853070858,
+      "weight_decay": 3.2709054748769388e-06,
+      "batch_size": 128
+    }
+  },
+  "importances": {
+    "hidden": 0.49775048265960464,
+    "lr": 0.3354977570925239,
+    "dropout": 0.09077016302068672,
+    "batch_size": 0.03750831916951533,
+    "weight_decay": 0.03256219659278031,
+    "n_layers": 0.005911081464889159
+  },
+  "importance_error": null,
+  "plots": {
+    "trials": "experiment_2_trials.png",
+    "importance": "experiment_2_importance.png"
+  },
+  "plot_errors": []
+}

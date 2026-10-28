@@ -3,11 +3,11 @@ split_seed: 0
 seed: 0
 model:
   n_layers: 3
-  hidden: 477
-  dropout: 0.06630997951610068
+  hidden: 458
+  dropout: 0.23577625853070858
 train:
-  lr: 0.0027001323792852677
-  weight_decay: 0.00039152365218508226
+  lr: 0.004695179443797484
+  weight_decay: 3.2709054748769388e-06
   batch_size: 128
   epochs: 30
 runtime:
