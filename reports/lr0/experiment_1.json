@@ -2,29 +2,29 @@
   "task_2": {
     "seeds": {
       "1": {
-        "run_id": "lr0-experiment1-2026-10-28_19-29-20-0ed368",
+        "run_id": "lr0-experiment1-2026-10-28_20-07-44-e1c985",
         "val_acc": 0.9583333333333334,
-        "train_time": 0.5953177081537433
+        "train_time": 0.6103468721848913
       },
       "2": {
-        "run_id": "lr0-experiment1-2026-10-28_19-29-21-5e07e5",
+        "run_id": "lr0-experiment1-2026-10-28_20-07-45-da43e4",
         "val_acc": 0.9583333333333334,
-        "train_time": 0.5923993349424563
+        "train_time": 0.6316016679047607
       },
       "3": {
-        "run_id": "lr0-experiment1-2026-10-28_19-29-22-371efe",
+        "run_id": "lr0-experiment1-2026-10-28_20-07-46-4b1f40",
         "val_acc": 0.9527777777777777,
-        "train_time": 0.5955409199232236
+        "train_time": 0.6213761261315085
       },
       "4": {
-        "run_id": "lr0-experiment1-2026-10-28_19-29-23-3163fd",
+        "run_id": "lr0-experiment1-2026-10-28_20-07-47-cfe672",
         "val_acc": 0.9527777777777777,
-        "train_time": 0.5931708310381509
+        "train_time": 0.6146922511397861
       },
       "5": {
-        "run_id": "lr0-experiment1-2026-10-28_19-29-24-9d5fa4",
+        "run_id": "lr0-experiment1-2026-10-28_20-07-48-474c7a",
         "val_acc": 0.9611111111111111,
-        "train_time": 0.5903189579257742
+        "train_time": 0.651624251739122
       }
     },
     "summary": {
@@ -76,15 +76,15 @@
       }
     ],
     "run_ids": [
-      "lr0-experiment1-2026-10-28_19-29-16-cc9034",
-      "lr0-experiment1-2026-10-28_19-29-20-0ed368"
+      "lr0-experiment1-2026-10-28_20-07-40-c083bb",
+      "lr0-experiment1-2026-10-28_20-07-44-e1c985"
     ],
     "n_val": 360
   },
   "task_1": {
     "run_ids": [
-      "lr0-experiment1-2026-10-28_19-29-16-cc9034",
-      "lr0-experiment1-2026-10-28_19-29-19-ee9cc6"
+      "lr0-experiment1-2026-10-28_20-07-40-c083bb",
+      "lr0-experiment1-2026-10-28_20-07-43-7abd0e"
     ],
     "identical": true
   }
