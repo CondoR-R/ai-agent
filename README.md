@@ -109,7 +109,7 @@ uv run python scripts/lr0/experiment_3.py
 
 # отчёт и MLflow UI
 uv run python scripts/lr0/report.py
-uv run mlflow ui --backend-store-uri sqlite:///mlflow.db
+uv run mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5001
 ```
 
 Подробности ЛР0, таблицы и графики появятся в `reports/lr0/report.md`
