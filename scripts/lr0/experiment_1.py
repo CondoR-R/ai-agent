@@ -4,7 +4,7 @@ from pathlib import Path
 from statistics import median
 
 from compare_csv import compare_csv
-from run import main as run
+from run import main as run, add_args, CLI_KEYS
 
 from ai_agent import cli, files
 from ai_agent.labs.lr0.analysis import compare_predictions, update_report
@@ -73,10 +73,10 @@ def analyze_task3(run_dirs: list[Path]) -> None:
 
 def main() -> None:
     """Выполняет запуски эксперимента 1 и сохраняет отчёт."""
-    args = cli.parse_args()
+    args = cli.parse_args(extra=add_args)
 
     config_path = Path(args.config)
-    cli_cfg = cli.get_cli_cfg(args)
+    cli_cfg = cli.get_cli_cfg(args, keys=CLI_KEYS)
     exp = 1
     series = args.series
 

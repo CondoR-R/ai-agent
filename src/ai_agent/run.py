@@ -6,45 +6,38 @@ from pathlib import Path
 
 from . import console, files, metadata, reproducibility, tracking, utils
 
-# файлы, которые должны появиться в каталоге запуска
-ARTIFACT_FILES = (
-    files.CONFIG_FILENAME,
-    files.METADATA_FILENAME,
-    "history.csv",
-    "predictions.csv",
-    files.METRICS_FILENAME,
-)
+# библиотеки, версии которых пишутся в metadata.json в любом запуске
+DEFAULT_LIBS = ("mlflow",)
 
 
 def _config_summary(cfg: dict) -> str:
-    """Краткая выжимка конфигурации для вывода в терминал."""
-    model = cfg["model"]
-    train = cfg["train"]
-    return (
-        f"model={model['n_layers']}×{model['hidden']} "
-        f"(dropout={model['dropout']}), train={train['epochs']} эпох, "
-        f"batch={train['batch_size']}, lr={train['lr']}"
+    """Выжимка конфигурации по умолчанию: скалярные поля верхнего уровня.
+
+    Лабораторная может передать свою функцию через config_summary.
+    """
+    return ", ".join(
+        f"{key}={value}"
+        for key, value in cfg.items()
+        if not isinstance(value, (dict, list))
     )
 
 
 def _metrics_summary(metrics: dict) -> str:
-    """Форматирует итоговые метрики для вывода."""
-    parts = []
-    if "val_acc" in metrics:
-        parts.append(f"val_acc={metrics['val_acc']:.4f}")
-    if "val_loss" in metrics:
-        parts.append(f"val_loss={metrics['val_loss']:.4f}")
-    if "test_acc" in metrics:
-        parts.append(f"test_acc={metrics['test_acc']:.4f}")
-    if "train_time" in metrics:
-        parts.append(f"train_time={metrics['train_time']:.2f} с")
-    return ", ".join(parts)
+    """Выжимка итоговых метрик по умолчанию: числа верхнего уровня.
+
+    Лабораторная может передать свою функцию через metrics_summary.
+    """
+    return ", ".join(
+        f"{key}={value:.4g}"
+        for key, value in metrics.items()
+        if isinstance(value, (int, float)) and not isinstance(value, bool)
+    )
 
 
 def _artifacts(run_dir: Path) -> str:
-    """Перечисляет созданные файлы каталога запуска."""
+    """Перечисляет файлы, которые лежат в каталоге запуска."""
     return ", ".join(
-        name for name in ARTIFACT_FILES if (run_dir / name).exists()
+        sorted(p.name for p in run_dir.iterdir() if p.is_file())
     )
 
 
@@ -105,8 +98,11 @@ def run(
     exp: int,
     series: str,
     sha256: dict[str, str],
-    lab_fn: Callable[[dict, Path, bool], None],
-    eval_test: bool,
+    lab_fn: Callable[[dict, Path], None],
+    *,
+    libs: tuple[str, ...] = (),
+    config_summary: Callable[[dict], str] | None = None,
+    metrics_summary: Callable[[dict], str] | None = None,
 ) -> Path:
     """Запуск эксперимента
 
@@ -116,8 +112,13 @@ def run(
         exp - номер эксперимента
         series - серия эксперимента
         sha256 - словарь с sha256 файлов
-        lab_fn - функция запуска лабораторной
-        eval_test - флаг тестовых данных
+        lab_fn - функция лабораторной: lab_fn(cfg, run_dir). Всё, что нужно
+                 сверх этого (например, eval_test в ЛР0), привязывается
+                 через functools.partial
+        libs - библиотеки лабораторной, версии которых пишутся в metadata
+               (к ним добавляются mlflow и tracked_libs из конфигурации)
+        config_summary - функция cfg -> строка для вывода в терминал
+        metrics_summary - функция metrics -> строка для вывода в терминал
 
     return: путь к директории запуска
     """
@@ -144,10 +145,10 @@ def run(
         step_number, step_title = 2, "конфиг"
         console.step(2, "Конфиг: чтение и слияние с CLI")
         file_cfg = files.read_yaml(config_path)
+        utils.check_overrides(file_cfg, cli_cfg)
         cfg = utils.merge_cfgs(file_cfg, cli_cfg)
         console.info(
-            f"experiment={cfg['experiment']}, series={series}, "
-            f"exp={exp}, eval_test={eval_test}"
+            f"experiment={cfg['experiment']}, series={series}, exp={exp}"
         )
         if cli_cfg:
             console.info(f"CLI-переопределения: {cli_cfg}")
@@ -161,37 +162,34 @@ def run(
         step_number, step_title = 4, "config.yaml"
         console.step(4, "Сохранение config.yaml")
         files.write_yaml(run_dir / files.CONFIG_FILENAME, cfg)
-        console.info(_config_summary(cfg))
+        console.info((config_summary or _config_summary)(cfg))
 
         step_number, step_title = 5, "воспроизводимость"
         console.step(5, "Воспроизводимость")
-        reproducibility.set_seed(
-            cfg["seed"], cfg["runtime"]["num_threads"]
-        )
-        console.info(
-            f"seed={cfg['seed']}, "
-            f"num_threads={cfg['runtime']['num_threads']}, "
-            "deterministic=True"
-        )
+        seed = cfg.get("seed")
+        num_threads = cfg.get("runtime", {}).get("num_threads", 1)
+        if seed is None:
+            console.info("seed не задан в конфигурации: генераторы не фиксируются")
+        else:
+            reproducibility.set_seed(seed, num_threads)
+            console.info(
+                f"seed={seed}, num_threads={num_threads}, deterministic=True"
+            )
 
         step_number, step_title = 6, "metadata.json"
         console.step(6, "metadata.json")
-        meta = metadata.init(
-            run_dir,
-            run_id,
-            series,
-            cfg,
-            ("torch", "scikit-learn", "optuna", "mlflow"),
-            sha256,
+        all_libs = tuple(
+            dict.fromkeys(
+                (*DEFAULT_LIBS, *libs, *(cfg.get("tracked_libs") or ()))
+            )
         )
+        meta = metadata.init(run_dir, run_id, series, cfg, all_libs, sha256)
         versions = meta["versions"]
         console.info(
-            f"commit={meta['commit'][:7]}, python={versions['python']}, "
-            f"torch={versions['torch']}"
+            f"commit={meta['commit'][:7]}, python={versions['python']}"
         )
         console.info(
-            f"sklearn={versions['scikit-learn']}, "
-            f"optuna={versions['optuna']}, mlflow={versions['mlflow']}"
+            ", ".join(f"{k}={v}" for k, v in versions.items() if k != "python")
         )
 
         step_number, step_title = 7, "MLflow"
@@ -205,7 +203,7 @@ def run(
         step_number, step_title = 8, "лабораторная"
         console.step(8, "Лабораторная: старт")
         lab_started = time.perf_counter()
-        lab_fn(cfg, run_dir, eval_test)
+        lab_fn(cfg, run_dir)
         console.info(
             "лабораторная: готово за "
             f"{time.perf_counter() - lab_started:.2f} с"
@@ -225,7 +223,9 @@ def run(
 
     console.ok(f"Запуск завершён за {elapsed:.2f} с")
     if metrics:
-        console.info(f"метрики: {_metrics_summary(metrics)}")
+        console.info(
+            f"метрики: {(metrics_summary or _metrics_summary)(metrics)}"
+        )
     else:
         console.info("метрики: metrics.json не найден")
     console.info(f"артефакты: {_artifacts(run_dir)}")

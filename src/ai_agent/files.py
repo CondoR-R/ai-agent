@@ -48,6 +48,8 @@ PROJECT_ROOT = _find_project_root()
 RUNS_DIR = PROJECT_ROOT / "runs"
 DATA_DIR = PROJECT_ROOT / "data"
 MANIFEST_PATH = DATA_DIR / "manifest.json"
+# адрес сервера модели, имя модели и параметры генерации (ЛР1 и далее)
+ENDPOINT_PATH = PROJECT_ROOT / "endpoint.yaml"
 
 MLFLOW_DB = PROJECT_ROOT / "mlflow.db"
 MLFLOW_TRACKING_URI = f"sqlite:///{MLFLOW_DB.as_posix()}"
@@ -231,6 +233,48 @@ def read_csv(path: Path, cast: dict[str, type] | None = None) -> list[dict]:
             rows.append(row)
 
     return rows
+
+
+def append_jsonl(path: Path, record: dict) -> None:
+    """Дописывает одну запись в JSONL-файл (results.jsonl).
+
+    Файл открывается и закрывается на каждую запись: если запуск упал
+    на 15-й записи, первые 14 уже лежат на диске (Правила, п. 4.2).
+
+    params:
+        path - путь к файлу
+        record - записываемый словарь, сериализуемый в JSON
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    """Читает JSONL-файл в список словарей.
+
+    params:
+        path - путь к файлу
+
+    return: список записей в порядке записи в файл
+
+    raise:
+        FileNotFoundError, если файла нет
+        ValueError с номером строки, если строка не разбирается как JSON
+    """
+    if not path.exists():
+        raise FileNotFoundError("Файл не найден по указанному пути")
+    records: list[dict] = []
+    with path.open("r", encoding="utf-8") as f:
+        for number, line in enumerate(f, start=1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                records.append(json.loads(line))
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"{path}:{number}: {exc}") from exc
+    return records
 
 
 def write_error(path: Path, exc: BaseException) -> None:

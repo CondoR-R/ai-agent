@@ -8,9 +8,10 @@ import mlflow
 
 from . import files
 
-MLFLOW_DB = files.PROJECT_ROOT / "mlflow.db"
-MLFLOW_TRACKING_URI = f"sqlite:///{MLFLOW_DB.as_posix()}"
-MLFLOW_ARTIFACTS_DIR = files.PROJECT_ROOT / "mlartifacts"
+# константы определены в files.py; имена оставлены для совместимости
+MLFLOW_DB = files.MLFLOW_DB
+MLFLOW_TRACKING_URI = files.MLFLOW_TRACKING_URI
+MLFLOW_ARTIFACTS_DIR = files.MLFLOW_ARTIFACTS_DIR
 
 # поля конфигурации, которые не логируются как параметры
 EXCLUDED_PARAMS = ("tracked_libs",)
@@ -83,37 +84,52 @@ def start(run_id: str, cfg: dict, series: str, run_dir: Path) -> str:
 
     params = {k: v for k, v in cfg.items() if k not in EXCLUDED_PARAMS}
     mlflow.log_params(flatten(params))
-    mlflow.set_tags(
-        {
-            "work": cfg["experiment"],
-            "series": series,
-            "seed": cfg["seed"],
-            "commit": meta["commit"],
-            "run_id": run_id,
-        }
-    )
+
+    tags = {
+        "work": cfg["experiment"],
+        "series": series,
+        "commit": meta["commit"],
+        "run_id": run_id,
+    }
+    if cfg.get("seed") is not None:
+        tags["seed"] = cfg["seed"]
+    mlflow.set_tags(tags)
     return active_run.info.run_id
+
+
+def log_metrics(metrics: dict[str, Any], step: int | None = None) -> None:
+    """Логирует числовые метрики в активную запись MLflow.
+
+    Без активной записи ничего не делает, поэтому код лабораторной
+    можно запускать и вне каркаса.
+
+    params:
+        metrics - {имя: значение}; нечисловые значения пропускаются
+        step - номер шага (эпохи), если метрика меняется по ходу запуска
+    """
+    if mlflow.active_run() is None:
+        return
+    for key, value in metrics.items():
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            mlflow.log_metric(key, value, step=step)
 
 
 def log_epoch(record: dict[str, Any]) -> None:
     """Логирует метрики одной эпохи (step = номер эпохи).
 
-    Без активной записи ничего не делает, поэтому обучение можно
-    запускать и вне каркаса.
-
     params:
         record - запись эпохи: {epoch, train_loss, val_loss, val_acc, time_epoch}
     """
-    if mlflow.active_run() is None:
-        return
-    step = record["epoch"]
-    for key, value in record.items():
-        if key != "epoch" and isinstance(value, (int, float)):
-            mlflow.log_metric(key, value, step=step)
+    log_metrics(
+        {k: v for k, v in record.items() if k != "epoch"}, step=record["epoch"]
+    )
 
 
 def finish(run_dir: Path, error: str | None = None) -> None:
     """Логирует итоговые метрики, загружает файлы запуска, закрывает запись.
+
+    Вложенные словари в metrics.json разворачиваются в имена через точку:
+    {"by_len": {"256": {"ttft": 0.1}}} -> final_by_len.256.ttft.
 
     При падении запись закрывается со статусом FAILED, а файлы,
     записанные до падения, всё равно загружаются.
@@ -127,12 +143,12 @@ def finish(run_dir: Path, error: str | None = None) -> None:
 
     metrics_path = run_dir / files.METRICS_FILENAME
     if metrics_path.exists():
-        final = json.loads(metrics_path.read_text("utf-8"))
+        final = flatten(json.loads(metrics_path.read_text("utf-8")))
         mlflow.log_metrics(
             {
                 f"{FINAL_PREFIX}{k}": v
                 for k, v in final.items()
-                if isinstance(v, (int, float))
+                if isinstance(v, (int, float)) and not isinstance(v, bool)
             }
         )
 

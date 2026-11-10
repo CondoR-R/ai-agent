@@ -28,8 +28,8 @@ def init(
     m = get_metadata(
         run_id,
         series,
-        cfg["runtime"]["num_threads"],
-        cfg["seed"],
+        cfg.get("runtime", {}).get("num_threads"),
+        cfg.get("seed"),
         libs,
         sha256,
     )
@@ -50,11 +50,34 @@ def update(run_dir: Path, status: str) -> None:
     files.write_json(run_dir / files.METADATA_FILENAME, metadata)
 
 
+def add(run_dir: Path, fields: dict) -> None:
+    """Добавляет в metadata.json поля, известные только во время запуска.
+
+    Например, ЛР1 после обращения к серверу записывает адрес, точное имя
+    модели, ревизию, формат весов и параметры генерации (Правила, п. 3).
+    Уже существующие поля (run_id, status, commit, ...) перезаписать нельзя.
+
+    params:
+        run_dir - директория запуска
+        fields - добавляемые поля
+
+    raise:
+        ValueError, если поле уже есть в metadata.json
+    """
+    path = run_dir / files.METADATA_FILENAME
+    metadata = files.read_json(path)
+    clash = sorted(set(fields) & set(metadata))
+    if clash:
+        raise ValueError(f"Поля уже есть в metadata.json: {clash}")
+    metadata.update(fields)
+    files.write_json(path, metadata)
+
+
 def get_metadata(
     run_id: str,
     series: str,
-    num_threads: int,
-    seed: int,
+    num_threads: int | None,
+    seed: int | None,
     libs: tuple[str, ...],
     sha256: dict[str, str],
 ) -> dict:
@@ -63,8 +86,8 @@ def get_metadata(
     params:
         run_id - id запуска
         series - серия запуска
-        num_threads - число потоков
-        seed - сид случайности
+        num_threads - число потоков (None, если не задано в конфигурации)
+        seed - сид случайности (None, если не задан в конфигурации)
         libs - список с названиями используемых библиотек
         sha256 - словарь с sha256 файлов, ключ - название файла
 

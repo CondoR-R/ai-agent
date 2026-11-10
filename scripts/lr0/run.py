@@ -1,9 +1,24 @@
 """Скрипт одного запуска"""
 
+import argparse
+from functools import partial
 from pathlib import Path
 
 from ai_agent import cli, files, run
 from ai_agent.labs.lr0.run import lr0_run
+from ai_agent.labs.lr0.summaries import config_summary, metrics_summary
+
+# аргументы CLI, значения которых копируются в конфиг
+CLI_KEYS = ("split_seed",)
+# библиотеки ЛР0, версии которых пишутся в metadata.json
+LIBS = ("torch", "scikit-learn", "optuna")
+
+
+def add_args(parser: argparse.ArgumentParser) -> None:
+    """Аргументы командной строки, специфичные для ЛР0."""
+    parser.add_argument("--split-seed", type=int)
+    # включать ли тестовые данные
+    parser.add_argument("--eval-test", action="store_true")
 
 
 def main(
@@ -26,17 +41,25 @@ def main(
     )
 
     run_dir = run.run(
-        config_path, cli_cfg, exp, series, sha256, lr0_run, eval_test
+        config_path,
+        cli_cfg,
+        exp,
+        series,
+        sha256,
+        partial(lr0_run, eval_test=eval_test),
+        libs=LIBS,
+        config_summary=config_summary,
+        metrics_summary=metrics_summary,
     )
 
     return run_dir
 
 
 if __name__ == "__main__":
-    args = cli.parse_args()
+    args = cli.parse_args(extra=add_args)
 
     config_path = Path(args.config)
-    cli_cfg = cli.get_cli_cfg(args)
+    cli_cfg = cli.get_cli_cfg(args, keys=CLI_KEYS)
     exp = int(args.exp)
     eval_test = args.eval_test
     series = args.series
