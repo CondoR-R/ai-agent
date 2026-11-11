@@ -104,15 +104,14 @@ def compare_predictions(
     return {
         "n": n,
         "counts": counts,
-        "first_acc": (
-            counts["both_correct"] + counts["only_first_correct"]
-        ) / n,
-        "second_acc": (
-            counts["both_correct"] + counts["only_second_correct"]
-        ) / n,
+        "first_acc": (counts["both_correct"] + counts["only_first_correct"])
+        / n,
+        "second_acc": (counts["both_correct"] + counts["only_second_correct"])
+        / n,
         "delta_acc": (
             counts["only_second_correct"] - counts["only_first_correct"]
-        ) / n,
+        )
+        / n,
         "examples": examples,
     }
 

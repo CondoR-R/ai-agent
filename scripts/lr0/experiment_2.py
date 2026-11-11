@@ -37,9 +37,7 @@ def main() -> None:
     states_text = ", ".join(
         f"{name}={count}" for name, count in counts.items() if count
     )
-    print(
-        f"[EXP2] trial: {len(study.trials)} ({states_text})", flush=True
-    )
+    print(f"[EXP2] trial: {len(study.trials)} ({states_text})", flush=True)
     print(
         f"[EXP2] лучший trial #{study.best_trial.number}: "
         f"val_acc={study.best_value:.4f}",
@@ -69,9 +67,7 @@ def main() -> None:
             flush=True,
         )
     if report["plot_errors"]:
-        print(
-            f"[EXP2] ошибки графиков: {report['plot_errors']}", flush=True
-        )
+        print(f"[EXP2] ошибки графиков: {report['plot_errors']}", flush=True)
 
 
 if __name__ == "__main__":

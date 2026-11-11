@@ -38,3 +38,5 @@ optuna.db
 .cache/
 
 методичка/
+
+data/lr1/

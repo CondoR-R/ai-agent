@@ -58,9 +58,7 @@ def _parse_override(item: str) -> tuple[list[str], object]:
     return key.split("."), yaml.safe_load(raw)
 
 
-def get_cli_cfg(
-    args: argparse.Namespace, keys: tuple[str, ...] = ()
-) -> dict:
+def get_cli_cfg(args: argparse.Namespace, keys: tuple[str, ...] = ()) -> dict:
     """Собирает переопределения конфигурации из аргументов CLI
 
     params:

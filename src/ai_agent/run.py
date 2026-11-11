@@ -36,9 +36,7 @@ def _metrics_summary(metrics: dict) -> str:
 
 def _artifacts(run_dir: Path) -> str:
     """Перечисляет файлы, которые лежат в каталоге запуска."""
-    return ", ".join(
-        sorted(p.name for p in run_dir.iterdir() if p.is_file())
-    )
+    return ", ".join(sorted(p.name for p in run_dir.iterdir() if p.is_file()))
 
 
 def _error_detail(exc: BaseException) -> str:
@@ -87,9 +85,7 @@ def _handle_failure(
         console.info("MLflow: не удалось закрыть запись")
     else:
         if mlflow_run_id is not None:
-            console.info(
-                f"MLflow: run_id={mlflow_run_id}, статус FAILED"
-            )
+            console.info(f"MLflow: run_id={mlflow_run_id}, статус FAILED")
 
 
 def run(
@@ -132,9 +128,7 @@ def run(
     try:
         utils.check_git()
     except SystemExit as exc:
-        lines = [
-            line.strip() for line in str(exc).splitlines() if line.strip()
-        ]
+        lines = [line.strip() for line in str(exc).splitlines() if line.strip()]
         if lines:
             console.error(lines[0])
             for line in lines[1:]:
@@ -169,7 +163,9 @@ def run(
         seed = cfg.get("seed")
         num_threads = cfg.get("runtime", {}).get("num_threads", 1)
         if seed is None:
-            console.info("seed не задан в конфигурации: генераторы не фиксируются")
+            console.info(
+                "seed не задан в конфигурации: генераторы не фиксируются"
+            )
         else:
             reproducibility.set_seed(seed, num_threads)
             console.info(
@@ -205,16 +201,13 @@ def run(
         lab_started = time.perf_counter()
         lab_fn(cfg, run_dir)
         console.info(
-            "лабораторная: готово за "
-            f"{time.perf_counter() - lab_started:.2f} с"
+            f"лабораторная: готово за {time.perf_counter() - lab_started:.2f} с"
         )
 
         metadata.update(run_dir, "completed")
         tracking.finish(run_dir)
     except BaseException as exc:
-        _handle_failure(
-            exc, step_number, step_title, run_dir, mlflow_run_id
-        )
+        _handle_failure(exc, step_number, step_title, run_dir, mlflow_run_id)
         raise
 
     elapsed = time.perf_counter() - started

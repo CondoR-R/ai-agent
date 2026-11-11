@@ -89,8 +89,7 @@ def _data_table() -> str:
         ],
         [
             "Размеры",
-            f"train={sizes['train']}, val={sizes['val']}, "
-            f"test={sizes['test']}",
+            f"train={sizes['train']}, val={sizes['val']}, test={sizes['test']}",
         ],
         ["sha256 split.json", f"`{manifest['sha256'][:16]}…`"],
     ]
@@ -99,12 +98,8 @@ def _data_table() -> str:
 
 def _configs_table() -> str:
     try:
-        base = files.read_yaml(
-            files.PROJECT_ROOT / "configs/lr0/base.yaml"
-        )
-        best = files.read_yaml(
-            files.PROJECT_ROOT / "configs/lr0/best.yaml"
-        )
+        base = files.read_yaml(files.PROJECT_ROOT / "configs/lr0/base.yaml")
+        best = files.read_yaml(files.PROJECT_ROOT / "configs/lr0/best.yaml")
     except FileNotFoundError:
         return "_Конфигурации не найдены._"
 
@@ -153,9 +148,7 @@ def _exp1_sections(exp1: dict) -> dict:
                 _sec(item["train_time"]),
             ]
         )
-    seeds_table = _table(
-        ["seed", "run_id", "val_acc", "train_time, с"], rows
-    )
+    seeds_table = _table(["seed", "run_id", "val_acc", "train_time, с"], rows)
 
     summary = task2.get("summary", {})
     if summary:
@@ -249,9 +242,7 @@ def _exp2_sections(exp2: dict) -> dict:
         }
 
     states = exp2.get("states", {})
-    state_rows = [
-        [name, count] for name, count in states.items() if count
-    ]
+    state_rows = [[name, count] for name, count in states.items() if count]
     states_table = _table(["Состояние", "Trial"], state_rows)
 
     epochs = exp2.get("epochs", {})
@@ -309,9 +300,7 @@ def _exp2_sections(exp2: dict) -> dict:
                 importances.items(), key=lambda item: item[1], reverse=True
             )
         ]
-        importance_table = _table(
-            ["Параметр", "Важность", "Доля"], rows
-        )
+        importance_table = _table(["Параметр", "Важность", "Доля"], rows)
         if error:
             importance_table += f"\n\n_Предупреждение: {error}_"
     else:
@@ -330,15 +319,11 @@ def _exp2_sections(exp2: dict) -> dict:
         if name and (REPORTS_DIR / name).exists():
             plot_parts.append(f"![{label}]({name})")
     plot_text = (
-        "\n\n".join(plot_parts)
-        if plot_parts
-        else "_Графики не построены._"
+        "\n\n".join(plot_parts) if plot_parts else "_Графики не построены._"
     )
     if exp2.get("plot_errors"):
         plot_text += (
-            "\n\n_Ошибки графиков: "
-            + "; ".join(exp2["plot_errors"])
-            + "_"
+            "\n\n_Ошибки графиков: " + "; ".join(exp2["plot_errors"]) + "_"
         )
 
     return {
@@ -414,12 +399,8 @@ def _exp3_sections(exp3: dict, exp1: dict, exp2: dict) -> dict:
     )
 
     best_trial = exp2.get("best_trial") or {}
-    best_values = [
-        item["best"]["val_acc"] for item in seeds.values()
-    ]
-    best_tests = [
-        item["best"]["test_acc"] for item in seeds.values()
-    ]
+    best_values = [item["best"]["val_acc"] for item in seeds.values()]
+    best_tests = [item["best"]["test_acc"] for item in seeds.values()]
     mean_val = sum(best_values) / len(best_values) if best_values else None
     mean_test = sum(best_tests) / len(best_tests) if best_tests else None
     best_trial_value = best_trial.get("value")
@@ -480,9 +461,7 @@ def _merge_manual(template_text: str, previous_text: str) -> str:
     def replace(match: re.Match) -> str:
         key = match.group(1)
         content = old_blocks.get(key, match.group(2))
-        return (
-            f"<!-- manual:{key} -->{content}<!-- /manual:{key} -->"
-        )
+        return f"<!-- manual:{key} -->{content}<!-- /manual:{key} -->"
 
     return MANUAL_RE.sub(replace, template_text)
 

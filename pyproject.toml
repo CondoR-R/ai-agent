@@ -8,12 +8,15 @@ authors = [
 ]
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "httpx>=0.28.1",
     "mlflow>=3.17.0",
     "numpy>=2.5.3",
+    "openai>=3.49.0",
     "optuna>=5.0.0",
     "pyyaml>=6.0.3",
     "scikit-learn>=1.9.1",
     "torch>=2.14.1",
+    "transformers>=5.22.2",
 ]
 
 [build-system]

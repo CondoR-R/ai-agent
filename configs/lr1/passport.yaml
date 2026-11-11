@@ -1,0 +1,18 @@
+experiment: lr1
+seed: 0
+runtime: {num_threads: 1}
+# версии этих пакетов пишутся в metadata.json (vllm — в окружении Colab)
+tracked_libs: [openai, transformers, huggingface-hub, vllm]
+
+endpoint_path: endpoint.yaml
+
+server:
+  name: vllm
+  max_model_len: 32768           # сервер обязан отдавать именно этот предел
+  log_path: /content/vllm/vllm.log
+  cmd_path: /content/vllm/vllm.cmd
+
+checks:
+  prompt_tokens: 1024            # длина запроса для проверки токенизации
+  fixed_output_tokens: 64        # ответ ровно такой длины с ignore_eos
+  kv_rel_tol: 0.05               # допустимое расхождение ёмкости KV-кеша

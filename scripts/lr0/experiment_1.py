@@ -4,7 +4,8 @@ from pathlib import Path
 from statistics import median
 
 from compare_csv import compare_csv
-from run import main as run, add_args, CLI_KEYS
+from run import CLI_KEYS, add_args
+from run import main as run
 
 from ai_agent import cli, files
 from ai_agent.labs.lr0.analysis import compare_predictions, update_report
