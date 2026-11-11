@@ -14,5 +14,24 @@
       "test": 360
     },
     "sha256": "15784ba5a76de42db28c379ed560b6baed63df57c518616b592b9d6abd2378fa"
+  },
+  "gutenberg_1342": {
+    "source": "Project Gutenberg, ebook #1342: Jane Austen, Pride and Prejudice",
+    "url": "https://www.gutenberg.org/cache/epub/1342/pg1342.txt",
+    "version": "получено 2026-11-11; у файла нет версии, версией служит SHA-256 очищенного текста",
+    "license": "общественное достояние",
+    "selection": {
+      "rule": "текст между маркерами '*** START OF' и '*** END OF' Project Gutenberg, переводы строк приведены к LF",
+      "chars_before": 763082,
+      "chars_after": 728714,
+      "excluded": "заголовок и лицензия Project Gutenberg"
+    },
+    "files": {
+      "data/lr1/pride_and_prejudice.txt": {
+        "sha256": "ec5006ab5edb21cf0ee304712665ef03a8a96bc5ef2e8bb70877dca86973d79c",
+        "n_records": 1,
+        "n_chars": 728714
+      }
+    }
   }
 }
