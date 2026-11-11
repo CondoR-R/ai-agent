@@ -21,12 +21,22 @@ DEFAULT_METRICS = (
     "vllm:gpu_cache_usage_perc",
 )
 
+# счётчики кеша префикса (токены); имена зависят от версии vLLM
+PREFIX_CACHE_METRICS = (
+    "vllm:prefix_cache_queries_total",
+    "vllm:prefix_cache_hits_total",
+    "vllm:gpu_prefix_cache_queries_total",
+    "vllm:gpu_prefix_cache_hits_total",
+)
+EXP1_METRICS = DEFAULT_METRICS + PREFIX_CACHE_METRICS
+
 _KV_TOKENS = re.compile(r"GPU KV cache size:\s*([\d,]+)\s*tokens")
 _CONCURRENCY = re.compile(
     r"Maximum concurrency for\s*([\d,]+)\s*tokens per request:\s*([\d.]+)x"
 )
 _AVAILABLE = re.compile(r"Available KV cache memory:\s*([\d.]+)\s*GiB")
 _DTYPE = re.compile(r"dtype=torch\.(\w+)")
+_PREFIX_CACHING = re.compile(r"enable_prefix_caching=(True|False)")
 _METRIC_LINE = re.compile(
     r"^(?P<name>[a-zA-Z_:][a-zA-Z0-9_:]*)(?:\{[^}]*\})?\s+(?P<value>\S+)",
     re.MULTILINE,
@@ -117,6 +127,7 @@ def parse_vllm_log(text: str) -> dict:
     concurrency = _last_match(_CONCURRENCY, text)
     available = _last_match(_AVAILABLE, text)
     dtype = _last_match(_DTYPE, text)
+    prefix = _last_match(_PREFIX_CACHING, text)
     return {
         "kv_cache_tokens": _to_int(tokens.group(1)) if tokens else None,
         "max_concurrency_tokens_per_request": (
@@ -127,7 +138,31 @@ def parse_vllm_log(text: str) -> dict:
         ),
         "available_kv_gib": float(available.group(1)) if available else None,
         "weights_dtype": dtype.group(1) if dtype else None,
+        "prefix_caching": (
+            prefix.group(1) == "True" if prefix else None
+        ),
     }
+
+
+def prefix_caching_state(
+    log_info: dict, launch_command: str | None
+) -> tuple[bool, str]:
+    """Включено ли кеширование префикса и откуда это известно.
+
+    Порядок источников: журнал vLLM, флаги команды запуска, умолчание
+    vLLM (у V1 включено).
+
+    return: (включено, источник)
+    """
+    value = log_info.get("prefix_caching")
+    if value is not None:
+        return value, "журнал vLLM"
+    command = launch_command or ""
+    if "--no-enable-prefix-caching" in command:
+        return False, "команда запуска"
+    if "--enable-prefix-caching" in command:
+        return True, "команда запуска"
+    return True, "умолчание vLLM (флага нет в команде запуска)"
 
 
 # ---------- HTTP к серверу ----------
@@ -225,9 +260,7 @@ def gpu_info() -> dict | None:
         ).stdout
     except (FileNotFoundError, subprocess.CalledProcessError):
         return None
-    name, memory_mib, driver = [
-        p.strip() for p in out.splitlines()[0].split(",")
-    ]
+    name, memory_mib, driver = [p.strip() for p in out.splitlines()[0].split(",")]
     return {
         "name": name,
         "memory_mib": int(float(memory_mib)),

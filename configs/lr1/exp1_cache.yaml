@@ -1,0 +1,23 @@
+# Опыт 1, серия prefix_cache: один и тот же запрос трижды (кеш префикса ВКЛЮЧЁН).
+# Сервер: bash scripts/lr1/start_vllm.sh   (кеширование по умолчанию включено)
+experiment: lr1
+seed: 0
+runtime: {num_threads: 1}
+tracked_libs: [openai, transformers, huggingface-hub, vllm]
+
+endpoint_path: endpoint.yaml
+
+server:
+  name: vllm
+  max_model_len: 32768
+  log_path: /content/vllm/vllm.log
+  cmd_path: /content/vllm/vllm.cmd
+
+exp1:
+  mode: prefix_cache
+  prefix_caching: true
+  prompt_tokens: 8192
+  repeats: 3                       # одинаковых запросов подряд
+  n_prompts: 1                     # сколько разных запросов проверить
+  output_tokens: 16
+  warmup_tokens: 1024

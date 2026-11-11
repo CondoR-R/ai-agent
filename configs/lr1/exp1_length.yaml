@@ -1,0 +1,22 @@
+# Опыт 1, серия ttft_vs_length: длина запроса и TTFT (кеш префикса ВЫКЛЮЧЕН).
+# Сервер: bash scripts/lr1/start_vllm.sh --no-enable-prefix-caching
+experiment: lr1
+seed: 0
+runtime: {num_threads: 1}
+tracked_libs: [openai, transformers, huggingface-hub, vllm]
+
+endpoint_path: endpoint.yaml
+
+server:
+  name: vllm
+  max_model_len: 32768
+  log_path: /content/vllm/vllm.log
+  cmd_path: /content/vllm/vllm.cmd
+
+exp1:
+  mode: ttft_vs_length
+  prefix_caching: false            # состояние сервера; несовпадение — ошибка
+  prompt_lengths: [256, 1024, 4096, 8192, 16384]
+  repeats: 5                       # запросов на длину
+  output_tokens: 16
+  warmup_tokens: 1024
