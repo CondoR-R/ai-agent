@@ -1,10 +1,15 @@
 """Клиент-измеритель к OpenAI-совместимому серверу (ЛР1, п. 3.2)"""
 
 import time
+from typing import Any, cast
 
 import httpx
 import openai
 from openai import AsyncOpenAI, OpenAI
+from openai.types.chat import (
+    ChatCompletionMessageParam,
+    ChatCompletionStreamOptionsParam,
+)
 
 from .endpoint import Endpoint
 from .timing import StreamRecorder
@@ -12,6 +17,10 @@ from .timing import StreamRecorder
 # Сбои вызова — это неуспешный результат записи, а не остановка серии
 # (Правила, п. 6). Ошибки в нашем коде сюда не попадают и серию остановят.
 CALL_ERRORS = (openai.OpenAIError, httpx.HTTPError)
+
+# сервер присылает usage последним фрагментом потока; тип нужен явно:
+# голый словарь выводится как dict[str, bool], а не как TypedDict openai
+STREAM_OPTIONS: ChatCompletionStreamOptionsParam = {"include_usage": True}
 
 
 def make_client(endpoint: Endpoint) -> OpenAI:
@@ -41,7 +50,7 @@ def make_async_client(endpoint: Endpoint) -> AsyncOpenAI:
 def timed_chat(
     client: OpenAI,
     endpoint: Endpoint,
-    messages: list[dict],
+    messages: list[dict[str, Any]],
     max_tokens: int,
     *,
     request_id: str,
@@ -75,7 +84,12 @@ def timed_chat(
     recorder = StreamRecorder(t0)
     error = None
     try:
-        stream = client.chat.completions.create(messages=messages, **kwargs)
+        stream = client.chat.completions.create(
+            messages=cast(list[ChatCompletionMessageParam], messages),
+            stream=True,
+            stream_options=STREAM_OPTIONS,
+            **kwargs,
+        )
         for chunk in stream:
             recorder.feed(chunk, time.perf_counter())
     except CALL_ERRORS as exc:
@@ -95,7 +109,7 @@ def timed_chat(
 async def async_timed_chat(
     client: AsyncOpenAI,
     endpoint: Endpoint,
-    messages: list[dict],
+    messages: list[dict[str, Any]],
     max_tokens: int,
     *,
     request_id: str,
@@ -112,7 +126,10 @@ async def async_timed_chat(
     error = None
     try:
         stream = await client.chat.completions.create(
-            messages=messages, **kwargs
+            messages=cast(list[ChatCompletionMessageParam], messages),
+            stream=True,
+            stream_options=STREAM_OPTIONS,
+            **kwargs,
         )
         async for chunk in stream:
             recorder.feed(chunk, time.perf_counter())

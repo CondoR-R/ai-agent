@@ -3,6 +3,7 @@
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 from ai_agent import files
 
@@ -45,7 +46,7 @@ class Endpoint:
         url = self.base_url.rstrip("/")
         return url[: -len("/v1")] if url.endswith("/v1") else url
 
-    def chat_kwargs(self, max_tokens: int, *, ignore_eos: bool = False) -> dict:
+    def chat_kwargs(self, max_tokens: int, *, ignore_eos: bool = False) -> dict[str, Any]:
         """Аргументы chat.completions.create для потокового запроса.
 
         Все параметры генерации передаются явно: умолчания сервера
@@ -61,8 +62,6 @@ class Endpoint:
             "model": self.model,
             "max_tokens": max_tokens,
             **self.generation,
-            "stream": True,
-            "stream_options": {"include_usage": True},
         }
         body = dict(self.extra_body)
         if ignore_eos:
