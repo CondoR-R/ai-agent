@@ -12,6 +12,13 @@ LOG="$VLLM_DIR/vllm.log"
 LIMIT_MIB=1000
 mkdir -p "$VLLM_DIR"
 
+# в новой сессии Colab пакеты стираются: без vllm сервер не запустится
+if ! command -v vllm > /dev/null; then
+  echo "[vLLM] команда vllm не найдена: в этой сессии vLLM не установлен." \
+    "Выполните: pip install vllm" >&2
+  exit 1
+fi
+
 # vLLM берёт под себя ~90% памяти GPU: на занятом он упадёт с невнятной
 # ошибкой инициализации, поэтому проверяем заранее
 used="$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits \
