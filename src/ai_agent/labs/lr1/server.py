@@ -4,6 +4,7 @@ import json
 import os
 import re
 import subprocess
+import urllib.error
 import urllib.request
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
@@ -181,9 +182,16 @@ def fetch_models(endpoint: Endpoint) -> dict:
     raise:
         ValueError, если сервер не отдаёт модель из endpoint.yaml
     """
-    payload = json.loads(
-        _get(f"{endpoint.base_url.rstrip('/')}/models", endpoint.api_key)
-    )
+    try:
+        payload = json.loads(
+            _get(f"{endpoint.base_url.rstrip('/')}/models", endpoint.api_key)
+        )
+    except urllib.error.URLError as exc:
+        raise ConnectionError(
+            f"Сервер {endpoint.base_url} не отвечает ({exc.reason}). "
+            "Он запущен? Смотрите scripts/lr1/start_vllm.sh и журнал "
+            "/content/vllm/vllm.log"
+        ) from exc
     models = payload.get("data", [])
     for model in models:
         if model.get("id") == endpoint.model:

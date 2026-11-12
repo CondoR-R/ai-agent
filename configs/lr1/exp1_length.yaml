@@ -19,4 +19,4 @@ exp1:
   prompt_lengths: [256, 1024, 4096, 8192, 16384]
   repeats: 5                       # запросов на длину
   output_tokens: 16
-  warmup_tokens: 1024
+  warmup_tokens: [256, 1024, 4096, 8192, 16384]   # по одному запросу на длину

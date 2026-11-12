@@ -13,7 +13,8 @@ from . import data, exp1_analysis, prompts, server
 from .client import make_client, timed_chat
 from .endpoint import Endpoint, load_endpoint
 
-WARMUP_REQUEST_ID = 0
+# номера прогревочных запросов не пересекаются с номерами измеряемых
+WARMUP_REQUEST_ID = 900_000
 
 
 def _snapshot(endpoint: Endpoint) -> dict:
@@ -135,9 +136,24 @@ def _open_session(cfg: dict, run_dir: Path) -> _Session:
 
 
 def _warmup(session: _Session, ecfg: dict) -> None:
-    """Один прогревочный запрос перед серией (в статистику не входит)."""
-    messages, _ = session.build(WARMUP_REQUEST_ID, ecfg["warmup_tokens"])
-    session.send("warmup", messages, {"phase": "warmup"}, warmup=True)
+    """Прогревочные запросы перед серией (в статистику не входят).
+
+    По одному на каждую длину из warmup_tokens. Первый запрос новой длины
+    может идти заметно дольше остальных (компиляция ядер, автотюнинг), и
+    без прогрева на этой длине разовая добавка попала бы в первую
+    измеряемую запись.
+    """
+    sizes = ecfg["warmup_tokens"]
+    if isinstance(sizes, int):
+        sizes = [sizes]
+    for index, n_tokens in enumerate(sizes):
+        messages, _ = session.build(WARMUP_REQUEST_ID + index, n_tokens)
+        session.send(
+            f"warmup-{n_tokens}",
+            messages,
+            {"phase": "warmup", "prompt_tokens_target": n_tokens},
+            warmup=True,
+        )
 
 
 def _run_ttft_vs_length(ecfg: dict, session: _Session) -> None:
@@ -219,6 +235,11 @@ def exp1_lab(cfg: dict, run_dir: Path) -> None:
         console.info(
             f"ВНИМАНИЕ: длина ответа не равна {ecfg['output_tokens']} у "
             f"{metrics['n_wrong_output_len']} запросов"
+        )
+    if metrics.get("cache_hit_tokens_max"):
+        console.info(
+            "ВНИМАНИЕ: сервер взял из кеша префикса до "
+            f"{metrics['cache_hit_tokens_max']:.0f} токенов за один запрос"
         )
     for number, entry in metrics.get("prompts", {}).items():
         if entry["cold_start_ok"] == 0:

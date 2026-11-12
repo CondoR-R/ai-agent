@@ -8,7 +8,19 @@ set -euo pipefail
 
 VLLM_DIR="${VLLM_DIR:-/content/vllm}"
 PORT="${PORT:-8000}"
+LOG="$VLLM_DIR/vllm.log"
+LIMIT_MIB=1000
 mkdir -p "$VLLM_DIR"
+
+# vLLM берёт под себя ~90% памяти GPU: на занятом он упадёт с невнятной
+# ошибкой инициализации, поэтому проверяем заранее
+used="$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits \
+  2> /dev/null | head -n 1 | tr -d ' ' || true)"
+if [[ -n "$used" && "$used" -ge "$LIMIT_MIB" ]]; then
+  echo "[vLLM] GPU уже занят (${used} MiB): сначала" \
+    "bash scripts/lr1/stop_vllm.sh" >&2
+  exit 1
+fi
 
 CMD=(
   vllm serve Qwen/Qwen3-4B-Instruct-2507
@@ -21,27 +33,34 @@ CMD=(
 
 # команда со всеми флагами идёт в паспорт сервера
 printf '%q ' "${CMD[@]}" > "$VLLM_DIR/vllm.cmd"
-: > "$VLLM_DIR/vllm.log"
-nohup "${CMD[@]}" > "$VLLM_DIR/vllm.log" 2>&1 &
+# журнал прошлого запуска не затираем: в нём может быть причина сбоя
+[[ -s "$LOG" ]] && mv "$LOG" "$VLLM_DIR/vllm.prev.log"
+nohup "${CMD[@]}" > "$LOG" 2>&1 &
 echo $! > "$VLLM_DIR/vllm.pid"
-echo "[vLLM] pid=$(cat "$VLLM_DIR/vllm.pid"), журнал: $VLLM_DIR/vllm.log"
+echo "[vLLM] pid=$(cat "$VLLM_DIR/vllm.pid"), журнал: $LOG"
+
+fail() {
+  echo "[vLLM] $1" >&2
+  echo "--- строки с ошибками (причина обычно выше трейсбека):" >&2
+  grep -n -m 15 -E "ERROR|Traceback|OutOfMemory|out of memory|ValueError|AssertionError|RuntimeError" \
+    "$LOG" >&2 || true
+  echo "--- конец журнала:" >&2
+  tail -n 30 "$LOG" >&2
+  exit 1
+}
 
 # ждём готовности: первая загрузка весов занимает несколько минут
 for _ in $(seq 1 180); do
   if curl -sf "localhost:$PORT/v1/models" > /dev/null; then
     echo "[vLLM] сервер отвечает"
     grep -E "GPU KV cache size|Maximum concurrency|Available KV cache" \
-      "$VLLM_DIR/vllm.log" || true
+      "$LOG" || true
     exit 0
   fi
   if ! kill -0 "$(cat "$VLLM_DIR/vllm.pid")" 2> /dev/null; then
-    echo "[vLLM] процесс завершился, конец журнала:" >&2
-    tail -n 40 "$VLLM_DIR/vllm.log" >&2
-    exit 1
+    fail "процесс завершился"
   fi
   sleep 5
 done
 
-echo "[vLLM] не дождались ответа за 15 минут" >&2
-tail -n 40 "$VLLM_DIR/vllm.log" >&2
-exit 1
+fail "не дождались ответа за 15 минут"

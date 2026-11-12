@@ -129,9 +129,16 @@ def summarize_length_run(records: list[dict], ecfg: dict) -> dict:
     by_length = summarize_by_length(
         records, lengths, ecfg["repeats"], ecfg["output_tokens"]
     )
+    hits = [
+        h
+        for h in (hit_tokens(r) for r in records if not r["warmup"])
+        if h is not None
+    ]
     return {
         "n_planned": len(lengths) * ecfg["repeats"],
         "n_ok": sum(e["n_ok"] for e in by_length.values()),
+        # по счётчику сервера: сколько токенов одного запроса пришло из кеша
+        "cache_hit_tokens_max": max(hits) if hits else None,
         "n_wrong_output_len": sum(
             e.get("n_wrong_output_len", 0) for e in by_length.values()
         ),

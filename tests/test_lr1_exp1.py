@@ -199,3 +199,28 @@ def test_summaries_are_strings():
     assert "speedup_2_median" in analysis.metrics_summary(cache)
     assert "mode=ttft_vs_length" in analysis.config_summary(
         {"exp1": ECFG_LENGTH})
+
+
+# ---------- кеш в серии длин, недоступный сервер ----------
+
+
+def test_length_run_reports_cache_hits():
+    records = _length_records()
+    records[1]["server_delta"] = {"vllm:prefix_cache_hits_total": 0.0}
+    records[2]["server_delta"] = {"vllm:prefix_cache_hits_total": 16.0}
+    metrics = analysis.summarize_length_run(records, ECFG_LENGTH)
+    assert metrics["cache_hit_tokens_max"] == 16.0
+    # без счётчиков значение неизвестно, а не ноль
+    assert analysis.summarize_length_run(_length_records(), ECFG_LENGTH)[
+        "cache_hit_tokens_max"] is None
+
+
+def test_unreachable_server_gives_clear_error():
+    from ai_agent.labs.lr1.endpoint import Endpoint
+
+    endpoint = Endpoint(
+        base_url="http://127.0.0.1:1/v1", model="m",
+        generation={"temperature": 0.0},
+    )
+    with pytest.raises(ConnectionError, match="не отвечает"):
+        server.fetch_models(endpoint)

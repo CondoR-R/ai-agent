@@ -53,13 +53,23 @@ def _ms(value: float | None) -> str:
     return "—" if value is None else f"{value * 1000:.0f}"
 
 
+def _caching_note(series: dict) -> str:
+    """Состояние кеша префикса на сервере — из metadata, а не из конфига."""
+    state = series["server"]["prefix_caching"]
+    text = f"кеширование префикса {'включено' if state['enabled'] else 'выключено'}"
+    hits = series["metrics"].get("cache_hit_tokens_max")
+    if hits is not None:
+        text += f"; максимум токенов из кеша за один запрос: {hits:.0f}"
+    return text + "."
+
+
 def length_tables(series: dict) -> str:
     metrics, ecfg = series["metrics"], series["ecfg"]
     lines = [
         f"**Таблица 1.** TTFT и скорость prefill по длине запроса. "
         f"Серия `{series['series']}`, run_id `{series['run_id']}`; "
         f"запросов на длину (знаменатель): {ecfg['repeats']}, ответ "
-        f"{ecfg['output_tokens']} токенов, кеширование префикса выключено.",
+        f"{ecfg['output_tokens']} токенов, {_caching_note(series)}",
         "",
         "| Длина (цель) | Запрос по usage | Успешно | TTFT медиана, мс "
         "| TTFT мин–макс, мс | Prefill медиана, ток/с | Prefill мин–макс |",
@@ -113,7 +123,7 @@ def cache_tables(series: dict) -> str:
         f"**Таблица 3.** Один и тот же запрос на {ecfg['prompt_tokens']} "
         f"токенов, повторённый {ecfg['repeats']} раза подряд. "
         f"Серия `{series['series']}`, run_id `{series['run_id']}`; "
-        "кеширование префикса включено.",
+        f"{_caching_note(series)}",
         "",
         "| Запрос | Успешно | TTFT 1-й, мс | TTFT 2-й, мс | TTFT 3-й, мс "
         "| Ускорение 1/2 | Ускорение 1/3 | Токенов из кеша (1/2/3) "
