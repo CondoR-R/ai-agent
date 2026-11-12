@@ -14,11 +14,11 @@ from pathlib import Path
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import numpy as np  # noqa: E402
+import matplotlib.pyplot as plt
+import numpy as np
 
-from ai_agent import files  # noqa: E402
-from ai_agent.labs.lr1 import exp1_analysis as analysis  # noqa: E402
+from ai_agent import files
+from ai_agent.labs.lr1 import exp1_analysis as analysis
 
 REPORTS_DIR = files.PROJECT_ROOT / "reports" / "lr1"
 FIGURES_DIR = REPORTS_DIR / "figures"
@@ -109,7 +109,7 @@ def length_tables(series: dict) -> str:
         speed = fit["prefill_tok_s"]
         lines += [
             "",
-            f"Прямая по медианам: TTFT = {int(round(fit['intercept_s'] * 1000))} мс"
+            f"Прямая по медианам: TTFT = {round(fit['intercept_s'] * 1000)} мс"
             f" + {fit['slope_s_per_token'] * 1000:.4f} мс × токены"
             + (f" (скорость prefill {speed:.0f} ток/с)" if speed else "")
             + ".",

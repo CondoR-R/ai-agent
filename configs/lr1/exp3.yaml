@@ -1,0 +1,28 @@
+# Опыт 3: нагрузка, пропускная способность и goodput (п. 4.3).
+# Сервер: bash scripts/lr1/start_vllm.sh
+experiment: lr1
+seed: 0
+runtime: {num_threads: 1}
+tracked_libs: [openai, transformers, huggingface-hub, vllm]
+
+endpoint_path: endpoint.yaml
+
+server:
+  name: vllm
+  max_model_len: 32768
+  log_path: /content/vllm/vllm.log
+  cmd_path: /content/vllm/vllm.cmd
+
+exp3:
+  prompt_tokens: 1024
+  output_tokens: 128
+  clients: [1, 2, 4, 8, 16, 32]
+  min_requests: 16                 # запросов на уровень не меньше
+  requests_per_client: 4           # max(16, 4c) запросов на уровень
+  warmup_tokens: 1024
+  warmup_output_tokens: 128
+  # пределы интерактивного ассистента: TTFT p90 <= 2 с, медиана TPOT
+  # <= 100 мс (п. 4.3). Для CPU выберите свои через --set exp3.limits...
+  limits:
+    ttft_p90_s: 2.0
+    tpot_median_s: 0.1

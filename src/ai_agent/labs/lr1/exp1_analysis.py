@@ -5,6 +5,7 @@
 запроса остаётся в n_planned, но в медианы не входит.
 """
 
+from itertools import pairwise
 from statistics import median
 
 import numpy as np
@@ -84,7 +85,7 @@ def scaling(by_length: dict, lengths: list[int]) -> dict:
     постоянной части TTFT.
     """
     result: dict[str, dict] = {}
-    for a, b in zip(lengths, lengths[1:]):
+    for a, b in pairwise(lengths):
         first, second = by_length[str(a)], by_length[str(b)]
         if "ttft_median_s" not in first or "ttft_median_s" not in second:
             continue
@@ -114,7 +115,7 @@ def fit_ttft(by_length: dict, lengths: list[int]) -> dict | None:
     ]
     if len(points) < 2:
         return None
-    xs, ys = zip(*points)
+    xs, ys = zip(*points, strict=False)
     slope, intercept = np.polyfit(xs, ys, 1)
     return {
         "slope_s_per_token": float(slope),

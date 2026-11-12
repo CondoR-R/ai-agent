@@ -1,0 +1,29 @@
+# Опыт 2: длина ответа и скорость генерации (п. 4.2).
+# Сервер: bash scripts/lr1/start_vllm.sh
+experiment: lr1
+seed: 0
+runtime: {num_threads: 1}
+tracked_libs: [openai, transformers, huggingface-hub, vllm]
+
+endpoint_path: endpoint.yaml
+
+server:
+  name: vllm
+  max_model_len: 32768
+  log_path: /content/vllm/vllm.log
+  cmd_path: /content/vllm/vllm.cmd
+
+exp2:
+  prompt_tokens: 1024
+  output_lengths: [16, 64, 256, 1024]
+  repeats: 5                       # запросов на длину ответа
+  warmup_tokens: 1024
+  warmup_output_tokens: 64
+
+# нижняя граница TPOT из п. 2.1: веса модели / пропускная способность
+# памяти. Qwen3-4B в FP16 ≈ 4 млрд × 2 байта = 8·10^9 байт ≈ 7.45 ГиБ;
+# у T4 память передаёт до 300 ГБ/с. На другом оборудовании переопределите:
+#   --set decode_memory.weights_gib=... --set decode_memory.memory_bandwidth_gb_s=...
+decode_memory:
+  weights_gib: 7.45
+  memory_bandwidth_gb_s: 300.0
