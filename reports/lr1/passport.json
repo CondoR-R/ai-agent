@@ -1,0 +1,63 @@
+{
+  "server": {
+    "name": "llama.cpp",
+    "version": "0.9.0 (build 12110, commit cd959bae9)",
+    "build_info": "b12110-cd959bae9",
+    "launch_command": "llama-server -hf Qwen/Qwen2.5-1.5B-Instruct-GGUF:Q4_K_M --alias Qwen/Qwen2.5-1.5B-Instruct -c 32768 -np 1 -t 6 -tb 6 --host 127.0.0.1 --port 8000 --metrics --no-webui -lv 5 --log-file /tmp/lr1-llama/llama.log --no-cache-prompt",
+    "max_model_len": 32768,
+    "context_per_slot": 32768,
+    "total_slots": 1,
+    "log_path": "/tmp/lr1-llama/llama.log"
+  },
+  "model": {
+    "id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "repo": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "weights_dtype": "Q4_K - Medium",
+    "weights_file": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "weights_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "n_params": 1777088000,
+    "weights_size_bytes": 1111370240
+  },
+  "device": {
+    "gpu": null,
+    "cpu_count": 8,
+    "cpu_model": "Apple M1",
+    "system": "Darwin",
+    "machine": "arm64",
+    "total_ram_gib": 8.0
+  },
+  "generation": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "extra_body": {}
+  },
+  "kv_cache": {
+    "kv_cache_tokens": 32768,
+    "available_kv_gib": 0.875,
+    "weights_dtype": "Q4_K - Medium",
+    "kv_cache_dtype": "f16",
+    "kv_cache_k_gib": 0.4375,
+    "kv_cache_v_gib": 0.4375,
+    "n_layers": 28,
+    "n_kv_heads": 2,
+    "head_dim": 128,
+    "bytes_per_token": 28672,
+    "context_gib": 0.875,
+    "check": {
+      "computed_gib": 0.875,
+      "available_gib": 0.875,
+      "ratio": 1.0,
+      "ok": true
+    }
+  },
+  "checks": {
+    "kv_capacity": true,
+    "exact_tokens": true,
+    "prompt_length": true,
+    "requests_ok": true,
+    "determinism_same_text": true,
+    "prompt_length_diff": 0,
+    "failed_requests": []
+  }
+}
