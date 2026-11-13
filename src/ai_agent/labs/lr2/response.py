@@ -1,6 +1,7 @@
 """Разбор и проверка JSON-ответа модели ЛР2."""
 
 import json
+import re
 
 from .prompts import LABELS
 
@@ -12,6 +13,16 @@ def _passed_map(passed: list[dict]) -> dict[str, set[int]]:
         str(document["doc_id"]): {int(s) for s in document["sentences"]}
         for document in passed
     }
+
+
+def _canonical_doc_id(doc_id: str, available: dict[str, set[int]]) -> str:
+    """Убирает обёртки вроде 'DOC 123' / ':[DOC 123]', если id однозначен."""
+    if doc_id in available:
+        return doc_id
+    matches = {
+        value for value in re.findall(r"\d+", doc_id) if value in available
+    }
+    return matches.pop() if len(matches) == 1 else doc_id
 
 
 def parse_response(raw: str | None, passed: list[dict], mode: str) -> dict:
@@ -101,6 +112,8 @@ def parse_response(raw: str | None, passed: list[dict], mode: str) -> dict:
         }
 
     available = _passed_map(passed)
+    doc_id = _canonical_doc_id(doc_id, available)
+    parsed["doc_id"] = doc_id
     if doc_id not in available:
         return {
             "parsed": parsed,

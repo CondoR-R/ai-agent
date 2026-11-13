@@ -130,6 +130,17 @@ def test_response_rejects_unknown_label_extra_field_and_bad_reference():
     assert response.parse_response(ok, passed, "rag")["status"] == "ok"
 
 
+def test_response_normalizes_decorated_doc_id():
+    passed = [{"doc_id": "17628888", "sentences": [7]}]
+    for raw_id in ("DOC 17628888", ":[DOC 17628888]", "log_17628888"):
+        raw = (
+            '{"label": "SUPPORT", "doc_id": "' + raw_id + '", "sentences": [7]}'
+        )
+        parsed = response.parse_response(raw, passed, "oracle")
+        assert parsed["status"] == "ok"
+        assert parsed["parsed"]["doc_id"] == "17628888"
+
+
 def test_rationale_passed_detects_removed_sentence():
     gold_record = {
         "label": "SUPPORT",

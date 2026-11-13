@@ -32,10 +32,11 @@ SCHEMA: dict[str, Any] = {
 }
 
 OUTPUT_RULES = """\
-Return exactly one JSON object with keys "label", "doc_id", "sentences".
-Use sentence numbers exactly as they appear in square brackets.
-Cite only documents and sentence numbers that are shown to you. Do not cite
-any other sentence. For NOINFO, set "doc_id" to null and "sentences" to [].
+Return only one compact JSON object, with no comments, explanations, or extra
+text. Example: {"label": "SUPPORT", "doc_id": "13734012", "sentences": [4]}
+Use "doc_id" exactly as the number shown in a document heading.
+Cite only documents and sentence numbers that are shown to you; use at most
+three sentences. For NOINFO, set "doc_id" to null and "sentences" to [].
 """
 
 SYSTEM_RAG = f"""\
@@ -69,7 +70,7 @@ SYSTEM = {
 
 
 def _document_block(document: dict, sentence_ids: list[int]) -> str:
-    lines = [f"[DOC {document['doc_id']}] {str(document['title']).strip()}"]
+    lines = [f"Document {document['doc_id']}: {str(document['title']).strip()}"]
     for sentence_id in sentence_ids:
         lines.append(f"[{sentence_id}] {document['abstract'][sentence_id]}")
     return "\n".join(lines)
