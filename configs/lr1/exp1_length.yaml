@@ -1,17 +1,17 @@
 # Опыт 1, серия ttft_vs_length: длина запроса и TTFT (кеш префикса ВЫКЛЮЧЕН).
-# Сервер: bash scripts/lr1/start_vllm.sh --no-enable-prefix-caching
+# Сервер: bash scripts/lr1/start_llama.sh --no-cache-prompt
 experiment: lr1
 seed: 0
-runtime: {num_threads: 1}
-tracked_libs: [openai, transformers, huggingface-hub, vllm]
+runtime: {num_threads: 6}
+tracked_libs: [openai, transformers, huggingface-hub]
 
 endpoint_path: endpoint.yaml
 
 server:
-  name: vllm
+  name: llama.cpp
   max_model_len: 32768
-  log_path: /content/vllm/vllm.log
-  cmd_path: /content/vllm/vllm.cmd
+  log_path: /tmp/lr1-llama/llama.log
+  cmd_path: /tmp/lr1-llama/llama.cmd
 
 exp1:
   mode: ttft_vs_length

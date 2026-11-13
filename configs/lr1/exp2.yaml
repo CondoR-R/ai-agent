@@ -1,17 +1,17 @@
 # Опыт 2: длина ответа и скорость генерации (п. 4.2).
-# Сервер: bash scripts/lr1/start_vllm.sh
+# Сервер: bash scripts/lr1/start_llama.sh
 experiment: lr1
 seed: 0
-runtime: {num_threads: 1}
-tracked_libs: [openai, transformers, huggingface-hub, vllm]
+runtime: {num_threads: 6}
+tracked_libs: [openai, transformers, huggingface-hub]
 
 endpoint_path: endpoint.yaml
 
 server:
-  name: vllm
+  name: llama.cpp
   max_model_len: 32768
-  log_path: /content/vllm/vllm.log
-  cmd_path: /content/vllm/vllm.cmd
+  log_path: /tmp/lr1-llama/llama.log
+  cmd_path: /tmp/lr1-llama/llama.cmd
 
 exp2:
   prompt_tokens: 1024
@@ -21,9 +21,11 @@ exp2:
   warmup_output_tokens: 64
 
 # нижняя граница TPOT из п. 2.1: веса модели / пропускная способность
-# памяти. Qwen3-4B в FP16 ≈ 4 млрд × 2 байта = 8·10^9 байт ≈ 7.45 ГиБ;
-# у T4 память передаёт до 300 ГБ/с. На другом оборудовании переопределите:
+# памяти. Qwen2.5-1.5B-Instruct в Q4_K_M занимает ≈1.11 ГБ (≈1.04 ГиБ),
+# память Apple M1 передаёт до 68.25 ГБ/с. На другом оборудовании
+# переопределите:
 #   --set decode_memory.weights_gib=... --set decode_memory.memory_bandwidth_gb_s=...
 decode_memory:
-  weights_gib: 7.45
-  memory_bandwidth_gb_s: 300.0
+  weights_gib: 1.04
+  memory_bandwidth_gb_s: 68.25
+  description: "Qwen2.5-1.5B-Instruct, Q4_K_M, ≈1.11 ГБ"

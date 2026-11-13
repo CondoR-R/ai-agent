@@ -106,7 +106,7 @@ def _open_session(cfg: dict, run_dir: Path) -> _Session:
         raise ValueError(
             f"Кеширование префикса на сервере: {enabled} ({source}), а "
             f"серия требует {expected}. Перезапустите сервер "
-            "(scripts/lr1/start_vllm.sh с нужным флагом)"
+            "(scripts/lr1/start_llama.sh с нужным флагом)"
         )
 
     metadata.add(

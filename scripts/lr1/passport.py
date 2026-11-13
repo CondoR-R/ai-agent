@@ -1,6 +1,6 @@
 """Паспорт сервера и проверки реализации ЛР1 (п. 3.1 и 3.4).
 
-Запуск (сервер vLLM уже поднят, дерево git чистое):
+Запуск (сервер llama.cpp уже поднят, дерево git чистое):
     python scripts/lr1/passport.py --config configs/lr1/passport.yaml \
         --series passport --exp 0
 """

@@ -13,7 +13,14 @@ from . import data, prompts, server
 from .client import make_client, timed_chat
 from .endpoint import load_endpoint
 
-DTYPE_BYTES = {"float16": 2, "bfloat16": 2, "float32": 4}
+DTYPE_BYTES = {
+    "float16": 2,
+    "bfloat16": 2,
+    "float32": 4,
+    "f16": 2,
+    "f32": 4,
+    "q8_0": 1,
+}
 PASSPORT_FILENAME = "passport.json"
 # допустимое расхождение длины запроса: локальный токенизатор и сервер
 PROMPT_TOLERANCE = 2
@@ -22,13 +29,13 @@ PROMPT_TOLERANCE = 2
 def _require_kv_log(kv_cache: dict, log_path: str | None) -> None:
     missing = [
         key
-        for key in ("kv_cache_tokens", "available_kv_gib", "weights_dtype")
+        for key in ("kv_cache_tokens", "available_kv_gib", "kv_cache_dtype")
         if kv_cache.get(key) is None
     ]
     if missing:
         raise ValueError(
             f"В журнале сервера ({log_path}) не найдено: {missing}. "
-            "Проверьте путь к журналу и версию vLLM"
+            "Проверьте путь к журналу и версию сервера"
         )
 
 
@@ -58,17 +65,18 @@ def passport_lab(cfg: dict, run_dir: Path) -> None:
         f"контекст {info['server']['max_model_len']}"
     )
     console.info(
-        f"устройство: {gpu['name'] if gpu else 'GPU не найден'}, "
-        f"CPU потоков: {info['device']['cpu_count']}"
+        f"устройство: {gpu['name'] if gpu else 'CPU (GPU не найден)'}, "
+        f"потоков: {info['device']['cpu_count']}, "
+        f"память: {info['device'].get('total_ram_gib') or '—'} ГиБ"
     )
 
     # 2. ёмкость KV-кеша против журнала
     kv_cache = info["kv_cache"]
     _require_kv_log(kv_cache, info["server"]["log_path"])
     kv_cfg = server.kv_config_from_hf(endpoint.model, info["model"]["revision"])
-    dtype = kv_cache["weights_dtype"]
+    dtype = kv_cache["kv_cache_dtype"]
     if dtype not in DTYPE_BYTES:
-        raise ValueError(f"Неизвестный dtype весов в журнале: {dtype!r}")
+        raise ValueError(f"Неизвестный dtype KV-кеша в журнале: {dtype!r}")
     bytes_per_token = server.kv_bytes_per_token(
         kv_cfg["n_layers"],
         kv_cfg["n_kv_heads"],
@@ -214,7 +222,7 @@ def passport_lab(cfg: dict, run_dir: Path) -> None:
             "kv_available_gib": kv_check["available_gib"],
             "kv_ratio": kv_check["ratio"],
             "kv_context_gib": max_len * bytes_per_token / server.GIB,
-            "max_concurrency_x": kv_cache["max_concurrency_x"],
+            "max_concurrency_x": kv_cache.get("max_concurrency_x"),
             "exact_tokens_completion": exact["completion_tokens"],
             "prompt_length_diff": length_diff,
             "determinism_same_text": (

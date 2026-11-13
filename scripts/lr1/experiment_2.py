@@ -1,6 +1,6 @@
 """Эксперимент 2 ЛР1: длина ответа и скорость генерации.
 
-Запуск (сервер vLLM уже поднят, дерево git чистое):
+Запуск (сервер llama.cpp уже поднят, дерево git чистое):
     python scripts/lr1/experiment_2.py --config configs/lr1/exp2.yaml \
         --series output_length --exp 2
 """

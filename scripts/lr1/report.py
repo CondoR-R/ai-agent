@@ -112,30 +112,45 @@ def _passport_table() -> str:
     kv = passport.get("kv_cache", {})
     checks = passport.get("checks", {})
     gpu = device.get("gpu") or {}
+    if gpu:
+        device_text = (
+            f"{gpu.get('name')}, {gpu.get('memory_mib', '—')} MiB; "
+            f"CPU потоков: {device.get('cpu_count')}"
+        )
+    else:
+        device_text = (
+            f"{device.get('cpu_model') or 'CPU'}, "
+            f"{_num(device.get('total_ram_gib'), 1)} ГиБ ОЗУ; "
+            f"потоков: {device.get('cpu_count')}"
+        )
 
     def check(name: str) -> str:
         value = checks.get(name)
         return "—" if value is None else ("да" if value else "НЕТ")
 
+    context = server.get("max_model_len")
+    slots = server.get("total_slots")
+    per_slot = server.get("context_per_slot")
+    context_text = (
+        f"{context} ({per_slot} на слот × {slots})"
+        if slots and slots > 1 and per_slot
+        else context
+    )
+
     rows = [
         ["Модель", f"{model.get('repo')} @ {str(model.get('revision'))[:12]}…"],
         ["Сервер", f"{server.get('name')} {server.get('version')}"],
         ["Команда запуска", f"`{server.get('launch_command')}`"],
-        ["Предел контекста", server.get("max_model_len")],
+        ["Предел контекста", context_text],
         ["Формат весов", model.get("weights_dtype")],
         [
             "KV-кеш",
             f"{kv.get('bytes_per_token')} байт/токен; "
             f"{kv.get('kv_cache_tokens')} токенов; "
             f"{_num(kv.get('available_kv_gib'), 2)} GiB; "
-            f"параллельно {kv.get('max_concurrency_x')}×",
+            f"тип {kv.get('kv_cache_dtype') or '—'}",
         ],
-        [
-            "Устройство",
-            f"{gpu.get('name', 'GPU не найден')}, "
-            f"{gpu.get('memory_mib', '—')} MiB; "
-            f"CPU потоков: {device.get('cpu_count')}",
-        ],
+        ["Устройство", device_text],
         [
             "Проверки",
             f"KV-кеш: {check('kv_capacity')}; ровно токенов: "
@@ -152,6 +167,7 @@ def _memory_table() -> str:
     decode = exp2.get("decode_memory") or {}
     weights_gib = decode.get("weights_gib")
     bandwidth = decode.get("memory_bandwidth_gb_s")
+    description = decode.get("description")
 
     passport = _load_json("passport.json")
     kv = passport.get("kv_cache", {})
@@ -160,12 +176,8 @@ def _memory_table() -> str:
 
     rows = []
     if weights_gib is not None:
-        rows.append(
-            [
-                "Память весов",
-                f"{weights_gib:.2f} GiB (FP16, ≈4 млрд параметров)",
-            ]
-        )
+        suffix = f" ({description})" if description else ""
+        rows.append(["Память весов", f"{weights_gib:.2f} GiB{suffix}"])
     if weights_gib and bandwidth:
         lower = weights_gib * GIB / (bandwidth * 1e9)
         rows.append(
@@ -448,6 +460,9 @@ def _exp3_sections(exp3: dict) -> dict:
             "exp3_plots": empty,
         }
 
+    ecfg = (exp3.get("config") or {}).get("exp3") or {}
+    prompt_tokens = ecfg.get("prompt_tokens", "—")
+    output_tokens = ecfg.get("output_tokens", "—")
     rows = []
     for clients, e in metrics["by_clients"].items():
         rows.append(
@@ -484,8 +499,9 @@ def _exp3_sections(exp3: dict) -> dict:
     table = (
         f"**Таблица 4.** Уровни нагрузки. Серия `{exp3.get('series', '—')}`, "
         f"run_id `{exp3.get('run_id', '—')}`; запросов на уровень "
-        "max(16, 4c); пределы TTFT p90 и медианы TPOT — в конфигурации."
-        f"\n\n{table}"
+        f"max({ecfg.get('min_requests', '—')}, "
+        f"{ecfg.get('requests_per_client', '—')}c); пределы TTFT p90 и "
+        f"медианы TPOT — в конфигурации.\n\n{table}"
     )
 
     max_load = metrics.get("max_clients_within_limits")
@@ -502,7 +518,8 @@ def _exp3_sections(exp3: dict) -> dict:
         + (
             ""
             if capacity is None
-            else f"; запросов по 1024 + 128 токенов помещается ≈ {capacity}"
+            else f"; запросов по {prompt_tokens} + {output_tokens} токенов "
+            f"помещается ≈ {capacity}"
         )
         + f". Ошибок вызова: {metrics.get('n_error')} из "
         f"{metrics.get('n_planned')}."

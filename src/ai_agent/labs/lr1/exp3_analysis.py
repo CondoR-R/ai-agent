@@ -35,6 +35,15 @@ def _snapshot_value(record: dict, key: str, moment: str) -> float | None:
     return snapshot.get(key)
 
 
+def _snapshot_any(record: dict, keys: tuple[str, ...], moment: str):
+    """Первое найденное значение из набора имён (vLLM или llama.cpp)."""
+    for key in keys:
+        value = _snapshot_value(record, key, moment)
+        if value is not None:
+            return value
+    return None
+
+
 def summarize_level_run(
     records: list[dict],
     cfg: dict,
@@ -122,16 +131,20 @@ def summarize_level_run(
         level_record = level_records.get(clients) or {}
         entry["server_before"] = level_record.get("server_before")
         entry["server_after"] = level_record.get("server_after")
-        entry["queue_waiting_after"] = _snapshot_value(
-            level_record, "vllm:num_requests_waiting", "after"
+        entry["queue_waiting_after"] = _snapshot_any(
+            level_record,
+            ("vllm:num_requests_waiting", "llamacpp:requests_deferred"),
+            "after",
         )
-        entry["kv_cache_usage_after"] = _snapshot_value(
-            level_record, "vllm:kv_cache_usage_perc", "after"
+        entry["kv_cache_usage_after"] = _snapshot_any(
+            level_record,
+            (
+                "vllm:kv_cache_usage_perc",
+                "vllm:gpu_cache_usage_perc",
+                "llamacpp:kv_cache_usage_perc",
+            ),
+            "after",
         )
-        if entry["kv_cache_usage_after"] is None:
-            entry["kv_cache_usage_after"] = _snapshot_value(
-                level_record, "vllm:gpu_cache_usage_perc", "after"
-            )
         levels[str(clients)] = entry
 
     within = [e["clients"] for e in levels.values() if e["limits_ok"]]

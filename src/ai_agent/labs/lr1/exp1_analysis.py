@@ -10,8 +10,8 @@ from statistics import median
 
 import numpy as np
 
-# подстрока имени счётчика попаданий в кеш префикса в /metrics vLLM
-HITS_MARKER = "prefix_cache_hits"
+# подстроки имён счётчика попаданий в кеш префикса: vLLM и llama.cpp
+HITS_MARKERS = ("prefix_cache_hits", "prompt_tokens_cached")
 
 
 def _group(records: list[dict], **condition) -> list[dict]:
@@ -108,8 +108,10 @@ def fit_ttft(by_length: dict, lengths: list[int]) -> dict | None:
     длинных запросах делает прямую приближённой.
     """
     points = [
-        (by_length[str(n)]["prompt_tokens_median"],
-         by_length[str(n)]["ttft_median_s"])
+        (
+            by_length[str(n)]["prompt_tokens_median"],
+            by_length[str(n)]["ttft_median_s"],
+        )
         for n in lengths
         if "ttft_median_s" in by_length[str(n)]
     ]
@@ -144,8 +146,11 @@ def summarize_length_run(records: list[dict], ecfg: dict) -> dict:
             e.get("n_wrong_output_len", 0) for e in by_length.values()
         ),
         "prompt_dev_max": max(
-            (e["prompt_dev_max"] for e in by_length.values()
-             if "prompt_dev_max" in e),
+            (
+                e["prompt_dev_max"]
+                for e in by_length.values()
+                if "prompt_dev_max" in e
+            ),
             default=None,
         ),
         "by_length": by_length,
@@ -160,7 +165,7 @@ def summarize_length_run(records: list[dict], ecfg: dict) -> dict:
 def hit_tokens(record: dict) -> float | None:
     """Сколько токенов запроса сервер взял из кеша (по /metrics)."""
     for name, value in (record.get("server_delta") or {}).items():
-        if HITS_MARKER in name:
+        if any(marker in name for marker in HITS_MARKERS):
             return value
     return None
 

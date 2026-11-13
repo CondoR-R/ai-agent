@@ -1,16 +1,16 @@
 experiment: lr1
 seed: 0
-runtime: {num_threads: 1}
-# версии этих пакетов пишутся в metadata.json (vllm — в окружении Colab)
-tracked_libs: [openai, transformers, huggingface-hub, vllm]
+runtime: {num_threads: 6}
+# версии этих пакетов пишутся в metadata.json
+tracked_libs: [openai, transformers, huggingface-hub]
 
 endpoint_path: endpoint.yaml
 
 server:
-  name: vllm
+  name: llama.cpp
   max_model_len: 32768           # сервер обязан отдавать именно этот предел
-  log_path: /content/vllm/vllm.log
-  cmd_path: /content/vllm/vllm.cmd
+  log_path: /tmp/lr1-llama/llama.log
+  cmd_path: /tmp/lr1-llama/llama.cmd
 
 checks:
   prompt_tokens: 1024            # длина запроса для проверки токенизации

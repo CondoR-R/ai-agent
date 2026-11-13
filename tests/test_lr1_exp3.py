@@ -174,6 +174,27 @@ def test_no_successful_requests_gives_no_throughput():
     assert metrics["kv_requests_capacity"] is None
 
 
+def test_llama_metrics_aliases():
+    records = [
+        _request(clients=1, index=index, t_send=index * 0.1)
+        for index in range(16)
+    ]
+    snapshot = {"llamacpp:requests_deferred": 3.0}
+    records.append(
+        {
+            "id": "level-1",
+            "condition": {"phase": "level", "clients": 1},
+            "status": "ok",
+            "warmup": False,
+            "server_before": {"llamacpp:requests_deferred": 0.0},
+            "server_after": snapshot,
+        }
+    )
+    metrics = analysis.summarize_level_run(records, CFG, kv_cache_tokens=None)
+    assert metrics["by_clients"]["1"]["queue_waiting_after"] == 3.0
+    assert metrics["by_clients"]["1"]["kv_cache_usage_after"] is None
+
+
 def test_summaries_are_strings():
     metrics = analysis.summarize_level_run(
         _records(), CFG, kv_cache_tokens=60000

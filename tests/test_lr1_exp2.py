@@ -99,7 +99,9 @@ def test_fit_needs_two_points():
 def test_decode_lower_bound_and_tpot_ratio():
     bound = analysis.decode_lower_bound_s(7.45, 300.0)
     assert bound == pytest.approx(7.45 * analysis.GIB / 300e9)
-    assert 0.026 < bound < 0.027  # ≈ 27 мс для Qwen3-4B FP16 на T4
+    assert (
+        0.026 < bound < 0.027
+    )  # ≈ 27 мс для Qwen3-4B FP16 на T4 (пример из методички)
 
     lengths = [16, 64]
     metrics = analysis.summarize_run(

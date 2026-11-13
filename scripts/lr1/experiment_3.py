@@ -1,6 +1,6 @@
 """Эксперимент 3 ЛР1: нагрузка, пропускная способность и goodput.
 
-Запуск (сервер vLLM уже поднят, дерево git чистое):
+Запуск (сервер llama.cpp уже поднят, дерево git чистое):
     python scripts/lr1/experiment_3.py --config configs/lr1/exp3.yaml \
         --series load --exp 3
 """

@@ -46,11 +46,13 @@ class Endpoint:
         url = self.base_url.rstrip("/")
         return url[: -len("/v1")] if url.endswith("/v1") else url
 
-    def chat_kwargs(self, max_tokens: int, *, ignore_eos: bool = False) -> dict[str, Any]:
+    def chat_kwargs(
+        self, max_tokens: int, *, ignore_eos: bool = False
+    ) -> dict[str, Any]:
         """Аргументы chat.completions.create для потокового запроса.
 
         Все параметры генерации передаются явно: умолчания сервера
-        (например, generation_config.json у vLLM) на результат влиять
+        (например, temperature 0.8 у llama.cpp) на результат влиять
         не должны.
 
         params:

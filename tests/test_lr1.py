@@ -77,13 +77,19 @@ def test_recorder_flags_missing_usage_and_errors():
     assert failed["status"] == "error" and failed["ttft_s"] is None
 
 
-# ---------- KV-кеш и журнал vLLM ----------
+# ---------- KV-кеш и журнал сервера ----------
 
 LOG = """
 INFO Initializing a V1 LLM engine with config: dtype=torch.float16, x=1
 INFO Available KV cache memory: 4.12 GiB
 INFO GPU KV cache size: 29,984 tokens
 INFO Maximum concurrency for 32,768 tokens per request: 0.91x
+"""
+
+LLAMA_LOG = """
+llama_context: n_ctx                 = 32768
+print_info: file type   = Q4_K - Medium
+llama_kv_cache: size =  896.00 MiB ( 32768 cells,  28 layers,  1/1 seqs), K (f16):  448.00 MiB, V (f16):  448.00 MiB
 """
 
 
@@ -106,6 +112,36 @@ def test_parse_vllm_log_takes_last_run_and_missing_is_none():
     info = server.parse_vllm_log("GPU KV cache size: 1,000 tokens\n" + LOG)
     assert info["kv_cache_tokens"] == 29_984
     assert server.parse_vllm_log("ничего")["kv_cache_tokens"] is None
+
+
+def test_command_version_reads_stderr(monkeypatch):
+    class Result:
+        stdout = ""
+        stderr = "version: 0.9.0 (build 12110)\n"
+
+    monkeypatch.setattr(
+        server.subprocess, "run", lambda *args, **kwargs: Result()
+    )
+    assert server._command_version("llama-server").startswith("0.9.0")
+
+
+def test_parse_llama_log():
+    info = server.parse_llama_log(LLAMA_LOG)
+    assert info["kv_cache_tokens"] == 32_768
+    assert info["available_kv_gib"] == pytest.approx(0.875)
+    assert info["kv_cache_dtype"] == "f16"
+    assert info["kv_cache_k_gib"] == pytest.approx(448 / 1024)
+    assert info["weights_dtype"] == "Q4_K - Medium"
+    assert server.parse_llama_log("ничего")["kv_cache_tokens"] is None
+    assert server.parse_server_log(LLAMA_LOG)["kv_cache_dtype"] == "f16"
+
+    parallel = LLAMA_LOG.replace(
+        "( 32768 cells,  28 layers,  1/1 seqs)",
+        "(  2048 cells,  28 layers, 32/32 seqs)",
+    ).replace("896.00 MiB", "1792.00 MiB")
+    info = server.parse_llama_log(parallel)
+    assert info["kv_cache_tokens"] == 65_536
+    assert info["available_kv_gib"] == pytest.approx(1.75)
 
 
 def test_kv_capacity_check():

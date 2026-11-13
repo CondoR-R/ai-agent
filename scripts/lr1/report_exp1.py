@@ -1,7 +1,7 @@
 """Отчёт эксперимента 1: таблицы и графики из сохранённых запусков.
 
-Запускается локально после того, как каталоги запусков скачаны с Colab
-в runs/. Всё считается заново из results.jsonl (Правила, п. 4.2, 8):
+Запускается локально после выполнения экспериментов. Всё считается
+заново из results.jsonl (Правила, п. 4.2, 8):
 
     python scripts/lr1/report_exp1.py \
         --length-run runs/lr1-experiment1-...-<id> \
@@ -77,8 +77,10 @@ def length_tables(series: dict) -> str:
     ]
     for length, e in metrics["by_length"].items():
         if "ttft_median_s" not in e:
-            lines.append(f"| {length} | — | {e['n_ok']}/{e['n_planned']} "
-                         "| — | — | — | — |")
+            lines.append(
+                f"| {length} | — | {e['n_ok']}/{e['n_planned']} "
+                "| — | — | — | — |"
+            )
             continue
         lines.append(
             f"| {length} | {e['prompt_tokens_median']:.0f} "
@@ -154,9 +156,7 @@ def _fmt(value: float | None) -> str:
 def plot_ttft(series: dict, path: Path) -> None:
     """TTFT от длины запроса: медиана и диапазон, прямая по медианам."""
     metrics = series["metrics"]
-    points = [
-        e for e in metrics["by_length"].values() if "ttft_median_s" in e
-    ]
+    points = [e for e in metrics["by_length"].values() if "ttft_median_s" in e]
     xs = np.array([e["prompt_tokens_median"] for e in points])
     med = np.array([e["ttft_median_s"] for e in points])
     low = np.array([e["ttft_min_s"] for e in points])
@@ -164,15 +164,22 @@ def plot_ttft(series: dict, path: Path) -> None:
 
     fig, ax = plt.subplots(figsize=(6.5, 4.2))
     ax.errorbar(
-        xs, med, yerr=[med - low, high - med], marker="o", capsize=3,
+        xs,
+        med,
+        yerr=[med - low, high - med],
+        marker="o",
+        capsize=3,
         label=f"медиана и диапазон (запросов на длину: {series['ecfg']['repeats']})",
     )
     fit = metrics["ttft_fit"]
     if fit:
         line = np.linspace(xs.min(), xs.max(), 50)
         ax.plot(
-            line, fit["intercept_s"] + fit["slope_s_per_token"] * line,
-            "--", color="gray", label="прямая по медианам",
+            line,
+            fit["intercept_s"] + fit["slope_s_per_token"] * line,
+            "--",
+            color="gray",
+            label="прямая по медианам",
         )
     ax.set_xlabel("Длина запроса, токенов")
     ax.set_ylabel("TTFT, с")
@@ -187,7 +194,8 @@ def plot_ttft(series: dict, path: Path) -> None:
 def plot_prefill_speed(series: dict, path: Path) -> None:
     """Скорость prefill (токенов запроса в секунду TTFT) по длине."""
     points = [
-        e for e in series["metrics"]["by_length"].values()
+        e
+        for e in series["metrics"]["by_length"].values()
         if "ttft_median_s" in e
     ]
     xs = np.array([e["prompt_tokens_median"] for e in points])
@@ -197,7 +205,11 @@ def plot_prefill_speed(series: dict, path: Path) -> None:
 
     fig, ax = plt.subplots(figsize=(6.5, 4.2))
     ax.errorbar(
-        xs, med, yerr=[med - low, high - med], marker="o", capsize=3,
+        xs,
+        med,
+        yerr=[med - low, high - med],
+        marker="o",
+        capsize=3,
         label="медиана и диапазон",
     )
     ax.set_xscale("log")
@@ -242,8 +254,8 @@ def plot_cache(series: dict, path: Path) -> None:
 def log_to_mlflow(paths: list[Path], run_ids: dict[str, str]) -> None:
     """Сохраняет рисунки и таблицы отчёта в MLflow (Правила, п. 4.4).
 
-    Отдельный эксперимент lr1_report: артефакты Colab-запусков лежат по
-    путям Colab, а отчёт собирается локально.
+    Отдельный эксперимент lr1_report: артефакты запусков лежат в runs/,
+    а отчёт собирается локально.
     """
     import mlflow
 
@@ -252,8 +264,11 @@ def log_to_mlflow(paths: list[Path], run_ids: dict[str, str]) -> None:
     tracking.setup("lr1_report")
     with mlflow.start_run(run_name="exp1-report"):
         mlflow.set_tags(
-            {"work": "lr1", "experiment": "1",
-             **{f"source_{k}": v for k, v in run_ids.items()}}
+            {
+                "work": "lr1",
+                "experiment": "1",
+                **{f"source_{k}": v for k, v in run_ids.items()},
+            }
         )
         for path in paths:
             mlflow.log_artifact(str(path))
