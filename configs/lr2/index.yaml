@@ -1,0 +1,16 @@
+# Индекс ЛР2: BAAI/bge-small-en-v1.5, 384d, предел 512 токенов.
+# Сборка: python scripts/lr2/build_index.py --config configs/lr2/index.yaml
+experiment: lr2
+seed: 0
+runtime: {num_threads: 6}
+tracked_libs: [sentence-transformers, transformers, numpy]
+
+encoder:
+  model: BAAI/bge-small-en-v1.5
+  revision: 5c38ec7c405ec4b44b94cc5a9bb96e735b38267a
+  device: cpu
+  max_seq_length: 512
+  batch_size: 32
+  # карточка BGE для поиска короткого запроса по пассажу
+  query_prefix: "Represent this sentence for searching relevant passages: "
+  document_prefix: ""
