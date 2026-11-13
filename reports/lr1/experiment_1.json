@@ -1,0 +1,196 @@
+{
+  "ttft_vs_length": {
+    "run_id": "lr1-experiment1-2026-11-13_13-47-33-d47053",
+    "series": "ttft_vs_length",
+    "config": {
+      "mode": "ttft_vs_length",
+      "prefix_caching": false,
+      "prompt_lengths": [
+        256,
+        1024,
+        4096,
+        8192,
+        16384
+      ],
+      "repeats": 5,
+      "output_tokens": 16,
+      "warmup_tokens": [
+        256,
+        1024,
+        4096,
+        8192,
+        16384
+      ]
+    },
+    "server": {
+      "launch_command": "llama-server -hf Qwen/Qwen2.5-1.5B-Instruct-GGUF:Q4_K_M --alias Qwen/Qwen2.5-1.5B-Instruct -c 32768 -np 1 -t 6 -tb 6 --host 127.0.0.1 --port 8000 --metrics --no-webui -lv 5 --log-file /tmp/lr1-llama/llama.log --no-cache-prompt",
+      "prefix_caching": {
+        "enabled": false,
+        "source": "команда запуска"
+      },
+      "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "gpu": null
+    },
+    "metrics": {
+      "n_planned": 25,
+      "n_ok": 25,
+      "cache_hit_tokens_max": 0.0,
+      "n_wrong_output_len": 0,
+      "prompt_dev_max": 0,
+      "by_length": {
+        "256": {
+          "n_planned": 5,
+          "n_recorded": 5,
+          "n_ok": 5,
+          "prompt_tokens_median": 256,
+          "prompt_dev_max": 0,
+          "ttft_median_s": 0.7560948330065003,
+          "ttft_min_s": 0.7538988340093056,
+          "ttft_max_s": 0.7882877079973696,
+          "prefill_tok_s_median": 338.5818667508327,
+          "prefill_tok_s_min": 324.7545247792374,
+          "prefill_tok_s_max": 339.5681070874824,
+          "n_wrong_output_len": 0
+        },
+        "1024": {
+          "n_planned": 5,
+          "n_recorded": 5,
+          "n_ok": 5,
+          "prompt_tokens_median": 1024,
+          "prompt_dev_max": 0,
+          "ttft_median_s": 2.403560541002662,
+          "ttft_min_s": 2.2069753749965457,
+          "ttft_max_s": 2.438492959001451,
+          "prefill_tok_s_median": 426.0346192789599,
+          "prefill_tok_s_min": 419.93149753416645,
+          "prefill_tok_s_max": 463.983427998875,
+          "n_wrong_output_len": 0
+        },
+        "4096": {
+          "n_planned": 5,
+          "n_recorded": 5,
+          "n_ok": 5,
+          "prompt_tokens_median": 4096,
+          "prompt_dev_max": 0,
+          "ttft_median_s": 10.786826165989623,
+          "ttft_min_s": 9.96843274999992,
+          "ttft_max_s": 11.111902874996304,
+          "prefill_tok_s_median": 379.72244448645176,
+          "prefill_tok_s_min": 368.6137330462729,
+          "prefill_tok_s_max": 410.89708911363556,
+          "n_wrong_output_len": 0
+        },
+        "8192": {
+          "n_planned": 5,
+          "n_recorded": 5,
+          "n_ok": 5,
+          "prompt_tokens_median": 8192,
+          "prompt_dev_max": 0,
+          "ttft_median_s": 25.149172958001145,
+          "ttft_min_s": 23.559225208009593,
+          "ttft_max_s": 26.244946749997325,
+          "prefill_tok_s_median": 325.73635775938055,
+          "prefill_tok_s_min": 312.1362781961383,
+          "prefill_tok_s_max": 347.71941469513644,
+          "n_wrong_output_len": 0
+        },
+        "16384": {
+          "n_planned": 5,
+          "n_recorded": 5,
+          "n_ok": 5,
+          "prompt_tokens_median": 16384,
+          "prompt_dev_max": 0,
+          "ttft_median_s": 64.90071124999668,
+          "ttft_min_s": 61.790034749996266,
+          "ttft_max_s": 70.35976329199912,
+          "prefill_tok_s_median": 252.44715634762537,
+          "prefill_tok_s_min": 232.86036270481725,
+          "prefill_tok_s_max": 265.15602501746434,
+          "n_wrong_output_len": 0
+        }
+      },
+      "scaling": {
+        "256-1024": {
+          "length_ratio": 4.0,
+          "ttft_ratio": 3.178914120395792,
+          "marginal_prefill_tok_s": 466.17055291192094
+        },
+        "1024-4096": {
+          "length_ratio": 4.0,
+          "ttft_ratio": 4.487852909038781,
+          "marginal_prefill_tok_s": 366.4443114916543
+        },
+        "4096-8192": {
+          "length_ratio": 2.0,
+          "ttft_ratio": 2.331471052838077,
+          "marginal_prefill_tok_s": 285.190161421129
+        },
+        "8192-16384": {
+          "length_ratio": 2.0,
+          "ttft_ratio": 2.5806300413290004,
+          "marginal_prefill_tok_s": 206.0800751866642
+        }
+      },
+      "ttft_fit": {
+        "slope_s_per_token": 0.003983727173043629,
+        "intercept_s": -3.064846107801248,
+        "prefill_tok_s": 251.02120616256573
+      }
+    }
+  },
+  "prefix_cache": {
+    "run_id": "lr1-experiment1-2026-11-13_13-58-18-b3058c",
+    "series": "prefix_cache",
+    "config": {
+      "mode": "prefix_cache",
+      "prefix_caching": true,
+      "prompt_tokens": 8192,
+      "repeats": 3,
+      "n_prompts": 1,
+      "output_tokens": 16,
+      "warmup_tokens": [
+        1024,
+        8192
+      ]
+    },
+    "server": {
+      "launch_command": "llama-server -hf Qwen/Qwen2.5-1.5B-Instruct-GGUF:Q4_K_M --alias Qwen/Qwen2.5-1.5B-Instruct -c 32768 -np 1 -t 6 -tb 6 --host 127.0.0.1 --port 8000 --metrics --no-webui -lv 5 --log-file /tmp/lr1-llama/llama.log",
+      "prefix_caching": {
+        "enabled": true,
+        "source": "умолчание сервера (флага нет в команде запуска)"
+      },
+      "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "gpu": null
+    },
+    "metrics": {
+      "n_planned": 3,
+      "n_ok": 3,
+      "speedup_2_median": 331.0583177584945,
+      "speedup_3_median": 432.2760057281773,
+      "prompts": {
+        "1": {
+          "n_planned": 3,
+          "n_recorded": 3,
+          "n_ok": 3,
+          "prompt_tokens": 8192,
+          "ttft_s": [
+            24.949548000004143,
+            0.07536299999628682,
+            0.057716708004591055
+          ],
+          "hit_tokens": [
+            27.0,
+            8191.0,
+            8191.0
+          ],
+          "ttft_attempt1_s": 24.949548000004143,
+          "ttft_attempt2_s": 0.07536299999628682,
+          "ttft_attempt3_s": 0.057716708004591055,
+          "speedup_2": 331.0583177584945,
+          "speedup_3": 432.2760057281773,
+          "cold_start_ok": 1
+        }
+      }
+    }
+  }
+}

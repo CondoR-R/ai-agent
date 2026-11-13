@@ -1,0 +1,124 @@
+{
+  "run_id": "lr1-experiment2-2026-11-13_13-59-29-10ef3c",
+  "series": "decode_memory",
+  "config": {
+    "experiment": "lr1",
+    "seed": 0,
+    "runtime": {
+      "num_threads": 6
+    },
+    "tracked_libs": [
+      "openai",
+      "transformers",
+      "huggingface-hub"
+    ],
+    "endpoint_path": "endpoint.yaml",
+    "server": {
+      "name": "llama.cpp",
+      "max_model_len": 32768,
+      "log_path": "/tmp/lr1-llama/llama.log",
+      "cmd_path": "/tmp/lr1-llama/llama.cmd"
+    },
+    "exp2": {
+      "prompt_tokens": 1024,
+      "output_lengths": [
+        16,
+        64,
+        256,
+        1024
+      ],
+      "repeats": 5,
+      "warmup_tokens": 1024,
+      "warmup_output_tokens": 64
+    },
+    "decode_memory": {
+      "weights_gib": 1.04,
+      "memory_bandwidth_gb_s": 68.25,
+      "description": "Qwen2.5-1.5B-Instruct, Q4_K_M, ≈1.11 ГБ"
+    }
+  },
+  "server": {
+    "launch_command": "llama-server -hf Qwen/Qwen2.5-1.5B-Instruct-GGUF:Q4_K_M --alias Qwen/Qwen2.5-1.5B-Instruct -c 32768 -np 1 -t 6 -tb 6 --host 127.0.0.1 --port 8000 --metrics --no-webui -lv 5 --log-file /tmp/lr1-llama/llama.log",
+    "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "gpu": null
+  },
+  "metrics": {
+    "n_planned": 20,
+    "n_ok": 20,
+    "n_wrong_output_len": 0,
+    "tpot_median_s": 0.029801941654951924,
+    "decode_lower_bound_s": 0.016361780175238094,
+    "decode_lower_bound_tok_s": 61.118043959140785,
+    "tpot_over_lower_bound": 1.8214363801351006,
+    "by_output": {
+      "16": {
+        "n_planned": 5,
+        "n_recorded": 5,
+        "n_ok": 5,
+        "completion_tokens_median": 16,
+        "e2e_median_s": 3.374439291001181,
+        "e2e_min_s": 2.624626457996783,
+        "e2e_max_s": 4.612704165992909,
+        "ttft_median_s": 2.9196825830003945,
+        "tpot_median_s": 0.030317113866719106,
+        "tpot_min_s": 0.027400766666202496,
+        "tpot_max_s": 0.038806719399872236,
+        "decode_tok_s_median": 32.984670123819384,
+        "n_wrong_output_len": 0
+      },
+      "64": {
+        "n_planned": 5,
+        "n_recorded": 5,
+        "n_ok": 5,
+        "completion_tokens_median": 64,
+        "e2e_median_s": 4.660391792000155,
+        "e2e_min_s": 4.214266540991957,
+        "e2e_max_s": 5.464679750002688,
+        "ttft_median_s": 2.8695421669981442,
+        "tpot_median_s": 0.02842618452384144,
+        "tpot_min_s": 0.026202441126871336,
+        "tpot_max_s": 0.031791748682504506,
+        "decode_tok_s_median": 35.178833063624346,
+        "n_wrong_output_len": 0
+      },
+      "256": {
+        "n_planned": 5,
+        "n_recorded": 5,
+        "n_ok": 5,
+        "completion_tokens_median": 256,
+        "e2e_median_s": 10.289922791009303,
+        "e2e_min_s": 8.581011999995098,
+        "e2e_max_s": 10.899652291001985,
+        "ttft_median_s": 2.702660916998866,
+        "tpot_median_s": 0.02928676944318474,
+        "tpot_min_s": 0.024560437905864662,
+        "tpot_max_s": 0.0309874094745336,
+        "decode_tok_s_median": 34.14511122300339,
+        "n_wrong_output_len": 0
+      },
+      "1024": {
+        "n_planned": 5,
+        "n_recorded": 5,
+        "n_ok": 5,
+        "completion_tokens_median": 1024,
+        "e2e_median_s": 34.21884433300875,
+        "e2e_min_s": 29.595423999999184,
+        "e2e_max_s": 35.90527116700832,
+        "ttft_median_s": 3.0180437920062104,
+        "tpot_median_s": 0.030417008960891206,
+        "tpot_min_s": 0.02657683402639454,
+        "tpot_max_s": 0.03201772987976329,
+        "decode_tok_s_median": 32.876342354560705,
+        "n_wrong_output_len": 0
+      }
+    },
+    "e2e_fit": {
+      "slope_s_per_token": 0.030731376122538012,
+      "intercept_s": 2.687231670091924,
+      "ttft_ref_s": 2.8946123749992694,
+      "tpot_ref_s": 0.029801941654951924,
+      "intercept_minus_ttft_s": -0.2073807049073455,
+      "slope_minus_tpot_s": 0.0009294344675860877
+    }
+  }
+}

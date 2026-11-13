@@ -1,0 +1,290 @@
+{
+  "run_id": "lr1-experiment3-2026-11-13_14-04-08-6f88bc",
+  "series": "load",
+  "config": {
+    "experiment": "lr1",
+    "seed": 0,
+    "runtime": {
+      "num_threads": 6
+    },
+    "tracked_libs": [
+      "openai",
+      "transformers",
+      "huggingface-hub"
+    ],
+    "endpoint_path": "endpoint.yaml",
+    "server": {
+      "name": "llama.cpp",
+      "max_model_len": 65536,
+      "log_path": "/tmp/lr1-llama/llama.log",
+      "cmd_path": "/tmp/lr1-llama/llama.cmd"
+    },
+    "exp3": {
+      "prompt_tokens": 1024,
+      "output_tokens": 128,
+      "clients": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      "min_requests": 8,
+      "requests_per_client": 2,
+      "warmup_tokens": 1024,
+      "warmup_output_tokens": 128,
+      "limits": {
+        "ttft_p90_s": 10.0,
+        "tpot_median_s": 0.15
+      }
+    }
+  },
+  "server": {
+    "launch_command": "llama-server -hf Qwen/Qwen2.5-1.5B-Instruct-GGUF:Q4_K_M --alias Qwen/Qwen2.5-1.5B-Instruct -c 65536 -np 32 -t 6 -tb 6 --host 127.0.0.1 --port 8000 --metrics --no-webui -lv 5 --log-file /tmp/lr1-llama/llama.log",
+    "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "gpu": null
+  },
+  "metrics": {
+    "n_planned": 136,
+    "n_ok": 136,
+    "n_error": 0,
+    "limits": {
+      "ttft_p90_s": 10.0,
+      "tpot_median_s": 0.15
+    },
+    "max_clients_within_limits": 2,
+    "kv_cache_tokens": 65536,
+    "kv_requests_capacity": 56,
+    "by_clients": {
+      "1": {
+        "clients": 1,
+        "n_planned": 8,
+        "n_recorded": 8,
+        "n_ok": 8,
+        "n_error": 0,
+        "wall_s": 48.0442880000046,
+        "output_tokens_total": 1024,
+        "throughput_tok_s": 21.313667922394895,
+        "requests_per_s": 0.16651303064371012,
+        "ttft_median_s": 2.854929020999407,
+        "ttft_p90_s": 2.939469140996516,
+        "tpot_median_s": 0.02794211974804515,
+        "e2e_median_s": 6.403578229001141,
+        "goodput_requests": 8,
+        "goodput_rps": 0.16651303064371012,
+        "limits_ok": true,
+        "server_before": {
+          "llamacpp:prompt_tokens_total": 1024.0,
+          "llamacpp:prompt_tokens_cached_total": 0.0,
+          "llamacpp:prompt_seconds_total": 2.015,
+          "llamacpp:tokens_predicted_total": 128.0,
+          "llamacpp:tokens_predicted_seconds_total": 2.84495,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "server_after": {
+          "llamacpp:prompt_tokens_total": 9216.0,
+          "llamacpp:prompt_tokens_cached_total": 0.0,
+          "llamacpp:prompt_seconds_total": 22.5831,
+          "llamacpp:tokens_predicted_total": 1152.0,
+          "llamacpp:tokens_predicted_seconds_total": 29.9976,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "queue_waiting_after": 0.0,
+        "kv_cache_usage_after": null
+      },
+      "2": {
+        "clients": 2,
+        "n_planned": 8,
+        "n_recorded": 8,
+        "n_ok": 8,
+        "n_error": 0,
+        "wall_s": 50.933461250009714,
+        "output_tokens_total": 1024,
+        "throughput_tok_s": 20.10466154997084,
+        "requests_per_s": 0.15706766835914718,
+        "ttft_median_s": 6.06376885449572,
+        "ttft_p90_s": 6.33781646690768,
+        "tpot_median_s": 0.051519969653560024,
+        "e2e_median_s": 12.557978728997114,
+        "goodput_requests": 8,
+        "goodput_rps": 0.15706766835914718,
+        "limits_ok": true,
+        "server_before": {
+          "llamacpp:prompt_tokens_total": 9216.0,
+          "llamacpp:prompt_tokens_cached_total": 0.0,
+          "llamacpp:prompt_seconds_total": 22.5831,
+          "llamacpp:tokens_predicted_total": 1152.0,
+          "llamacpp:tokens_predicted_seconds_total": 29.9976,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "server_after": {
+          "llamacpp:prompt_tokens_total": 17408.0,
+          "llamacpp:prompt_tokens_cached_total": 0.0,
+          "llamacpp:prompt_seconds_total": 46.7771,
+          "llamacpp:tokens_predicted_total": 2176.0,
+          "llamacpp:tokens_predicted_seconds_total": 83.0589,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "queue_waiting_after": 0.0,
+        "kv_cache_usage_after": null
+      },
+      "4": {
+        "clients": 4,
+        "n_planned": 8,
+        "n_recorded": 8,
+        "n_ok": 8,
+        "n_error": 0,
+        "wall_s": 36.49373570900934,
+        "output_tokens_total": 1024,
+        "throughput_tok_s": 28.059610234619015,
+        "requests_per_s": 0.21921570495796106,
+        "ttft_median_s": 7.379718271004094,
+        "ttft_p90_s": 11.74187146260665,
+        "tpot_median_s": 0.0841541578109774,
+        "e2e_median_s": 18.220207832993765,
+        "goodput_requests": 6,
+        "goodput_rps": 0.1644117787184708,
+        "limits_ok": false,
+        "server_before": {
+          "llamacpp:prompt_tokens_total": 17408.0,
+          "llamacpp:prompt_tokens_cached_total": 0.0,
+          "llamacpp:prompt_seconds_total": 46.7771,
+          "llamacpp:tokens_predicted_total": 2176.0,
+          "llamacpp:tokens_predicted_seconds_total": 83.0589,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "server_after": {
+          "llamacpp:prompt_tokens_total": 25600.0,
+          "llamacpp:prompt_tokens_cached_total": 0.0,
+          "llamacpp:prompt_seconds_total": 69.9342,
+          "llamacpp:tokens_predicted_total": 3200.0,
+          "llamacpp:tokens_predicted_seconds_total": 164.23,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "queue_waiting_after": 0.0,
+        "kv_cache_usage_after": null
+      },
+      "8": {
+        "clients": 8,
+        "n_planned": 16,
+        "n_recorded": 16,
+        "n_ok": 16,
+        "n_error": 0,
+        "wall_s": 64.48234687499644,
+        "output_tokens_total": 2048,
+        "throughput_tok_s": 31.760630610579234,
+        "requests_per_s": 0.24812992664515027,
+        "ttft_median_s": 11.427491083508357,
+        "ttft_p90_s": 19.691307499997492,
+        "tpot_median_s": 0.1755346136771378,
+        "e2e_median_s": 32.14315977100341,
+        "goodput_requests": 0,
+        "goodput_rps": 0.0,
+        "limits_ok": false,
+        "server_before": {
+          "llamacpp:prompt_tokens_total": 25600.0,
+          "llamacpp:prompt_tokens_cached_total": 0.0,
+          "llamacpp:prompt_seconds_total": 69.9342,
+          "llamacpp:tokens_predicted_total": 3200.0,
+          "llamacpp:tokens_predicted_seconds_total": 164.23,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "server_after": {
+          "llamacpp:prompt_tokens_total": 41709.0,
+          "llamacpp:prompt_tokens_cached_total": 275.0,
+          "llamacpp:prompt_seconds_total": 115.348,
+          "llamacpp:tokens_predicted_total": 5248.0,
+          "llamacpp:tokens_predicted_seconds_total": 483.101,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "queue_waiting_after": 0.0,
+        "kv_cache_usage_after": null
+      },
+      "16": {
+        "clients": 16,
+        "n_planned": 32,
+        "n_recorded": 32,
+        "n_ok": 32,
+        "n_error": 0,
+        "wall_s": 120.47661408298882,
+        "output_tokens_total": 4096,
+        "throughput_tok_s": 33.998299430780165,
+        "requests_per_s": 0.26561171430297004,
+        "ttft_median_s": 11.494734874999267,
+        "ttft_p90_s": 40.589414916302495,
+        "tpot_median_s": 0.35463370718499626,
+        "e2e_median_s": 60.00665370799834,
+        "goodput_requests": 0,
+        "goodput_rps": 0.0,
+        "limits_ok": false,
+        "server_before": {
+          "llamacpp:prompt_tokens_total": 41709.0,
+          "llamacpp:prompt_tokens_cached_total": 275.0,
+          "llamacpp:prompt_seconds_total": 115.348,
+          "llamacpp:tokens_predicted_total": 5248.0,
+          "llamacpp:tokens_predicted_seconds_total": 483.101,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "server_after": {
+          "llamacpp:prompt_tokens_total": 73485.0,
+          "llamacpp:prompt_tokens_cached_total": 1267.0,
+          "llamacpp:prompt_seconds_total": 205.142,
+          "llamacpp:tokens_predicted_total": 9344.0,
+          "llamacpp:tokens_predicted_seconds_total": 1810.17,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "queue_waiting_after": 0.0,
+        "kv_cache_usage_after": null
+      },
+      "32": {
+        "clients": 32,
+        "n_planned": 64,
+        "n_recorded": 64,
+        "n_ok": 64,
+        "n_error": 0,
+        "wall_s": 262.9738634999958,
+        "output_tokens_total": 8192,
+        "throughput_tok_s": 31.15138474588419,
+        "requests_per_s": 0.24337019332722024,
+        "ttft_median_s": 15.72272074999637,
+        "ttft_p90_s": 89.62357317109272,
+        "tpot_median_s": 0.9320348300512189,
+        "e2e_median_s": 130.5365889790046,
+        "goodput_requests": 0,
+        "goodput_rps": 0.0,
+        "limits_ok": false,
+        "server_before": {
+          "llamacpp:prompt_tokens_total": 73485.0,
+          "llamacpp:prompt_tokens_cached_total": 1267.0,
+          "llamacpp:prompt_seconds_total": 205.142,
+          "llamacpp:tokens_predicted_total": 9344.0,
+          "llamacpp:tokens_predicted_seconds_total": 1810.17,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "server_after": {
+          "llamacpp:prompt_tokens_total": 137066.0,
+          "llamacpp:prompt_tokens_cached_total": 3222.0,
+          "llamacpp:prompt_seconds_total": 420.637,
+          "llamacpp:tokens_predicted_total": 17536.0,
+          "llamacpp:tokens_predicted_seconds_total": 7887.5,
+          "llamacpp:requests_processing": 0.0,
+          "llamacpp:requests_deferred": 0.0
+        },
+        "queue_waiting_after": 0.0,
+        "kv_cache_usage_after": null
+      }
+    }
+  }
+}
