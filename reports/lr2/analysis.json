@@ -1,0 +1,1657 @@
+{
+  "runs": {
+    "exp1": "runs/lr2-experiment1-2026-11-13_16-09-04-c38c6d",
+    "exp2": "runs/lr2-experiment2-2026-11-14_16-28-32-df6b64"
+  },
+  "pairwise": {
+    "llm_only_to_rag_k3": {
+      "n": 90,
+      "fixed": 1,
+      "broke": 8,
+      "same_correct": 22,
+      "same_wrong": 59,
+      "net_correct": -7,
+      "net_pp": -7.777777777777778
+    },
+    "rag_k3_to_rag_k1": {
+      "n": 90,
+      "fixed": 26,
+      "broke": 14,
+      "same_correct": 9,
+      "same_wrong": 41,
+      "net_correct": 12,
+      "net_pp": 13.333333333333334
+    },
+    "rag_k3_to_rag_k5": {
+      "n": 90,
+      "fixed": 4,
+      "broke": 2,
+      "same_correct": 21,
+      "same_wrong": 63,
+      "net_correct": 2,
+      "net_pp": 2.2222222222222223
+    },
+    "rag_k1_to_rag_k5": {
+      "n": 90,
+      "fixed": 14,
+      "broke": 24,
+      "same_correct": 11,
+      "same_wrong": 41,
+      "net_correct": -10,
+      "net_pp": -11.11111111111111
+    }
+  },
+  "errors": {
+    "rag_k3": {
+      "counts": {
+        "evidence_not_found": 5,
+        "found_not_passed": 2,
+        "passed_wrong": 30,
+        "noinfo_wrong": 30
+      },
+      "examples": {
+        "passed_wrong": {
+          "category": "passed_wrong",
+          "claim_id": 1089,
+          "claim": "Smc5/6 engagment drives the activation of SUMO E3 ligase Mms21 by ATP-dependent remolding.",
+          "gold_label": "SUPPORT",
+          "gold_evidence": [
+            {
+              "doc_id": "17628888",
+              "title": "ATPase-Dependent Control of the Mms21 SUMO Ligase during DNA Repair",
+              "label": "SUPPORT",
+              "sentences": [
+                7
+              ],
+              "text": [
+                "In accordance, scanning force microscopy of the Smc5-Mms21 heterodimer shows that the molecule is physically remodeled in an ATP-dependent manner."
+              ]
+            }
+          ],
+          "retrieved": [
+            {
+              "doc_id": "17628888",
+              "score": 0.8557438254356384,
+              "rank": 1,
+              "title": "ATPase-Dependent Control of the Mms21 SUMO Ligase during DNA Repair"
+            },
+            {
+              "doc_id": "7915836",
+              "score": 0.7938259243965149,
+              "rank": 2,
+              "title": "The SMC5/6 complex maintains telomere length in ALT cancer cells through SUMOylation of telomere-binding proteins"
+            },
+            {
+              "doc_id": "23577014",
+              "score": 0.766017735004425,
+              "rank": 3,
+              "title": "A SUMO-Dependent Protein Network Regulates Chromosome Congression during Oocyte Meiosis"
+            },
+            {
+              "doc_id": "9732010",
+              "score": 0.7539997100830078,
+              "rank": 4,
+              "title": "Roles of histone acetylation and chromatin remodeling factor in a meiotic recombination hotspot."
+            },
+            {
+              "doc_id": "21948782",
+              "score": 0.7483952045440674,
+              "rank": 5,
+              "title": "Function and regulation of SUMO proteases"
+            }
+          ],
+          "passed": [
+            {
+              "doc_id": "17628888",
+              "title": "ATPase-Dependent Control of the Mms21 SUMO Ligase during DNA Repair",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            {
+              "doc_id": "7915836",
+              "title": "The SMC5/6 complex maintains telomere length in ALT cancer cells through SUMOylation of telomere-binding proteins",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            {
+              "doc_id": "23577014",
+              "title": "A SUMO-Dependent Protein Network Regulates Chromosome Congression during Oocyte Meiosis",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "prompt_tokens": 1212,
+          "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"17628888\", \"sentences\": [4, 5, 6, 7, 8]}",
+          "parsed": {
+            "label": "CONTRADICT",
+            "doc_id": "17628888",
+            "sentences": [
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          },
+          "parse_status": "ok"
+        },
+        "evidence_not_found": {
+          "category": "evidence_not_found",
+          "claim_id": 314,
+          "claim": "Deamination of cytidine to uridine on the minus strand of viral DNA results in catastrophic G-to-A mutations in the viral genome.",
+          "gold_label": "SUPPORT",
+          "gold_evidence": [
+            {
+              "doc_id": "4347374",
+              "title": "Broad antiretroviral defence by human APOBEC3G through lethal editing of nascent reverse transcripts",
+              "label": "SUPPORT",
+              "sentences": [
+                3,
+                5
+              ],
+              "text": [
+                "APOBEC3G is closely related to APOBEC1, the central component of an RNA-editing complex that deaminates a cytosine residue in apoB messenger RNA.",
+                "Here, we demonstrate that it does, as APOBEC3G exerts its antiviral effect during reverse transcription to trigger G-to-A hypermutation in the nascent retroviral DNA."
+              ]
+            }
+          ],
+          "retrieved": [
+            {
+              "doc_id": "544971",
+              "score": 0.7565313577651978,
+              "rank": 1,
+              "title": "DNA Deamination Mediates Innate Immunity to Retroviral Infection"
+            },
+            {
+              "doc_id": "2638387",
+              "score": 0.7405338287353516,
+              "rank": 2,
+              "title": "The cytidine deaminase CEM15 induces hypermutation in newly synthesized HIV-1 DNA"
+            },
+            {
+              "doc_id": "34498325",
+              "score": 0.7186567187309265,
+              "rank": 3,
+              "title": "A conserved modified wobble nucleoside (mcm5s2U) in lysyl-tRNA is required for viability in yeast."
+            },
+            {
+              "doc_id": "20996244",
+              "score": 0.7127630710601807,
+              "rank": 4,
+              "title": "Nonproductive human immunodeficiency virus type 1 infection in nucleoside-treated G0 lymphocytes."
+            },
+            {
+              "doc_id": "25787749",
+              "score": 0.7088446617126465,
+              "rank": 5,
+              "title": "G-quadruplexes significantly stimulate Pif1 helicase-catalyzed duplex DNA unwinding."
+            }
+          ],
+          "passed": [
+            {
+              "doc_id": "544971",
+              "title": "DNA Deamination Mediates Innate Immunity to Retroviral Infection",
+              "sentences": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "doc_id": "2638387",
+              "title": "The cytidine deaminase CEM15 induces hypermutation in newly synthesized HIV-1 DNA",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            {
+              "doc_id": "34498325",
+              "title": "A conserved modified wobble nucleoside (mcm5s2U) in lysyl-tRNA is required for viability in yeast.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "prompt_tokens": 1230,
+          "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"544971\", \"sentences\": [2, 3, 4, 5, 6, 7]}",
+          "parsed": {
+            "label": "CONTRADICT",
+            "doc_id": "544971",
+            "sentences": [
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          },
+          "parse_status": "invalid_reference"
+        },
+        "found_not_passed": {
+          "category": "found_not_passed",
+          "claim_id": 1274,
+          "claim": "The tip of the inner tube of the toxic type VI secretion system (T6SS) antibacterial effector in Escherichia coli (E. coli) carries toxic effector proteins.",
+          "gold_label": "SUPPORT",
+          "gold_evidence": [
+            {
+              "doc_id": "4406819",
+              "title": "PAAR-repeat proteins sharpen and diversify the Type VI secretion system spike",
+              "label": "SUPPORT",
+              "sentences": [
+                4,
+                5
+              ],
+              "text": [
+                "Here we report that proteins from the PAAR (proline-alanine-alanine-arginine) repeat superfamily form a sharp conical extension on the VgrG spike, which is further involved in attaching effector domains to the spike.",
+                "The crystal structures of two PAAR-repeat proteins bound to VgrG-like partners show that these proteins sharpen the tip of the T6SS spike complex."
+              ]
+            },
+            {
+              "doc_id": "4406819",
+              "title": "PAAR-repeat proteins sharpen and diversify the Type VI secretion system spike",
+              "label": "SUPPORT",
+              "sentences": [
+                7
+              ],
+              "text": [
+                "Our results indicate a new model of the T6SS organelle in which the VgrG-PAAR spike complex is decorated with multiple effectors that are delivered simultaneously into target cells in a single contraction-driven translocation event."
+              ]
+            }
+          ],
+          "retrieved": [
+            {
+              "doc_id": "27731651",
+              "score": 0.8450798988342285,
+              "rank": 1,
+              "title": "A view to a kill: the bacterial type VI secretion system."
+            },
+            {
+              "doc_id": "22632303",
+              "score": 0.8418130874633789,
+              "rank": 2,
+              "title": "Identification of T6SS-dependent effector and immunity proteins by Tn-seq in Vibrio cholerae."
+            },
+            {
+              "doc_id": "7145763",
+              "score": 0.8056620955467224,
+              "rank": 3,
+              "title": "Tit-for-Tat: Type VI Secretion System Counterattack during Bacterial Cell-Cell Interactions"
+            },
+            {
+              "doc_id": "4406819",
+              "score": 0.8028106093406677,
+              "rank": 4,
+              "title": "PAAR-repeat proteins sharpen and diversify the Type VI secretion system spike"
+            },
+            {
+              "doc_id": "7481159",
+              "score": 0.7879741191864014,
+              "rank": 5,
+              "title": "Biochemical analysis of TssK, a core component of the bacterial Type VI secretion system, reveals distinct oligomeric states of TssK and identifies a TssK–TssFG subcomplex"
+            }
+          ],
+          "passed": [
+            {
+              "doc_id": "27731651",
+              "title": "A view to a kill: the bacterial type VI secretion system.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "doc_id": "22632303",
+              "title": "Identification of T6SS-dependent effector and immunity proteins by Tn-seq in Vibrio cholerae.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            {
+              "doc_id": "7145763",
+              "title": "Tit-for-Tat: Type VI Secretion System Counterattack during Bacterial Cell-Cell Interactions",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "prompt_tokens": 1116,
+          "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"27731651\", \"sentences\": [3, 4]}",
+          "parsed": {
+            "label": "CONTRADICT",
+            "doc_id": "27731651",
+            "sentences": [
+              3,
+              4
+            ]
+          },
+          "parse_status": "ok"
+        },
+        "noinfo_wrong": {
+          "category": "noinfo_wrong",
+          "claim_id": 554,
+          "claim": "Immune complex triggered cell death leads to extracellular release of neutrophil protein HMGB1.",
+          "gold_label": "NOINFO",
+          "gold_evidence": [],
+          "retrieved": [
+            {
+              "doc_id": "9878167",
+              "score": 0.7602111101150513,
+              "rank": 1,
+              "title": "Viable neutrophils release mitochondrial DNA to form neutrophil extracellular traps"
+            },
+            {
+              "doc_id": "43054703",
+              "score": 0.7512370347976685,
+              "rank": 2,
+              "title": "A novel mechanism of rapid nuclear neutrophil extracellular trap formation in response to Staphylococcus aureus."
+            },
+            {
+              "doc_id": "381602",
+              "score": 0.7502740621566772,
+              "rank": 3,
+              "title": "Neutrophils Suppress Intraluminal NK Cell-Mediated Tumor Cell Clearance and Enhance Extravasation of Disseminated Carcinoma Cells."
+            },
+            {
+              "doc_id": "29399239",
+              "score": 0.7407859563827515,
+              "rank": 4,
+              "title": "Neutrophil extracellular traps: Is immunity the second function of chromatin?"
+            },
+            {
+              "doc_id": "1049501",
+              "score": 0.7384800314903259,
+              "rank": 5,
+              "title": "Neutrophil extracellular traps enriched in oxidized mitochondrial DNA are interferogenic and contribute to lupus-like disease"
+            }
+          ],
+          "passed": [
+            {
+              "doc_id": "9878167",
+              "title": "Viable neutrophils release mitochondrial DNA to form neutrophil extracellular traps",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            {
+              "doc_id": "43054703",
+              "title": "A novel mechanism of rapid nuclear neutrophil extracellular trap formation in response to Staphylococcus aureus.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            },
+            {
+              "doc_id": "381602",
+              "title": "Neutrophils Suppress Intraluminal NK Cell-Mediated Tumor Cell Clearance and Enhance Extravasation of Disseminated Carcinoma Cells.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "prompt_tokens": 1261,
+          "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"9878167\", \"sentences\": [4, 5, 6, 7, 8, 9, 10]}",
+          "parsed": {
+            "label": "CONTRADICT",
+            "doc_id": "9878167",
+            "sentences": [
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ]
+          },
+          "parse_status": "invalid_reference"
+        }
+      }
+    },
+    "rag_k1": {
+      "counts": {
+        "evidence_not_found": 4,
+        "found_not_passed": 3,
+        "passed_wrong": 18,
+        "noinfo_wrong": 30
+      },
+      "examples": {
+        "evidence_not_found": {
+          "category": "evidence_not_found",
+          "claim_id": 1132,
+          "claim": "TCR/CD3 microdomains are a required to induce the immunologic synapse to activate T cells.",
+          "gold_label": "SUPPORT",
+          "gold_evidence": [
+            {
+              "doc_id": "33499189",
+              "title": "Full activation of the T cell receptor requires both clustering and conformational changes at CD3.",
+              "label": "SUPPORT",
+              "sentences": [
+                3,
+                4
+              ],
+              "text": [
+                "The conformational change is elicited by cooperative rearrangements of two TCR-CD3 complexes and does not require accompanying changes in the structure of the TCRalphabeta ectodomains.",
+                "This conformational change at CD3 reverts upon ligand dissociation and is required for T cell activation."
+              ]
+            }
+          ],
+          "retrieved": [
+            {
+              "doc_id": "15972906",
+              "score": 0.8183782696723938,
+              "rank": 1,
+              "title": "Functional anatomy of T cell activation and synapse formation."
+            },
+            {
+              "doc_id": "18834078",
+              "score": 0.7927461862564087,
+              "rank": 2,
+              "title": "Secondary T cell–T cell synaptic interactions drive the differentiation of protective CD8+ T cells"
+            },
+            {
+              "doc_id": "994800",
+              "score": 0.781110405921936,
+              "rank": 3,
+              "title": "TCR ligand density and affinity determine peripheral induction of Foxp3 in vivo"
+            },
+            {
+              "doc_id": "6936141",
+              "score": 0.7806219458580017,
+              "rank": 4,
+              "title": "Nef is physically recruited into the immunological synapse and potentiates T cell activation early after TCR engagement."
+            },
+            {
+              "doc_id": "41982985",
+              "score": 0.772730827331543,
+              "rank": 5,
+              "title": "Altered TCR signaling from geometrically repatterned immunological synapses."
+            }
+          ],
+          "passed": [
+            {
+              "doc_id": "15972906",
+              "title": "Functional anatomy of T cell activation and synapse formation.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "prompt_tokens": 449,
+          "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"15972906\", \"sentences\": [4, 5]}",
+          "parsed": {
+            "label": "CONTRADICT",
+            "doc_id": "15972906",
+            "sentences": [
+              4,
+              5
+            ]
+          },
+          "parse_status": "ok"
+        },
+        "found_not_passed": {
+          "category": "found_not_passed",
+          "claim_id": 1274,
+          "claim": "The tip of the inner tube of the toxic type VI secretion system (T6SS) antibacterial effector in Escherichia coli (E. coli) carries toxic effector proteins.",
+          "gold_label": "SUPPORT",
+          "gold_evidence": [
+            {
+              "doc_id": "4406819",
+              "title": "PAAR-repeat proteins sharpen and diversify the Type VI secretion system spike",
+              "label": "SUPPORT",
+              "sentences": [
+                4,
+                5
+              ],
+              "text": [
+                "Here we report that proteins from the PAAR (proline-alanine-alanine-arginine) repeat superfamily form a sharp conical extension on the VgrG spike, which is further involved in attaching effector domains to the spike.",
+                "The crystal structures of two PAAR-repeat proteins bound to VgrG-like partners show that these proteins sharpen the tip of the T6SS spike complex."
+              ]
+            },
+            {
+              "doc_id": "4406819",
+              "title": "PAAR-repeat proteins sharpen and diversify the Type VI secretion system spike",
+              "label": "SUPPORT",
+              "sentences": [
+                7
+              ],
+              "text": [
+                "Our results indicate a new model of the T6SS organelle in which the VgrG-PAAR spike complex is decorated with multiple effectors that are delivered simultaneously into target cells in a single contraction-driven translocation event."
+              ]
+            }
+          ],
+          "retrieved": [
+            {
+              "doc_id": "27731651",
+              "score": 0.8450798988342285,
+              "rank": 1,
+              "title": "A view to a kill: the bacterial type VI secretion system."
+            },
+            {
+              "doc_id": "22632303",
+              "score": 0.8418130874633789,
+              "rank": 2,
+              "title": "Identification of T6SS-dependent effector and immunity proteins by Tn-seq in Vibrio cholerae."
+            },
+            {
+              "doc_id": "7145763",
+              "score": 0.8056620955467224,
+              "rank": 3,
+              "title": "Tit-for-Tat: Type VI Secretion System Counterattack during Bacterial Cell-Cell Interactions"
+            },
+            {
+              "doc_id": "4406819",
+              "score": 0.8028106093406677,
+              "rank": 4,
+              "title": "PAAR-repeat proteins sharpen and diversify the Type VI secretion system spike"
+            },
+            {
+              "doc_id": "7481159",
+              "score": 0.7879741191864014,
+              "rank": 5,
+              "title": "Biochemical analysis of TssK, a core component of the bacterial Type VI secretion system, reveals distinct oligomeric states of TssK and identifies a TssK–TssFG subcomplex"
+            }
+          ],
+          "passed": [
+            {
+              "doc_id": "27731651",
+              "title": "A view to a kill: the bacterial type VI secretion system.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "prompt_tokens": 475,
+          "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"27731651\", \"sentences\": [1, 2, 3, 4, 5]}",
+          "parsed": {
+            "label": "CONTRADICT",
+            "doc_id": "27731651",
+            "sentences": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          "parse_status": "ok"
+        },
+        "passed_wrong": {
+          "category": "passed_wrong",
+          "claim_id": 880,
+          "claim": "Occupancy of ribosomes by IncRNAs mirror 5 0-UTRs",
+          "gold_label": "SUPPORT",
+          "gold_evidence": [
+            {
+              "doc_id": "8426046",
+              "title": "Ribosome Profiling Provides Evidence that Large Noncoding RNAs Do Not Encode Proteins",
+              "label": "SUPPORT",
+              "sentences": [
+                3
+              ],
+              "text": [
+                "Here, we show that classical noncoding RNAs and 5' UTRs show the same ribosome occupancy as lincRNAs, demonstrating that ribosome occupancy alone is not sufficient to classify transcripts as coding or noncoding."
+              ]
+            }
+          ],
+          "retrieved": [
+            {
+              "doc_id": "8426046",
+              "score": 0.8111192584037781,
+              "rank": 1,
+              "title": "Ribosome Profiling Provides Evidence that Large Noncoding RNAs Do Not Encode Proteins"
+            },
+            {
+              "doc_id": "20725212",
+              "score": 0.7742562294006348,
+              "rank": 2,
+              "title": "Chaperoning 5S RNA assembly."
+            },
+            {
+              "doc_id": "25373397",
+              "score": 0.7648106813430786,
+              "rank": 3,
+              "title": "Four newly located pseudouridylate residues in Escherichia coli 23S ribosomal RNA are all at the peptidyltransferase center: analysis by the application of a new sequencing technique."
+            },
+            {
+              "doc_id": "18467982",
+              "score": 0.754446804523468,
+              "rank": 4,
+              "title": "A cluster of ribosome synthesis factors regulate pre-rRNA folding and 5.8S rRNA maturation by the Rat1 exonuclease"
+            },
+            {
+              "doc_id": "365896",
+              "score": 0.7380852699279785,
+              "rank": 5,
+              "title": "RiboSys, a high-resolution, quantitative approach to measure the in vivo kinetics of pre-mRNA splicing and 3'-end processing in Saccharomyces cerevisiae."
+            }
+          ],
+          "passed": [
+            {
+              "doc_id": "8426046",
+              "title": "Ribosome Profiling Provides Evidence that Large Noncoding RNAs Do Not Encode Proteins",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "prompt_tokens": 449,
+          "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"8426046\", \"sentences\": [2, 3, 4, 5]}",
+          "parsed": {
+            "label": "CONTRADICT",
+            "doc_id": "8426046",
+            "sentences": [
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          "parse_status": "ok"
+        },
+        "noinfo_wrong": {
+          "category": "noinfo_wrong",
+          "claim_id": 554,
+          "claim": "Immune complex triggered cell death leads to extracellular release of neutrophil protein HMGB1.",
+          "gold_label": "NOINFO",
+          "gold_evidence": [],
+          "retrieved": [
+            {
+              "doc_id": "9878167",
+              "score": 0.7602111101150513,
+              "rank": 1,
+              "title": "Viable neutrophils release mitochondrial DNA to form neutrophil extracellular traps"
+            },
+            {
+              "doc_id": "43054703",
+              "score": 0.7512370347976685,
+              "rank": 2,
+              "title": "A novel mechanism of rapid nuclear neutrophil extracellular trap formation in response to Staphylococcus aureus."
+            },
+            {
+              "doc_id": "381602",
+              "score": 0.7502740621566772,
+              "rank": 3,
+              "title": "Neutrophils Suppress Intraluminal NK Cell-Mediated Tumor Cell Clearance and Enhance Extravasation of Disseminated Carcinoma Cells."
+            },
+            {
+              "doc_id": "29399239",
+              "score": 0.7407859563827515,
+              "rank": 4,
+              "title": "Neutrophil extracellular traps: Is immunity the second function of chromatin?"
+            },
+            {
+              "doc_id": "1049501",
+              "score": 0.7384800314903259,
+              "rank": 5,
+              "title": "Neutrophil extracellular traps enriched in oxidized mitochondrial DNA are interferogenic and contribute to lupus-like disease"
+            }
+          ],
+          "passed": [
+            {
+              "doc_id": "9878167",
+              "title": "Viable neutrophils release mitochondrial DNA to form neutrophil extracellular traps",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "prompt_tokens": 463,
+          "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"9878167\", \"sentences\": [1, 2, 3, 4, 5, 6]}",
+          "parsed": {
+            "label": "CONTRADICT",
+            "doc_id": "9878167",
+            "sentences": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ]
+          },
+          "parse_status": "ok"
+        }
+      }
+    },
+    "rag_k5": {
+      "counts": {
+        "evidence_not_found": 5,
+        "found_not_passed": 0,
+        "passed_wrong": 30,
+        "noinfo_wrong": 30
+      },
+      "examples": {
+        "passed_wrong": {
+          "category": "passed_wrong",
+          "claim_id": 1089,
+          "claim": "Smc5/6 engagment drives the activation of SUMO E3 ligase Mms21 by ATP-dependent remolding.",
+          "gold_label": "SUPPORT",
+          "gold_evidence": [
+            {
+              "doc_id": "17628888",
+              "title": "ATPase-Dependent Control of the Mms21 SUMO Ligase during DNA Repair",
+              "label": "SUPPORT",
+              "sentences": [
+                7
+              ],
+              "text": [
+                "In accordance, scanning force microscopy of the Smc5-Mms21 heterodimer shows that the molecule is physically remodeled in an ATP-dependent manner."
+              ]
+            }
+          ],
+          "retrieved": [
+            {
+              "doc_id": "17628888",
+              "score": 0.8557438254356384,
+              "rank": 1,
+              "title": "ATPase-Dependent Control of the Mms21 SUMO Ligase during DNA Repair"
+            },
+            {
+              "doc_id": "7915836",
+              "score": 0.7938259243965149,
+              "rank": 2,
+              "title": "The SMC5/6 complex maintains telomere length in ALT cancer cells through SUMOylation of telomere-binding proteins"
+            },
+            {
+              "doc_id": "23577014",
+              "score": 0.766017735004425,
+              "rank": 3,
+              "title": "A SUMO-Dependent Protein Network Regulates Chromosome Congression during Oocyte Meiosis"
+            },
+            {
+              "doc_id": "9732010",
+              "score": 0.7539997100830078,
+              "rank": 4,
+              "title": "Roles of histone acetylation and chromatin remodeling factor in a meiotic recombination hotspot."
+            },
+            {
+              "doc_id": "21948782",
+              "score": 0.7483952045440674,
+              "rank": 5,
+              "title": "Function and regulation of SUMO proteases"
+            }
+          ],
+          "passed": [
+            {
+              "doc_id": "17628888",
+              "title": "ATPase-Dependent Control of the Mms21 SUMO Ligase during DNA Repair",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            {
+              "doc_id": "7915836",
+              "title": "The SMC5/6 complex maintains telomere length in ALT cancer cells through SUMOylation of telomere-binding proteins",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            {
+              "doc_id": "23577014",
+              "title": "A SUMO-Dependent Protein Network Regulates Chromosome Congression during Oocyte Meiosis",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            {
+              "doc_id": "9732010",
+              "title": "Roles of histone acetylation and chromatin remodeling factor in a meiotic recombination hotspot.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            {
+              "doc_id": "21948782",
+              "title": "Function and regulation of SUMO proteases",
+              "sentences": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ],
+          "prompt_tokens": 1766,
+          "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"17628888\", \"sentences\": [4, 5, 6, 7, 8]}",
+          "parsed": {
+            "label": "CONTRADICT",
+            "doc_id": "17628888",
+            "sentences": [
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          },
+          "parse_status": "ok"
+        },
+        "evidence_not_found": {
+          "category": "evidence_not_found",
+          "claim_id": 314,
+          "claim": "Deamination of cytidine to uridine on the minus strand of viral DNA results in catastrophic G-to-A mutations in the viral genome.",
+          "gold_label": "SUPPORT",
+          "gold_evidence": [
+            {
+              "doc_id": "4347374",
+              "title": "Broad antiretroviral defence by human APOBEC3G through lethal editing of nascent reverse transcripts",
+              "label": "SUPPORT",
+              "sentences": [
+                3,
+                5
+              ],
+              "text": [
+                "APOBEC3G is closely related to APOBEC1, the central component of an RNA-editing complex that deaminates a cytosine residue in apoB messenger RNA.",
+                "Here, we demonstrate that it does, as APOBEC3G exerts its antiviral effect during reverse transcription to trigger G-to-A hypermutation in the nascent retroviral DNA."
+              ]
+            }
+          ],
+          "retrieved": [
+            {
+              "doc_id": "544971",
+              "score": 0.7565313577651978,
+              "rank": 1,
+              "title": "DNA Deamination Mediates Innate Immunity to Retroviral Infection"
+            },
+            {
+              "doc_id": "2638387",
+              "score": 0.7405338287353516,
+              "rank": 2,
+              "title": "The cytidine deaminase CEM15 induces hypermutation in newly synthesized HIV-1 DNA"
+            },
+            {
+              "doc_id": "34498325",
+              "score": 0.7186567187309265,
+              "rank": 3,
+              "title": "A conserved modified wobble nucleoside (mcm5s2U) in lysyl-tRNA is required for viability in yeast."
+            },
+            {
+              "doc_id": "20996244",
+              "score": 0.7127630710601807,
+              "rank": 4,
+              "title": "Nonproductive human immunodeficiency virus type 1 infection in nucleoside-treated G0 lymphocytes."
+            },
+            {
+              "doc_id": "25787749",
+              "score": 0.7088446617126465,
+              "rank": 5,
+              "title": "G-quadruplexes significantly stimulate Pif1 helicase-catalyzed duplex DNA unwinding."
+            }
+          ],
+          "passed": [
+            {
+              "doc_id": "544971",
+              "title": "DNA Deamination Mediates Innate Immunity to Retroviral Infection",
+              "sentences": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "doc_id": "2638387",
+              "title": "The cytidine deaminase CEM15 induces hypermutation in newly synthesized HIV-1 DNA",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            {
+              "doc_id": "34498325",
+              "title": "A conserved modified wobble nucleoside (mcm5s2U) in lysyl-tRNA is required for viability in yeast.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            {
+              "doc_id": "20996244",
+              "title": "Nonproductive human immunodeficiency virus type 1 infection in nucleoside-treated G0 lymphocytes.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            },
+            {
+              "doc_id": "25787749",
+              "title": "G-quadruplexes significantly stimulate Pif1 helicase-catalyzed duplex DNA unwinding.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ],
+          "prompt_tokens": 1978,
+          "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"544971\", \"sentences\": [2, 3]}",
+          "parsed": {
+            "label": "CONTRADICT",
+            "doc_id": "544971",
+            "sentences": [
+              2,
+              3
+            ]
+          },
+          "parse_status": "ok"
+        },
+        "noinfo_wrong": {
+          "category": "noinfo_wrong",
+          "claim_id": 554,
+          "claim": "Immune complex triggered cell death leads to extracellular release of neutrophil protein HMGB1.",
+          "gold_label": "NOINFO",
+          "gold_evidence": [],
+          "retrieved": [
+            {
+              "doc_id": "9878167",
+              "score": 0.7602111101150513,
+              "rank": 1,
+              "title": "Viable neutrophils release mitochondrial DNA to form neutrophil extracellular traps"
+            },
+            {
+              "doc_id": "43054703",
+              "score": 0.7512370347976685,
+              "rank": 2,
+              "title": "A novel mechanism of rapid nuclear neutrophil extracellular trap formation in response to Staphylococcus aureus."
+            },
+            {
+              "doc_id": "381602",
+              "score": 0.7502740621566772,
+              "rank": 3,
+              "title": "Neutrophils Suppress Intraluminal NK Cell-Mediated Tumor Cell Clearance and Enhance Extravasation of Disseminated Carcinoma Cells."
+            },
+            {
+              "doc_id": "29399239",
+              "score": 0.7407859563827515,
+              "rank": 4,
+              "title": "Neutrophil extracellular traps: Is immunity the second function of chromatin?"
+            },
+            {
+              "doc_id": "1049501",
+              "score": 0.7384800314903259,
+              "rank": 5,
+              "title": "Neutrophil extracellular traps enriched in oxidized mitochondrial DNA are interferogenic and contribute to lupus-like disease"
+            }
+          ],
+          "passed": [
+            {
+              "doc_id": "9878167",
+              "title": "Viable neutrophils release mitochondrial DNA to form neutrophil extracellular traps",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            },
+            {
+              "doc_id": "43054703",
+              "title": "A novel mechanism of rapid nuclear neutrophil extracellular trap formation in response to Staphylococcus aureus.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            },
+            {
+              "doc_id": "381602",
+              "title": "Neutrophils Suppress Intraluminal NK Cell-Mediated Tumor Cell Clearance and Enhance Extravasation of Disseminated Carcinoma Cells.",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            },
+            {
+              "doc_id": "29399239",
+              "title": "Neutrophil extracellular traps: Is immunity the second function of chromatin?",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "doc_id": "1049501",
+              "title": "Neutrophil extracellular traps enriched in oxidized mitochondrial DNA are interferogenic and contribute to lupus-like disease",
+              "sentences": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "prompt_tokens": 1724,
+          "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"9878167\", \"sentences\": [4, 5, 6]}",
+          "parsed": {
+            "label": "CONTRADICT",
+            "doc_id": "9878167",
+            "sentences": [
+              4,
+              5,
+              6
+            ]
+          },
+          "parse_status": "ok"
+        }
+      }
+    }
+  },
+  "reference": {
+    "rag_k3": 0.21666666666666667,
+    "rag_k1": 0.35,
+    "rag_k5": 0.25
+  },
+  "case_studies": {
+    "evidence_not_found": {
+      "category": "evidence_not_found",
+      "claim_id": 1132,
+      "claim": "TCR/CD3 microdomains are a required to induce the immunologic synapse to activate T cells.",
+      "gold_label": "SUPPORT",
+      "gold_evidence": [
+        {
+          "doc_id": "33499189",
+          "title": "Full activation of the T cell receptor requires both clustering and conformational changes at CD3.",
+          "label": "SUPPORT",
+          "sentences": [
+            3,
+            4
+          ],
+          "text": [
+            "The conformational change is elicited by cooperative rearrangements of two TCR-CD3 complexes and does not require accompanying changes in the structure of the TCRalphabeta ectodomains.",
+            "This conformational change at CD3 reverts upon ligand dissociation and is required for T cell activation."
+          ]
+        }
+      ],
+      "retrieved": [
+        {
+          "doc_id": "15972906",
+          "score": 0.8183782696723938,
+          "rank": 1,
+          "title": "Functional anatomy of T cell activation and synapse formation."
+        },
+        {
+          "doc_id": "18834078",
+          "score": 0.7927461862564087,
+          "rank": 2,
+          "title": "Secondary T cell–T cell synaptic interactions drive the differentiation of protective CD8+ T cells"
+        },
+        {
+          "doc_id": "994800",
+          "score": 0.781110405921936,
+          "rank": 3,
+          "title": "TCR ligand density and affinity determine peripheral induction of Foxp3 in vivo"
+        },
+        {
+          "doc_id": "6936141",
+          "score": 0.7806219458580017,
+          "rank": 4,
+          "title": "Nef is physically recruited into the immunological synapse and potentiates T cell activation early after TCR engagement."
+        },
+        {
+          "doc_id": "41982985",
+          "score": 0.772730827331543,
+          "rank": 5,
+          "title": "Altered TCR signaling from geometrically repatterned immunological synapses."
+        }
+      ],
+      "passed": [
+        {
+          "doc_id": "15972906",
+          "title": "Functional anatomy of T cell activation and synapse formation.",
+          "sentences": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "doc_id": "18834078",
+          "title": "Secondary T cell–T cell synaptic interactions drive the differentiation of protective CD8+ T cells",
+          "sentences": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "doc_id": "994800",
+          "title": "TCR ligand density and affinity determine peripheral induction of Foxp3 in vivo",
+          "sentences": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ],
+      "prompt_tokens": 991,
+      "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"15972906\", \"sentences\": [4]}",
+      "parsed": {
+        "label": "CONTRADICT",
+        "doc_id": "15972906",
+        "sentences": [
+          4
+        ]
+      },
+      "parse_status": "ok"
+    },
+    "found_not_passed": {
+      "category": "found_not_passed",
+      "claim_id": 1274,
+      "claim": "The tip of the inner tube of the toxic type VI secretion system (T6SS) antibacterial effector in Escherichia coli (E. coli) carries toxic effector proteins.",
+      "gold_label": "SUPPORT",
+      "gold_evidence": [
+        {
+          "doc_id": "4406819",
+          "title": "PAAR-repeat proteins sharpen and diversify the Type VI secretion system spike",
+          "label": "SUPPORT",
+          "sentences": [
+            4,
+            5
+          ],
+          "text": [
+            "Here we report that proteins from the PAAR (proline-alanine-alanine-arginine) repeat superfamily form a sharp conical extension on the VgrG spike, which is further involved in attaching effector domains to the spike.",
+            "The crystal structures of two PAAR-repeat proteins bound to VgrG-like partners show that these proteins sharpen the tip of the T6SS spike complex."
+          ]
+        },
+        {
+          "doc_id": "4406819",
+          "title": "PAAR-repeat proteins sharpen and diversify the Type VI secretion system spike",
+          "label": "SUPPORT",
+          "sentences": [
+            7
+          ],
+          "text": [
+            "Our results indicate a new model of the T6SS organelle in which the VgrG-PAAR spike complex is decorated with multiple effectors that are delivered simultaneously into target cells in a single contraction-driven translocation event."
+          ]
+        }
+      ],
+      "retrieved": [
+        {
+          "doc_id": "27731651",
+          "score": 0.8450798988342285,
+          "rank": 1,
+          "title": "A view to a kill: the bacterial type VI secretion system."
+        },
+        {
+          "doc_id": "22632303",
+          "score": 0.8418130874633789,
+          "rank": 2,
+          "title": "Identification of T6SS-dependent effector and immunity proteins by Tn-seq in Vibrio cholerae."
+        },
+        {
+          "doc_id": "7145763",
+          "score": 0.8056620955467224,
+          "rank": 3,
+          "title": "Tit-for-Tat: Type VI Secretion System Counterattack during Bacterial Cell-Cell Interactions"
+        },
+        {
+          "doc_id": "4406819",
+          "score": 0.8028106093406677,
+          "rank": 4,
+          "title": "PAAR-repeat proteins sharpen and diversify the Type VI secretion system spike"
+        },
+        {
+          "doc_id": "7481159",
+          "score": 0.7879741191864014,
+          "rank": 5,
+          "title": "Biochemical analysis of TssK, a core component of the bacterial Type VI secretion system, reveals distinct oligomeric states of TssK and identifies a TssK–TssFG subcomplex"
+        }
+      ],
+      "passed": [
+        {
+          "doc_id": "27731651",
+          "title": "A view to a kill: the bacterial type VI secretion system.",
+          "sentences": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "doc_id": "22632303",
+          "title": "Identification of T6SS-dependent effector and immunity proteins by Tn-seq in Vibrio cholerae.",
+          "sentences": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        {
+          "doc_id": "7145763",
+          "title": "Tit-for-Tat: Type VI Secretion System Counterattack during Bacterial Cell-Cell Interactions",
+          "sentences": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ],
+      "prompt_tokens": 1116,
+      "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"27731651\", \"sentences\": [3, 4]}",
+      "parsed": {
+        "label": "CONTRADICT",
+        "doc_id": "27731651",
+        "sentences": [
+          3,
+          4
+        ]
+      },
+      "parse_status": "ok"
+    },
+    "passed_wrong": {
+      "category": "passed_wrong",
+      "claim_id": 1089,
+      "claim": "Smc5/6 engagment drives the activation of SUMO E3 ligase Mms21 by ATP-dependent remolding.",
+      "gold_label": "SUPPORT",
+      "gold_evidence": [
+        {
+          "doc_id": "17628888",
+          "title": "ATPase-Dependent Control of the Mms21 SUMO Ligase during DNA Repair",
+          "label": "SUPPORT",
+          "sentences": [
+            7
+          ],
+          "text": [
+            "In accordance, scanning force microscopy of the Smc5-Mms21 heterodimer shows that the molecule is physically remodeled in an ATP-dependent manner."
+          ]
+        }
+      ],
+      "retrieved": [
+        {
+          "doc_id": "17628888",
+          "score": 0.8557438254356384,
+          "rank": 1,
+          "title": "ATPase-Dependent Control of the Mms21 SUMO Ligase during DNA Repair"
+        },
+        {
+          "doc_id": "7915836",
+          "score": 0.7938259243965149,
+          "rank": 2,
+          "title": "The SMC5/6 complex maintains telomere length in ALT cancer cells through SUMOylation of telomere-binding proteins"
+        },
+        {
+          "doc_id": "23577014",
+          "score": 0.766017735004425,
+          "rank": 3,
+          "title": "A SUMO-Dependent Protein Network Regulates Chromosome Congression during Oocyte Meiosis"
+        },
+        {
+          "doc_id": "9732010",
+          "score": 0.7539997100830078,
+          "rank": 4,
+          "title": "Roles of histone acetylation and chromatin remodeling factor in a meiotic recombination hotspot."
+        },
+        {
+          "doc_id": "21948782",
+          "score": 0.7483952045440674,
+          "rank": 5,
+          "title": "Function and regulation of SUMO proteases"
+        }
+      ],
+      "passed": [
+        {
+          "doc_id": "17628888",
+          "title": "ATPase-Dependent Control of the Mms21 SUMO Ligase during DNA Repair",
+          "sentences": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        {
+          "doc_id": "7915836",
+          "title": "The SMC5/6 complex maintains telomere length in ALT cancer cells through SUMOylation of telomere-binding proteins",
+          "sentences": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "doc_id": "23577014",
+          "title": "A SUMO-Dependent Protein Network Regulates Chromosome Congression during Oocyte Meiosis",
+          "sentences": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ],
+      "prompt_tokens": 1212,
+      "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"17628888\", \"sentences\": [4, 5, 6, 7, 8]}",
+      "parsed": {
+        "label": "CONTRADICT",
+        "doc_id": "17628888",
+        "sentences": [
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      },
+      "parse_status": "ok"
+    },
+    "noinfo_wrong": {
+      "category": "noinfo_wrong",
+      "claim_id": 421,
+      "claim": "Flexible molecules experience greater steric hindrance in the tumor microenviroment than rigid molecules.",
+      "gold_label": "NOINFO",
+      "gold_evidence": [],
+      "retrieved": [
+        {
+          "doc_id": "1065627",
+          "score": 0.7417536973953247,
+          "rank": 1,
+          "title": "Microenvironment rigidity modulates responses to the HER2 receptor tyrosine kinase inhibitor lapatinib via YAP and TAZ transcription factors."
+        },
+        {
+          "doc_id": "17388232",
+          "score": 0.7304936647415161,
+          "rank": 2,
+          "title": "Mechanical regulation of cell function with geometrically modulated elastomeric substrates"
+        },
+        {
+          "doc_id": "6944800",
+          "score": 0.7090750932693481,
+          "rank": 3,
+          "title": "Microenvironmental regulation of tumor progression and metastasis"
+        },
+        {
+          "doc_id": "4346436",
+          "score": 0.7060556411743164,
+          "rank": 4,
+          "title": "Nonlinear Elasticity in Biological Gels"
+        },
+        {
+          "doc_id": "23576165",
+          "score": 0.7010312080383301,
+          "rank": 5,
+          "title": "Metabolic interplay between glycolysis and mitochondrial oxidation: The reverse Warburg effect and its therapeutic implication."
+        }
+      ],
+      "passed": [
+        {
+          "doc_id": "1065627",
+          "title": "Microenvironment rigidity modulates responses to the HER2 receptor tyrosine kinase inhibitor lapatinib via YAP and TAZ transcription factors.",
+          "sentences": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "doc_id": "17388232",
+          "title": "Mechanical regulation of cell function with geometrically modulated elastomeric substrates",
+          "sentences": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "doc_id": "6944800",
+          "title": "Microenvironmental regulation of tumor progression and metastasis",
+          "sentences": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "prompt_tokens": 864,
+      "raw_response": "{\"label\": \"CONTRADICT\", \"doc_id\": \"1065627\", \"sentences\": [0, 1, 2, 3, 4, 5, 6]}",
+      "parsed": {
+        "label": "CONTRADICT",
+        "doc_id": "1065627",
+        "sentences": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "parse_status": "ok"
+    }
+  }
+}
