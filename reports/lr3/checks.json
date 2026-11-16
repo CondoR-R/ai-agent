@@ -1,0 +1,106 @@
+{
+  "bm25": {
+    "documents": {
+      "1": "alpha beta beta gamma",
+      "2": "alpha gamma",
+      "3": "delta epsilon"
+    },
+    "query": "alpha beta beta zeta",
+    "ranked": [
+      {
+        "doc_id": "1",
+        "score": 1.5725612026838962,
+        "rank": 1
+      },
+      {
+        "doc_id": "2",
+        "score": 0.523548346501579,
+        "rank": 2
+      }
+    ],
+    "expected_scores": {
+      "1": 1.5725612026838962,
+      "2": 0.523548346501579
+    },
+    "scores_close": {
+      "1": true,
+      "2": true
+    },
+    "order": [
+      "1",
+      "2"
+    ],
+    "no_match_query": "zeta omega",
+    "no_match": [],
+    "pass": true
+  },
+  "rrf": {
+    "dense": [
+      "1",
+      "2"
+    ],
+    "bm25": [
+      "2",
+      "3"
+    ],
+    "ranked": [
+      {
+        "doc_id": "2",
+        "score": 0.03252247488101534,
+        "rank": 1,
+        "dense_rank": 2,
+        "bm25_rank": 1,
+        "dense_contribution": 0.016129032258064516,
+        "bm25_contribution": 0.01639344262295082
+      },
+      {
+        "doc_id": "1",
+        "score": 0.01639344262295082,
+        "rank": 2,
+        "dense_rank": 1,
+        "bm25_rank": null,
+        "dense_contribution": 0.01639344262295082,
+        "bm25_contribution": 0.0
+      },
+      {
+        "doc_id": "3",
+        "score": 0.016129032258064516,
+        "rank": 3,
+        "dense_rank": null,
+        "bm25_rank": 2,
+        "dense_contribution": 0.0,
+        "bm25_contribution": 0.016129032258064516
+      }
+    ],
+    "pass": true
+  },
+  "dense_reference": {
+    "n": 90,
+    "matched": 90,
+    "all_match": true,
+    "max_score_delta": 0.0,
+    "mismatches": [],
+    "pass": true
+  },
+  "rerank": {
+    "n_claims": 90,
+    "n_q_plus": 60,
+    "pairs": 1800,
+    "same_length": 90,
+    "same_set": 90,
+    "changed_order": 90,
+    "recall20_before": 0.9566666666666667,
+    "recall20_after": 0.9566666666666667,
+    "model": {
+      "model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+      "revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+      "max_length": 512,
+      "truncation": "only_second",
+      "batch_size": 20,
+      "device": "cpu",
+      "new_documents": false
+    },
+    "pass": true
+  },
+  "pass": true
+}

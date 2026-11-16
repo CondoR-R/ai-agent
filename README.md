@@ -13,8 +13,9 @@ ML-эксперименты и постепенный переход к аген
 гиперпараметров, **ЛР1** — инференс языковой модели на CPU: паспорт
 сервера, замеры TTFT/TPOT, кеш префикса и нагрузочное тестирование, и
 **ЛР2** — базовый RAG на SciFact: плотный поиск, сборка контекста,
-структурированные ответы и разбор ошибок. Остальные части (агенты с
-инструментами и их оценка) пока не реализованы.
+структурированные ответы и разбор ошибок, и **ЛР3** — улучшение поиска:
+BM25, RRF, cross-encoder и отложенная проверка. Остальные части (агенты
+с инструментами и их оценка) пока не реализованы.
 
 ## Технологии
 
@@ -31,6 +32,7 @@ ML-эксперименты и постепенный переход к аген
 | OpenAI Python client | потоковые запросы, `usage`, `ignore_eos` |
 | Transformers | токенизатор Qwen2.5 и параметры KV-кеша |
 | sentence-transformers | плотные эмбеддинги BGE-small для поиска ЛР2 |
+| Transformers cross-encoder | переранжирование 20 кандидатов RRF в ЛР3 |
 | matplotlib | графики отчётных артефактов |
 | PyYAML | конфигурации экспериментов |
 | Git | фиксация кода и проверка чистоты дерева перед запуском |
@@ -108,6 +110,20 @@ RAG k=3 = 0.256, oracle = 0.667; лучший режим RAG — k=1 (0.389).
 и не выбирает NOINFO, а точное короткое свидетельство oracle использует
 заметно лучше.
 
+### ЛР3
+
+- Dense top-20 на индексе ЛР2 с проверкой совпадения первых пяти
+  результатов с сохранёнными в ЛР2;
+- собственная реализация BM25 (`k1 = 1.2`, `b = 0.75`, Lucene-IDF,
+  токенизация латиницы и цифр) по полному корпусу;
+- RRF с `c = 60` и разбором вкладов Dense/BM25 для каждого кандидата;
+- `cross-encoder/ms-marco-MiniLM-L6-v2`, 512 токенов, обрезается только
+  документ; новых документов не добавляет;
+- проверки BM25, RRF, неизменности top-20 после rerank и Dense top-5 на
+  ЛР2;
+- прогноз, правило выбора по dev и однократный запуск Dense и выбранного
+  варианта на holdout.
+
 ### Пока не сделано
 
 - агент с инструментами, мультиагентная система;
@@ -121,19 +137,23 @@ ai-agent/
 │   └── labs/
 │       ├── lr0/           # ЛР0: данные, модель, обучение, поиск
 │       ├── lr1/           # ЛР1: паспорт, клиент, опыты 1–3, анализ
-│       └── lr2/           # ЛР2: данные, индекс, контекст, RAG, оценка
+│       ├── lr2/           # ЛР2: данные, индекс, контекст, RAG, оценка
+│       └── lr3/           # ЛР3: BM25, RRF, rerank, выбор и holdout
 ├── scripts/lr0/           # CLI: подготовка данных, запуски, эксперименты, отчёт
 ├── scripts/lr1/           # CLI ЛР1 + start/stop llama.cpp
 ├── scripts/lr2/           # CLI ЛР2: данные, индекс, проверки, опыты
+├── scripts/lr3/           # CLI ЛР3: проверки, dev, выбор, holdout
 ├── configs/lr0/           # base, best, search space
 ├── configs/lr1/           # паспорт и опыты 1–3
 ├── configs/lr2/           # индекс, эксперименты 1–2
+├── configs/lr3/           # эксперименты 1–3 и reranker
 ├── data/                  # split.json, manifest.json, данные ЛР1/ЛР2
 │   ├── lr1/               # Pride and Prejudice для запросов ЛР1
 │   └── lr2/               # SciFact, split, индекс и doc_ids
 ├── reports/lr0/           # JSON, графики, шаблон и report.md
 ├── reports/lr1/           # паспорт, JSON, графики, прогноз и report.md
 ├── reports/lr2/           # прогноз, проверки, анализ ошибок и report.md
+├── reports/lr3/           # прогноз, проверки, выбор, случаи и report.md
 ├── runs/                  # каталоги запусков (не в git)
 ├── mlartifacts/           # артефакты MLflow (не в git)
 ├── mlflow.db              # журнал MLflow (не в git)
@@ -253,6 +273,32 @@ bash scripts/lr1/stop_llama.sh
 машинные проверки — `checks.json`, разбор ошибок — `analysis.json`.
 Каталоги запусков лежат в `runs/lr2-experiment1-*` и
 `runs/lr2-experiment2-*`.
+
+### ЛР3: быстрый запуск
+
+```bash
+# проверки до опытов: BM25, RRF, Dense top-5, rerank
+uv run python scripts/lr3/checks.py
+
+# сервер llama.cpp; dev-опыты 1–2
+bash scripts/lr1/start_llama.sh
+uv run python scripts/lr3/experiment_1.py \
+  --config configs/lr3/exp1.yaml --series main --exp 1
+uv run python scripts/lr3/experiment_2.py \
+  --config configs/lr3/exp2.yaml --series main --exp 2
+
+# правило выбора; закоммитьте reports/lr3/selection.json
+uv run python scripts/lr3/select.py \
+  --exp1 runs/<lr3-exp1> --exp2 runs/<lr3-exp2>
+
+# однократный holdout после коммита selection.json
+uv run python scripts/lr3/holdout.py \
+  --config configs/lr3/holdout.yaml --series main --exp 3
+bash scripts/lr1/stop_llama.sh
+```
+
+Прогноз и правило выбора — в `reports/lr3/forecast.md`, проверки — в
+`reports/lr3/checks.json`, выбор — в `reports/lr3/selection.json`.
 
 ## Воспроизводимость
 
