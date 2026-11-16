@@ -1,0 +1,44 @@
+{
+  "selected": "rrf_ce",
+  "rule": "Из BM25, RRF и RRF+CE выбрать максимум MRR@3 на dev; при равенстве — максимум Recall@3; затем более простой вариант.",
+  "comparison_key": [
+    "MRR@3 (max)",
+    "Recall@3 (max)",
+    "complexity (min)"
+  ],
+  "dev_metrics": {
+    "bm25": {
+      "mrr@3": 0.7,
+      "recall@3": 0.7652777777777778,
+      "hit@3": 0.7833333333333333,
+      "recall@20": 0.9450000000000001
+    },
+    "rrf": {
+      "mrr@3": 0.7472222222222221,
+      "recall@3": 0.8269444444444446,
+      "hit@3": 0.8666666666666667,
+      "recall@20": 0.9566666666666667
+    },
+    "rrf_ce": {
+      "mrr@3": 0.7972222222222223,
+      "recall@3": 0.8444444444444446,
+      "hit@3": 0.8666666666666667,
+      "recall@20": 0.9566666666666667
+    }
+  },
+  "complexity_order": [
+    "bm25",
+    "rrf",
+    "rrf_ce"
+  ],
+  "config": {
+    "path": "configs/lr3/holdout.yaml",
+    "sha256": "274a731ba5e13aebdb127f2687c83430c9b031206d599fddb79adf94bb1fcec8"
+  },
+  "dev_runs": {
+    "exp1": "lr3-experiment1-2026-11-16_14-54-57-449ffc",
+    "exp2": "lr3-experiment2-2026-11-16_14-55-18-a82f24"
+  },
+  "commit": "d13cc4c3be6ad413f2fa2d9db06039ff7ae05178",
+  "generated_at": "2026-11-16_15-09-45"
+}
