@@ -121,7 +121,6 @@ def holdout_lab(cfg: dict, run_dir: Path) -> None:
             "path": cfg["selection_path"],
             "sha256": files.get_sha256(selection_path),
             "commit": selected_record.get("commit"),
-            "dev_metrics": selected_record.get("dev_metrics"),
         },
         "search": search,
         "search_by_class": search_by_class,
