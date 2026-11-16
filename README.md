@@ -11,11 +11,11 @@ ML-эксперименты и постепенный переход к аген
 
 Сейчас реализованы **ЛР0** — воспроизводимый эксперимент с подбором
 гиперпараметров, **ЛР1** — инференс языковой модели на CPU: паспорт
-сервера, замеры TTFT/TPOT, кеш префикса и нагрузочное тестирование, и
+сервера, замеры TTFT/TPOT, кеш префикса и нагрузочное тестирование,
 **ЛР2** — базовый RAG на SciFact: плотный поиск, сборка контекста,
-структурированные ответы и разбор ошибок, и **ЛР3** — улучшение поиска:
-BM25, RRF, cross-encoder и отложенная проверка. Остальные части (агенты
-с инструментами и их оценка) пока не реализованы.
+структурированные ответы и разбор ошибок, а также **ЛР3** — улучшение
+поиска: BM25, RRF, cross-encoder и отложенная проверка. Остальные части
+(агенты с инструментами и их оценка) пока не реализованы.
 
 ## Технологии
 
@@ -121,8 +121,18 @@ RAG k=3 = 0.256, oracle = 0.667; лучший режим RAG — k=1 (0.389).
   документ; новых документов не добавляет;
 - проверки BM25, RRF, неизменности top-20 после rerank и Dense top-5 на
   ЛР2;
-- прогноз, правило выбора по dev и однократный запуск Dense и выбранного
-  варианта на holdout.
+- прогноз, правило выбора по dev и holdout Dense и выбранного варианта;
+  технический повтор holdout после сбоя логирования MLflow;
+- отчётные артефакты: проверки, выбор, `analysis.json`, четыре случая в
+  `cases.json` и `reports/lr3/report.md`.
+
+Ключевой результат ЛР3: BM25 уступает Dense, RRF повышает Hit@3 и
+Recall@3, но немного снижает MRR@3; cross-encoder даёт лучший поиск
+(MRR@3 = 0.797 на dev против 0.747 у RRF и 0.753 у Dense). Правило
+выбрало RRF+CE, но на holdout преимущество поиска уменьшилось, а ответы
+не улучшились: Accuracy 0.133 против 0.138 у Dense. RRF без CE на dev
+дал лучший ответ (Accuracy 0.322), а CE стоит около 1.27 с на запрос
+против 15.7 мс у Dense.
 
 ### Пока не сделано
 
@@ -142,7 +152,7 @@ ai-agent/
 ├── scripts/lr0/           # CLI: подготовка данных, запуски, эксперименты, отчёт
 ├── scripts/lr1/           # CLI ЛР1 + start/stop llama.cpp
 ├── scripts/lr2/           # CLI ЛР2: данные, индекс, проверки, опыты
-├── scripts/lr3/           # CLI ЛР3: проверки, dev, выбор, holdout
+├── scripts/lr3/           # CLI ЛР3: проверки, dev, выбор, holdout, отчёт
 ├── configs/lr0/           # base, best, search space
 ├── configs/lr1/           # паспорт и опыты 1–3
 ├── configs/lr2/           # индекс, эксперименты 1–2
@@ -291,14 +301,19 @@ uv run python scripts/lr3/experiment_2.py \
 uv run python scripts/lr3/select.py \
   --exp1 runs/<lr3-exp1> --exp2 runs/<lr3-exp2>
 
-# однократный holdout после коммита selection.json
+# holdout после коммита selection.json
 uv run python scripts/lr3/holdout.py \
   --config configs/lr3/holdout.yaml --series main --exp 3
 bash scripts/lr1/stop_llama.sh
+
+# отчёт по последним завершённым запускам
+uv run python scripts/lr3/report.py
 ```
 
 Прогноз и правило выбора — в `reports/lr3/forecast.md`, проверки — в
-`reports/lr3/checks.json`, выбор — в `reports/lr3/selection.json`.
+`reports/lr3/checks.json`, выбор — в `reports/lr3/selection.json`,
+разбор — в `reports/lr3/cases.json` и `reports/lr3/analysis.json`,
+итог — в `reports/lr3/report.md`.
 
 ## Воспроизводимость
 
