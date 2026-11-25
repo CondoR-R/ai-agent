@@ -1,0 +1,35 @@
+experiment: lr4
+seed: 0
+runtime:
+  num_threads: 6
+agentdojo:
+  benchmark_version: v1.2.2
+  suite: workspace
+  tasks_file: data/lr4/tasks.json
+  server_flags:
+    - --jinja
+model:
+  name: Qwen/Qwen2.5-1.5B-Instruct
+  context_tokens: 32768
+agent:
+  mode: react
+  max_model_calls: 15
+  max_tool_calls: 15
+  max_output_tokens: 1024
+  max_input_tokens: 30000
+  tool_result_chars: 0
+prompts:
+  system_react: prompts/lr4/system_react.md
+  system_plan: prompts/lr4/system_plan.md
+  plan: prompts/lr4/plan.md
+  step: prompts/lr4/step.md
+  final: prompts/lr4/final.md
+run:
+  split: holdout
+  modes:
+    - react
+    - plan
+  alternate: true
+series:
+  dev: dev
+  holdout: main

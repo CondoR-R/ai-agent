@@ -1,0 +1,452 @@
+{
+  "benchmark_version": "v1.2.2",
+  "dev": [
+    "user_task_0",
+    "user_task_4",
+    "user_task_8",
+    "user_task_12",
+    "user_task_16",
+    "user_task_20",
+    "user_task_24",
+    "user_task_28",
+    "user_task_32",
+    "user_task_36"
+  ],
+  "holdout": [
+    "user_task_1",
+    "user_task_2",
+    "user_task_3",
+    "user_task_5",
+    "user_task_6",
+    "user_task_7",
+    "user_task_9",
+    "user_task_10",
+    "user_task_11",
+    "user_task_13",
+    "user_task_14",
+    "user_task_15",
+    "user_task_17",
+    "user_task_18",
+    "user_task_19",
+    "user_task_21",
+    "user_task_22",
+    "user_task_23",
+    "user_task_25",
+    "user_task_26",
+    "user_task_27",
+    "user_task_29",
+    "user_task_30",
+    "user_task_31",
+    "user_task_33",
+    "user_task_34",
+    "user_task_35",
+    "user_task_37",
+    "user_task_38",
+    "user_task_39"
+  ],
+  "n_tasks": 40,
+  "package_version": "0.1.35",
+  "suite": "workspace",
+  "tasks": {
+    "user_task_0": {
+      "changes_state": false,
+      "difficulty": "EASY",
+      "id": "user_task_0",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 0,
+      "prompt_sha256": "a705d71829085f217d287eb1a747ad774c6b73699bf9a24884c99e8e9e60d4b1",
+      "split": "dev"
+    },
+    "user_task_1": {
+      "changes_state": false,
+      "difficulty": "EASY",
+      "id": "user_task_1",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 1,
+      "prompt_sha256": "99946682f81b3e564d0875f5f2eec6dff861557d97cbf5822862b1a9ae9c47d5",
+      "split": "holdout"
+    },
+    "user_task_10": {
+      "changes_state": false,
+      "difficulty": "MEDIUM",
+      "id": "user_task_10",
+      "n_ground_truth_calls": 2,
+      "n_services": 1,
+      "number": 10,
+      "prompt_sha256": "33854b04a35a8aa71943025feb0646ee70aec422cb29e418fbfb2702c0e18755",
+      "split": "holdout"
+    },
+    "user_task_11": {
+      "changes_state": false,
+      "difficulty": "MEDIUM",
+      "id": "user_task_11",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 11,
+      "prompt_sha256": "552a214238641c16a2bac950564224df3d97d88e0cd8392d21ab6a78ab26aa08",
+      "split": "holdout"
+    },
+    "user_task_12": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_12",
+      "n_ground_truth_calls": 2,
+      "n_services": 1,
+      "number": 12,
+      "prompt_sha256": "f203e1b1abaf130d711ad88141b0eaa755bbe1dac874c1849d717e23039e7943",
+      "split": "dev"
+    },
+    "user_task_13": {
+      "changes_state": true,
+      "difficulty": "HARD",
+      "id": "user_task_13",
+      "n_ground_truth_calls": 5,
+      "n_services": 2,
+      "number": 13,
+      "prompt_sha256": "b480e313619779bf9a8e2cd00c0f13b12170153f56088df00899c0d172807127",
+      "split": "holdout"
+    },
+    "user_task_14": {
+      "changes_state": false,
+      "difficulty": "EASY",
+      "id": "user_task_14",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 14,
+      "prompt_sha256": "2b582262789f0e28b1cecd9700a8d364fac9c84b9b8c0fcf31826e1c12833e77",
+      "split": "holdout"
+    },
+    "user_task_15": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_15",
+      "n_ground_truth_calls": 2,
+      "n_services": 2,
+      "number": 15,
+      "prompt_sha256": "e650609f48161f211552ba19a7b4bf185ad66fdca1171bfe0d320a867cf56f97",
+      "split": "holdout"
+    },
+    "user_task_16": {
+      "changes_state": false,
+      "difficulty": "EASY",
+      "id": "user_task_16",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 16,
+      "prompt_sha256": "338fe418292b621e016ef158968a465884910fa3c98b9b3ff24934b19127af0d",
+      "split": "dev"
+    },
+    "user_task_17": {
+      "changes_state": false,
+      "difficulty": "EASY",
+      "id": "user_task_17",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 17,
+      "prompt_sha256": "cf9991442e86fdfe1600dbf16d5a78b8711264f490bad8abecec761cac3928ff",
+      "split": "holdout"
+    },
+    "user_task_18": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_18",
+      "n_ground_truth_calls": 2,
+      "n_services": 2,
+      "number": 18,
+      "prompt_sha256": "db61afd8d949473b23d9754787c9ac09fc18dab3048a7ed02b03fee9476acb20",
+      "split": "holdout"
+    },
+    "user_task_19": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_19",
+      "n_ground_truth_calls": 6,
+      "n_services": 3,
+      "number": 19,
+      "prompt_sha256": "23e3a41ba7952d3648d3761db0767c4fb9247e74f4a6836c6ca246a57e932c63",
+      "split": "holdout"
+    },
+    "user_task_2": {
+      "changes_state": false,
+      "difficulty": "MEDIUM",
+      "id": "user_task_2",
+      "n_ground_truth_calls": 2,
+      "n_services": 1,
+      "number": 2,
+      "prompt_sha256": "1934de3239dac124aa7c63ab31be6e4a6ad4ec5f1157255296bc8bbac77484de",
+      "split": "holdout"
+    },
+    "user_task_20": {
+      "changes_state": true,
+      "difficulty": "HARD",
+      "id": "user_task_20",
+      "n_ground_truth_calls": 3,
+      "n_services": 1,
+      "number": 20,
+      "prompt_sha256": "2019919862abfb5eadbc9f5a32d669354ab5dc37f8f981d061c80b1fbeb27763",
+      "split": "dev"
+    },
+    "user_task_21": {
+      "changes_state": true,
+      "difficulty": "HARD",
+      "id": "user_task_21",
+      "n_ground_truth_calls": 3,
+      "n_services": 1,
+      "number": 21,
+      "prompt_sha256": "9779f0526dca85675d95ed0bf19c0251bfcf9ebcb507d2f74ceb899e8077798e",
+      "split": "holdout"
+    },
+    "user_task_22": {
+      "changes_state": false,
+      "difficulty": "EASY",
+      "id": "user_task_22",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 22,
+      "prompt_sha256": "027eafcfa64327f8aad308fe640d262884c50fbc1164d4aa5908cacf4532f307",
+      "split": "holdout"
+    },
+    "user_task_23": {
+      "changes_state": false,
+      "difficulty": "MEDIUM",
+      "id": "user_task_23",
+      "n_ground_truth_calls": 2,
+      "n_services": 2,
+      "number": 23,
+      "prompt_sha256": "65f3f7469937d9465917196f1f18f9f71da7ce82a6743085a19babbf38451041",
+      "split": "holdout"
+    },
+    "user_task_24": {
+      "changes_state": false,
+      "difficulty": "EASY",
+      "id": "user_task_24",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 24,
+      "prompt_sha256": "68ac04e3f8daf469a0770dc90670e2dab75df5ca747dc2e0cbe75da822680548",
+      "split": "dev"
+    },
+    "user_task_25": {
+      "changes_state": true,
+      "difficulty": "HARD",
+      "id": "user_task_25",
+      "n_ground_truth_calls": 4,
+      "n_services": 2,
+      "number": 25,
+      "prompt_sha256": "74602129f1d10738a0557368e062fc902dea9bf62cabd378774e7120536a7068",
+      "split": "holdout"
+    },
+    "user_task_26": {
+      "changes_state": false,
+      "difficulty": "EASY",
+      "id": "user_task_26",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 26,
+      "prompt_sha256": "1a6cff4966e79d3d34a2b8d8bffd1ca92374b091daf399b07b31b987c9656df4",
+      "split": "holdout"
+    },
+    "user_task_27": {
+      "changes_state": false,
+      "difficulty": "MEDIUM",
+      "id": "user_task_27",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 27,
+      "prompt_sha256": "cf48a82f857ed82280ebaac6fd36c97e26de48cc2fd11fd45baa71e06688b487",
+      "split": "holdout"
+    },
+    "user_task_28": {
+      "changes_state": false,
+      "difficulty": "EASY",
+      "id": "user_task_28",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 28,
+      "prompt_sha256": "1149939b9ad274b90dd3005e10387fa85dc744380116bd459e0af82e5181c085",
+      "split": "dev"
+    },
+    "user_task_29": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_29",
+      "n_ground_truth_calls": 2,
+      "n_services": 1,
+      "number": 29,
+      "prompt_sha256": "6779993d337c8c473dfc504b47b6460304fbe7e30fd6a371bc54c57195e2a717",
+      "split": "holdout"
+    },
+    "user_task_3": {
+      "changes_state": false,
+      "difficulty": "EASY",
+      "id": "user_task_3",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 3,
+      "prompt_sha256": "9bc1bd93d3cf8bdea9365f83bef19949eabe0ff766d90e87d9ffbc5aaa1f8206",
+      "split": "holdout"
+    },
+    "user_task_30": {
+      "changes_state": false,
+      "difficulty": "MEDIUM",
+      "id": "user_task_30",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 30,
+      "prompt_sha256": "c490881425eba5196f3972978109d1df1247cc6caf57cb38af2f83f26c02251e",
+      "split": "holdout"
+    },
+    "user_task_31": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_31",
+      "n_ground_truth_calls": 2,
+      "n_services": 1,
+      "number": 31,
+      "prompt_sha256": "1ea6d06c06c4e81548a1e6aad14a44e1a9fe16a08c3cccf80a2449b060ce6170",
+      "split": "holdout"
+    },
+    "user_task_32": {
+      "changes_state": true,
+      "difficulty": "HARD",
+      "id": "user_task_32",
+      "n_ground_truth_calls": 3,
+      "n_services": 1,
+      "number": 32,
+      "prompt_sha256": "77a1f91163f0a1829c7108256a54648b28dd609565ca2413986e3fdb93d32afb",
+      "split": "dev"
+    },
+    "user_task_33": {
+      "changes_state": true,
+      "difficulty": "HARD",
+      "id": "user_task_33",
+      "n_ground_truth_calls": 2,
+      "n_services": 2,
+      "number": 33,
+      "prompt_sha256": "24da57d75cf56a4ecf2f497730ef08f40586249ae2630763c9f746f33eab093d",
+      "split": "holdout"
+    },
+    "user_task_34": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_34",
+      "n_ground_truth_calls": 3,
+      "n_services": 1,
+      "number": 34,
+      "prompt_sha256": "d541463c138c89992902f4deed43f19ca76f8cbdb59cf3715d000faa06b38a78",
+      "split": "holdout"
+    },
+    "user_task_35": {
+      "changes_state": true,
+      "difficulty": "EASY",
+      "id": "user_task_35",
+      "n_ground_truth_calls": 2,
+      "n_services": 1,
+      "number": 35,
+      "prompt_sha256": "4aa5155dfb9592a24078facadeb64f3440380a7c28c4c4a90fd0a23adb814f9a",
+      "split": "holdout"
+    },
+    "user_task_36": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_36",
+      "n_ground_truth_calls": 3,
+      "n_services": 1,
+      "number": 36,
+      "prompt_sha256": "96c4e818d1fc1439ba7350fdca345c2dfe4e10d6185ceacf0178decf87d65471",
+      "split": "dev"
+    },
+    "user_task_37": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_37",
+      "n_ground_truth_calls": 4,
+      "n_services": 1,
+      "number": 37,
+      "prompt_sha256": "327ecc71a16b2f75c922a15116cc8933a391730c6b67e51157d7f2eb430c49a6",
+      "split": "holdout"
+    },
+    "user_task_38": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_38",
+      "n_ground_truth_calls": 3,
+      "n_services": 1,
+      "number": 38,
+      "prompt_sha256": "28e67dc4be672250224d7881c5c2b1796fea7be1cd35ab41d284edcd4701b7fb",
+      "split": "holdout"
+    },
+    "user_task_39": {
+      "changes_state": false,
+      "difficulty": "MEDIUM",
+      "id": "user_task_39",
+      "n_ground_truth_calls": 2,
+      "n_services": 1,
+      "number": 39,
+      "prompt_sha256": "d03a570a2b64ec59907d7c2e3d51955f47640ca19eb561092d4f0eefa80d9f98",
+      "split": "holdout"
+    },
+    "user_task_4": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_4",
+      "n_ground_truth_calls": 3,
+      "n_services": 1,
+      "number": 4,
+      "prompt_sha256": "211c4492d26f39f7cced65f9f67fd9bbc5243a8de280bb75aeddc69a8af24693",
+      "split": "dev"
+    },
+    "user_task_5": {
+      "changes_state": false,
+      "difficulty": "MEDIUM",
+      "id": "user_task_5",
+      "n_ground_truth_calls": 1,
+      "n_services": 1,
+      "number": 5,
+      "prompt_sha256": "03079a09011ff006bc1c894494f442ccb94dd3286da501777ed4828ad6c0f051",
+      "split": "holdout"
+    },
+    "user_task_6": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_6",
+      "n_ground_truth_calls": 2,
+      "n_services": 1,
+      "number": 6,
+      "prompt_sha256": "325709a33fcd34cb11221d554bfa5709e7e4cfab5bcc1fc69e73380e420f9152",
+      "split": "holdout"
+    },
+    "user_task_7": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_7",
+      "n_ground_truth_calls": 2,
+      "n_services": 1,
+      "number": 7,
+      "prompt_sha256": "01d6c94f7d96405ec6dc28c678215003a0f63d315c2c63d3542902d07c4bf273",
+      "split": "holdout"
+    },
+    "user_task_8": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_8",
+      "n_ground_truth_calls": 2,
+      "n_services": 1,
+      "number": 8,
+      "prompt_sha256": "d1476cc398379c435460779b07158dd57d9b37b455748c28495e9a418f3a7913",
+      "split": "dev"
+    },
+    "user_task_9": {
+      "changes_state": true,
+      "difficulty": "MEDIUM",
+      "id": "user_task_9",
+      "n_ground_truth_calls": 2,
+      "n_services": 1,
+      "number": 9,
+      "prompt_sha256": "6650f1a36d3705307ecb5632bc0add2693456e7b81ae1edaf354ba59219b8e0e",
+      "split": "holdout"
+    }
+  }
+}

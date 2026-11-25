@@ -1,0 +1,43 @@
+{
+  "benchmark_version": "v1.2.2",
+  "suite": "workspace",
+  "agentdojo_version": "0.1.35",
+  "checks": [
+    {
+      "name": "invalid_tool_and_missing_argument",
+      "passed": true,
+      "errors": [
+        "ToolNotFoundError: The requested function `does_not_exist` is not available.",
+        "ValidationError: 1 validation error for Input schema for `search_calendar_events`\nquery\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+        "ValidationError: 1 validation error for Input schema for `search_calendar_events`\nquery\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+        "ValidationError: 1 validation error for Input schema for `search_calendar_events`\nquery\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing"
+      ],
+      "answer": "Scripted final answer.",
+      "stop_reason": "max_model_calls"
+    },
+    {
+      "name": "max_tool_calls",
+      "passed": true,
+      "n_tool_steps": 15,
+      "stop_reason": "max_tools",
+      "answer": "Scripted final answer."
+    },
+    {
+      "name": "ground_truth_echo",
+      "passed": true,
+      "n_passed": 40,
+      "n_failed": 0,
+      "expected": "36 из 40",
+      "failed_ids": []
+    },
+    {
+      "name": "plan_rejects_wrong_tool",
+      "passed": true,
+      "n_executed_tools": 0,
+      "env_unchanged": true,
+      "answer": "Scripted final answer."
+    }
+  ],
+  "pass": true,
+  "generated_at": "2026-11-25_13-53-39"
+}

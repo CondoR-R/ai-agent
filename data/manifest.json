@@ -409,5 +409,26 @@
       },
       "built_at": "2026-11-13"
     }
+  },
+  "agentdojo": {
+    "source": "AgentDojo PyPI package",
+    "version": "0.1.35",
+    "benchmark_version": "v1.2.2",
+    "suite": "workspace",
+    "rule": {
+      "dev": "user_task_n где n кратно 4",
+      "holdout": "остальные 30 задач"
+    },
+    "sizes": {
+      "dev": 10,
+      "holdout": 30,
+      "total": 40
+    },
+    "files": {
+      "data/lr4/tasks.json": {
+        "sha256": "8a234207bf491bc5e4cbe98f34cf391db63096e293e1fe1a146dd18ee3b00141",
+        "n_records": 40
+      }
+    }
   }
 }

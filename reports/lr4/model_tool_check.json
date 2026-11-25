@@ -1,0 +1,15 @@
+{
+  "base_url": "http://localhost:8000/v1",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "n_tool_calls": 1,
+  "tool_calls": [
+    {
+      "id": "wQMrYhi8c6R3GJwXG5uSa56qvwp91Hyh",
+      "name": "get_current_day",
+      "args": {},
+      "raw_args": "{}"
+    }
+  ],
+  "content": "",
+  "pass": true
+}
