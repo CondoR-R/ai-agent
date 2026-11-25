@@ -14,7 +14,12 @@ from ai_agent.labs.lr4.client import ModelClient
 
 
 def relative(path: Path) -> str:
-    return path.relative_to(files.PROJECT_ROOT).as_posix()
+    try:
+        return (
+            path.resolve().relative_to(files.PROJECT_ROOT.resolve()).as_posix()
+        )
+    except ValueError:
+        return path.as_posix()
 
 
 def prompt_hashes(cfg: dict) -> dict[str, str]:

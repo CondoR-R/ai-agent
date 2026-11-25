@@ -391,7 +391,11 @@ class ToolAgent(BasePipelineElement):
                         hinted = self._model(
                             chat,
                             f"react_hint_{hint}",
-                            [t for t in openai_tools if t["function"]["name"] == hint],
+                            [
+                                t
+                                for t in openai_tools
+                                if t["function"]["name"] == hint
+                            ],
                             hint,
                         )
                         if (

@@ -13,9 +13,11 @@ ML-эксперименты и постепенный переход к аген
 гиперпараметров, **ЛР1** — инференс языковой модели на CPU: паспорт
 сервера, замеры TTFT/TPOT, кеш префикса и нагрузочное тестирование,
 **ЛР2** — базовый RAG на SciFact: плотный поиск, сборка контекста,
-структурированные ответы и разбор ошибок, а также **ЛР3** — улучшение
-поиска: BM25, RRF, cross-encoder и отложенная проверка. Остальные части
-(агенты с инструментами и их оценка) пока не реализованы.
+структурированные ответы и разбор ошибок, **ЛР3** — улучшение поиска:
+BM25, RRF, cross-encoder и отложенная проверка, а также **ЛР4** —
+собственная обвязка tool-агента на AgentDojo (ReAct и plan-then-execute).
+Остальные части (мультиагентная система, оценка агентов, защита от prompt
+injection) пока не реализованы.
 
 ## Технологии
 
@@ -134,9 +136,23 @@ Recall@3, но немного снижает MRR@3; cross-encoder даёт лу�
 дал лучший ответ (Accuracy 0.322), а CE стоит около 1.27 с на запрос
 против 15.7 мс у Dense.
 
+### ЛР4
+
+- AgentDojo `v1.2.2`, suite `workspace`, 24 инструмента, 40 user tasks;
+  dev 10 (`n % 4 == 0`) и holdout 30 по правилам курса.
+- Собственная обвязка в `src/ai_agent/labs/lr4/`: OpenAI tool calling,
+  ReAct, plan-then-execute через `submit_plan`, лимиты 15 model/tool
+  calls, текстовый ответ в конце эпизода, трассы шагов.
+- Проверки без модели: ground-truth агент 40/40, обработка ошибки
+  инструмента, лимит 15 tool calls, запрет вызова не-планового инструмента.
+- Holdout run `lr4-experiment4-2026-11-25_14-32-32-0ebc67`: ReAct 1/30
+  (3.3%), Plan 2/30 (6.7%), оба верно 1, только Plan 1, оба неверно 28.
+- ReAct дороже по входу: median prompt tokens 7663 против 11983 у Plan;
+  основные неуспехи — неверный tool calling/аргументы и отказ 1.5B модели.
+
 ### Пока не сделано
 
-- агент с инструментами, мультиагентная система;
+- мультиагентная система;
 - оценка агентов и защита от prompt injection.
 
 ## Структура проекта
@@ -314,6 +330,30 @@ uv run python scripts/lr3/report.py
 `reports/lr3/checks.json`, выбор — в `reports/lr3/selection.json`,
 разбор — в `reports/lr3/cases.json` и `reports/lr3/analysis.json`,
 итог — в `reports/lr3/report.md`.
+
+### ЛР4: быстрый запуск
+
+```bash
+# данные AgentDojo и manifest
+uv run python scripts/lr4/prepare_data.py
+
+# проверки без модели и проверка tool calling
+uv run python scripts/lr4/checks.py
+bash scripts/lr1/start_llama.sh --jinja
+uv run python scripts/lr4/model_check.py
+
+# основной holdout (30 задач × 2 режима)
+uv run python scripts/lr4/experiment.py \
+  --config configs/lr4/exp.yaml --exp 4 --series main
+bash scripts/lr1/stop_llama.sh
+
+# отчёт по последнему завершённому запуску
+uv run python scripts/lr4/report.py
+```
+
+Прогноз — `reports/lr4/forecast.md`, проверки — `reports/lr4/checks.json`,
+итог — `reports/lr4/report.md`, артефакты запуска — в
+`runs/lr4-experiment4-*/{results.jsonl,metrics.json,traces/}`.
 
 ## Воспроизводимость
 
